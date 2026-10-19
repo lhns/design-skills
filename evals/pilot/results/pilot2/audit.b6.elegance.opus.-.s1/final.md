@@ -1,0 +1,17 @@
+PROBLEM: D1 / Design paragraph 1: C5 was added on 07-21, but D1 was not re-derived. The assignment rule is still "smallest free berth that fits the length", and draft never enters it. Under D1 as written, an 8 m boat drawing 1.8 m gets C1 to C6 if one of those is the smallest free berth that fits, which breaks C5. The 07-21 change log records collecting the draft and putting depths on the chart, but the rule that decides the berth never uses them. D1 should read "smallest free berth that fits length and draft", and its row should cite C5.
+
+PROBLEM: D1 / Constraints: "Smallest berth that fits. Don't waste a 15-metre berth on a little boat" is Mateo's own statement, so it is a constraint. It is missing from the constraint list. It appears only as the "Ruled out by" source inside D1. D1 is then shown as a decision when it is really a forced consequence of an unlisted constraint.
+
+PROBLEM: D3 "forced": The fork has only two options, and the record calls the result forced. The context names a third: the text-message service can reach every skipper who booked with a mobile number, which is about half of them. The office could send those skippers a berth before 18:00. C2 does not rule this out, because no radio is involved. D3 is therefore a real fork. It should be marked a designer choice and taken back to Mateo, not reported to him as forced.
+
+PROBLEM: D3 / Context: The waiting pontoon holds three boats, and nothing in the record shows that late arrivals stay at three or fewer. The fourth boat after 18:00 has nowhere to go. That puts it back in Mateo's 07-14 problem ("tie up wherever, the fuel berth included"). D3 does not show how the problem it was meant to solve is met.
+
+PROBLEM: D3 / Design paragraph 2: A boat arriving after 18:00 without a booking cannot be told to use the waiting pontoon, because by C2 nobody answers the radio. The design gives no channel that carries this instruction to the boat, such as signage at the entrance or a note in the booking email.
+
+PROBLEM: D4: Neither option is shown to meet C4. A sign is exactly what late arrivals already ignore when they "tie up wherever". "Moved by staff at 08:00" can't make the berth clear *by* 08:00 when staff arrive at 08:00. The record picks the sign as a designer default without breaking it against C4. This is a constraint quietly weakened to "asked to be clear". The row should say C4 is unmet, or add an option that actually meets it, for example an earlier staff start or a physical barrier.
+
+PROBLEM: D2: Mateo said "Rafting is fine on the outer berths" (07-07). The record labels outer-side rafting a "designer default" and leaves it open. Whether rafting is *allowed* on the outer side is his statement and should be cited as such. Only the remaining question is open: raft versus send the boat to the town quay when everything is full. As written, the row mixes up what the user said with what the designer chose.
+
+PROBLEM: C1 / Design: Mateo's "Anything longer goes to the town quay" is dropped. C1 records only the length range. The design never says what the office does with a boat over 15 m, or with one under 7 m.
+
+PROBLEM: Changes since 07-14: The change entry lists the edits made for C5 but not the concepts C5 touches and leaves unchanged, namely D1 and the Design text. Because no re-derivation was recorded, the inconsistency in the first problem slipped through.

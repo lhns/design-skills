@@ -14,7 +14,7 @@ Scale the method to the decision. For a small change, the constraints fit in one
 - **Designer choice:** anything else you decide, including defaults and conclusions drawn from constraints. It stays provisional, and it doesn't become a constraint when a user accepts your proposal; only the user's own statements do that.
 - **Concept:** a part with exactly one purpose: a type, service, state, rule, flag or config option.
 - **Independent:** each concept can be explained by one scenario that names no other concept.
-- **Simple:** irreducible. No part can be removed, merged or replaced by a simpler one without breaking a constraint. Measure in parts, not lines. Irreducibility is local; step 5 says when to look for a smaller representation.
+- **Simple:** irreducible. No part can be removed, merged or replaced by a simpler one without breaking a constraint. Behavior that emerges from how parts combine counts: a constraint met that way, with no part dedicated to it, is the best case, once the break test (Reviewing 1) confirms it. Measure in parts, not lines. Irreducible is not yet minimal: step 5 says when a different representation can be smaller.
 
 ## Designing
 1. **List the constraints,** with short ids (C1, C2, …) when the design needs them.
@@ -42,7 +42,7 @@ Low complexity is a sign of elegance when every constraint still holds and you c
 1. **Try to break it.** For each design and each constraint, name a concrete input or event that would break it, or show that none can. A design that fails a constraint loses to one that keeps it, however short it is.
 2. **Check how options were removed.** For each option a proposal rejects, was it ruled out by a constraint, or only by a value such as simplicity?
 3. **Check each concept** with the questions of steps 6, 8 and 9: which constraint breaks without it, a new kind or a reuse, an added exception clause, a condition or an arbitrary number.
-4. **Weigh what's left:** fewer independent concepts, fewer exceptions, an invariant that holds, and a small blast radius (if one constraint changes, how many concepts change?). Lines and table rows are not concepts. A longer design wins when its extra parts trace to constraints the shorter one drops or handles with exceptions.
+4. **Weigh what's left:** fewer independent concepts, fewer exceptions, constraints met by composition rather than by a dedicated part, an invariant that holds, and a small blast radius (if one constraint changes, how many concepts change?). Lines and table rows are not concepts. A longer design wins when its extra parts trace to constraints the shorter one drops or handles with exceptions.
 
 State the deciding reason in one sentence.
 

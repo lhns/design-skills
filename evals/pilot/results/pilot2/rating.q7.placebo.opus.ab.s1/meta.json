@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q7.placebo.opus.ab.s1",
+ "track": "rating",
+ "item": "q7",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 14578,
+ "total_cost_usd": 0.038808,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5632,
+ "final_text": "**Design 1 (Candidate A) is better.**\n\nBoth candidates compute the same price. Each takes the better of the group and member discounts, adds early bird, caps the total at 30%, rounds the ticket total half-up to the cent, and then adds the 2.00 booking fee. The difference is how easily people can read and change the code, and here A wins.\n\n**Bea can check A line by line against the flyer.** Her yearly review compares the code with the flyer, and last year's problem was that \"nobody could tell what ran in which order.\" A reads from top to bottom in the flyer's own order:\n\n1. The better of group and member.\n2. Plus early bird.\n3. Cap at 30%.\n4. Round, then add the fee.\n\nThe comments use the flyer's wording. Someone who \"can read a bit of Python if it's plain\" can follow all of it.\n\n**B brings back the problem the rewrite was meant to fix.** To know what runs when, the reader has to understand three things:\n- a decorator registry,\n- a global list that is re-sorted on every registration,\n- numeric step numbers (10, 20, 30, 90).\n\nThe order is spread across decorators, and `group_or_member` silently depends on running after the two step-10 rules. Some of the logic also stays outside the rules: the 30% cap and the rounding still sit in `price()`. So the \"every rule is a plugin\" picture doesn't hold, and the reader has to look in both places anyway.\n\n**The residents' discount doesn't justify B's framework.** That discount is speculative, which is what YAGNI warns against. Bea also says that if it arrives, it will have \"its own rules about what it combines with.\" That is exactly the part B's registry doesn't make easy: it would need another pairwise rule like `group_or_member`, with a carefully chosen step number. In A, adding it means changing a few lines inside the `max(...)` or near the early-bird check, which is a small and obvious edit.\n\n**Scale doesn't call for B's flexibility.** There is one developer, a few thousand orders a year, and one review session per year. The extra indirection costs reading time at every review and buys nothing that is needed now.\n\n**Small improvement for A:** name the rates as constants (`EARLY_BIRD_RATE`, `GROUP_RATE`, `MEMBER_RATE`, `GROUP_MIN_TICKETS`) next to the existing ones. Then the committee's yearly changes all happen in one block at the top.\n\nWINNER: 1"
+}

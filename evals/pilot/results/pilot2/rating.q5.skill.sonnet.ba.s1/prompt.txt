@@ -1,0 +1,95 @@
+# Pallet locations in a cold store
+
+A cold-storage warehouse keeps chilled and frozen pallets for food wholesalers. Every pallet has a barcode. Handheld scanners record three kinds of scan: `received` at the dock, `moved` when a pallet is put into a location (a freezer or chiller bay, such as `F2-14`), and `shipped` when it is loaded onto a lorry. The stock screen shows where each pallet is now. The location module is being rewritten; two candidates are below.
+
+**From the operations manager:**
+
+> The handhelds queue scans when they lose Wi-Fi and upload them when they're back in range. Inside the freezers there is no signal at all, so a driver's scans from a long freezer run turn up in one batch, sometimes an hour later. The loading-bay handhelds are almost as bad, the bay doors block the signal. Each scan carries the time it was taken; the handheld clocks are synced to the server every time they connect.
+>
+> Customers sometimes refuse a pallet at delivery. The lorry brings it back the same day and we receive it again at the dock like any other pallet, same barcode, and put it away.
+
+**Recent tickets on the old system:**
+
+> **#41** Pallet showed as in F2 after it had been shipped. A late move from a freezer handheld came in after the shipped scan. Fixed: moves are ignored once a pallet has shipped.
+>
+> **#47** Pallets jumping back to DOCK in the afternoon. The dock PC uploads its receive scans in one go at the end of the shift, after the pallets' first moves. Fixed: a receive doesn't override a known location.
+>
+> **#49** Two moves of the same pallet arrived in the wrong order (two drivers, both in freezers). Fixed: a move older than the last applied move is ignored.
+
+Volumes are small (a few thousand scans a day). Scans are never edited or deleted.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+```python
+from bisect import insort
+from collections import defaultdict
+
+scans = defaultdict(list)  # pallet -> its scans, in the order they were taken
+
+
+def apply(scan):
+    """Record one scan, whenever it arrives."""
+    insort(scans[scan.pallet], scan, key=lambda s: s.at)
+
+
+def location_of(pallet):
+    """Where the pallet is: what its most recently taken scan says (None: not in the building)."""
+    if not scans[pallet]:
+        return None
+    latest = scans[pallet][-1]
+    if latest.kind == "shipped":
+        return None
+    return "DOCK" if latest.kind == "received" else latest.location
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+from collections import defaultdict
+from dataclasses import dataclass
+from datetime import datetime
+
+
+@dataclass
+class Pallet:
+    location: str | None = None        # None: not in the building
+    moved_at: datetime | None = None   # time of the move that set `location`
+    shipped: bool = False
+
+
+pallets = defaultdict(Pallet)
+
+
+def apply(scan):
+    """Update a pallet's location from one scan. Scans may arrive late."""
+    p = pallets[scan.pallet]
+    if scan.kind == "received":
+        # The dock PC uploads at the end of the shift, often after the first
+        # move (#47); a receive only places a pallet that has no location yet.
+        # It also brings back a refused pallet.
+        p.shipped = False
+        if p.location is None:
+            p.location = "DOCK"
+    elif scan.kind == "moved":
+        # Moves uploaded after the pallet shipped (#41), or older than the move
+        # already applied (#49), are ignored.
+        if p.shipped or (p.moved_at is not None and scan.at < p.moved_at):
+            return
+        p.location = scan.location
+        p.moved_at = scan.at
+    elif scan.kind == "shipped":
+        p.shipped = True
+        p.location = None
+
+
+def location_of(pallet):
+    return pallets[pallet].location
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

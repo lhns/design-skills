@@ -1,0 +1,4 @@
+better: b
+longer: a
+kind: known-structure-deletes-cases-vs-accreted
+reason: "Each ticket added a case to A, but the cases interact once a refused pallet comes back while a loading-bay scan is still queued. Pallet moved to F2 at 08:00, shipped at 10:00 (loading-bay handheld uploads late), refused and received again at 15:00, moved to F3 at 15:20; the shipped scan arrives last. A: the 15:00 receive keeps F2 (the #47 rule), the 15:20 move sets F3, then the late 10:00 shipped scan sets location None and shipped=True, so the pallet vanishes from stock and every later move is ignored (the #41 rule). B keeps the scans ordered by when they were taken and reads the latest one: F3, and every ticket case (#41, #47, #49) falls out of the same rule. A's per-ticket guards look careful and each one is right in isolation."

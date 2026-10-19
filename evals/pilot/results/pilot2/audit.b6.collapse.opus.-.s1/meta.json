@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b6.collapse.opus.-.s1",
+ "track": "audit",
+ "item": "b6",
+ "condition": "collapse",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 28474,
+ "total_cost_usd": 0.071502,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-by-collapse"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 9484,
+ "final_text": "PROBLEM: D1 and Design: C5 was added on 07-21, but D1 was not re-derived. The rule is still \"smallest free berth that fits the length\", and the Design text says the same. A 14-metre boat drawing 2 metres can still be given C1 to C6 if one of them is the smallest free berth that fits. The change was patched in around the edges instead: the office now asks for draft and the berth chart shows depths. Nothing in the assignment rule uses draft, and no decision row records how C5 changes assignment.\n\nPROBLEM: Changes since 07-14: The new parts (the draft question in the email and radio script, and the low-water depths on the chart) trace to C5 but are attached to no decision. The record therefore cannot show whether they are enough to meet C5. Today they are not, because D1 ignores them.\n\nPROBLEM: C5: Mateo said \"The dredging's off until next year\", so C5 is temporary. The record states it as permanent and has nothing that would supersede or revisit it once dredging happens.\n\nPROBLEM: D1 / Constraints: First free berth is \"ruled out by: Mateo, 07-07\", but that statement (\"Smallest berth that fits. Don't waste a 15-metre berth\u2026\") appears in no constraint. The elimination cites an owner quote that is missing from the constraint list, so the list and the decisions disagree about what binds the design.\n\nPROBLEM: D3: It is marked \"forced\", but C2 rules out only the on-call option. The fork lists just two options and leaves out others that C2 does not rule out:\n- Booked boats could be given a berth in advance by email or text; the record notes the text service can reach any skipper whose number is on file.\n- An assignment board could be posted for arrivals after hours.\n\nSo the choice was never forced. It was reported to Mateo instead of being asked.\n\nPROBLEM: D3: The waiting pontoon holds three boats, and nothing covers a fourth late arrival. That boat ties up \"wherever, the fuel berth included\", which is exactly the problem Mateo described. Nobody walked through that case, so the default does not meet the need it exists to solve.\n\nPROBLEM: D4: Neither option is checked against C4.\n- **Staff moving boats at 08:00:** the office opens at 08:00, so this cannot clear the berth by 08:00. C4 should eliminate it, and the record does not say so.\n- **The sign:** a sign does not guarantee the berth is clear. Mateo's own report is that late boats tie up there anyway.\n\nThe designer default is recorded as if it meets C4 when nothing shows that it does.\n\nPROBLEM: D5: The \"10%\" in the first option is a number the designer chose; nothing in the record forces it. It should be marked as a designer choice or left as an open value. The \"seven nights\" part does trace to Mateo's \"a week or more\".\n\nPROBLEM: Design: It presents D2 (rafting when full) and D4 (the sign) as settled design, and only D5 is flagged as waiting for Mateo. Yet D2 and D4 are both open designer defaults. The Design text should mark them as provisional."
+}

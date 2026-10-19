@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q4.plain.sonnet.ba.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 11474,
+ "total_cost_usd": 0.018192,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3142,
+ "final_text": "**Design 2 (Candidate A) is better.**\n\n**The core problem: the email is the learner's copy of the terms.** The complaints log shows what happens when the cutoff in the email and the cutoff in the code drift apart. The board moved the cutoff from seven to ten days, the email still said \"one week\", and the centre refunded 23 learners because the email was what they had been promised. The key risk is therefore that the wording of the terms in the email and the rule in the code disagree.\n\n**Design 1** hard-codes the rule twice: `FULL_REFUND_DAYS = 10` in Python and \"ten days\" in the template prose. Those two copies are independent. The board has changed the terms twice in four years, so a third change is likely. Whoever changes the constant must remember to tell Gwen, or Gwen must remember to change the text, and nothing links them. That is exactly the failure that already cost 23 refunds. Gwen also has to do arithmetic in her head (\"ten days before\" means what date?), and the learner has to as well.\n\n**Design 2** keeps one source of truth: `FULL_REFUND_BEFORE`. The email gets a computed `$refund_deadline` date, and the refund logic uses the same `full_refund_deadline()` function. The email and the refund decision cannot disagree, because both are derived from the same value. When the board changes the rule, a developer changes one constant and every email sent afterward states the right date.\n\n**Fit with Gwen's constraints:** She asked for a placeholder she can move around and no Python editing. `$refund_deadline` is a single placeholder she can reposition freely, and all the surrounding wording stays in her template file. Wording changes (parking, caf\u00e9 hours) need no developer.\n\n**Boundary correctness:** The deadline day itself gets a full refund. Design 2's `today <= deadline` is equivalent to Design 1's `(first_session - today).days >= 10`, so behaviour matches. Design 2's email also tells the learner an unambiguous calendar date, which suits a desk that works in whole days and is easier to check than counting days.\n\n**Minor caveats for Design 2:**\n- It assumes `first_session` and `today` are plain `date` objects, as the brief says. A `datetime` would break the comparison, but the same applies to Design 1.\n- The deadline in an email is fixed at send time. If the board later changes the rule, earlier emails still show the date the learner was given. That is the right behaviour given the trading standards advice, though honouring those older terms at withdrawal time would need the terms stored per enrolment, which is outside this comparison.\n- `Template.substitute` raises on a missing or misspelled placeholder, which is a loud failure and arguably good, though Gwen should be told which placeholders exist.\n\nDesign 2 removes the duplicated-rule hazard that has already cost the centre money, at almost no extra complexity.\n\nWINNER: 2"
+}

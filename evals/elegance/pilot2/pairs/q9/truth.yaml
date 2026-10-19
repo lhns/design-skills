@@ -1,0 +1,4 @@
+better: b
+longer: b
+kind: arbitrary-limit-vs-condition-or-reasoned-bound
+reason: "A's 60-day window is a stand-in for the real condition (numbers restart each January), and it is too short for the quarterly statements Theo describes: an invoice dated 2 October, received 5 October, comes back as a stapled copy with the Q4 statement around 14 January, 101 days later, so A lets it through to the payment run and the theatre pays twice, the incident this check exists for. B states the condition the window was approximating: the same supplier number is the same invoice within one printed invoice year. The copy carries the original's printed date, so B holds it however late it arrives, and a January 0001 never matches last year's 0001. B also drops a magic number; its extra lines (an unreadable date holds rather than passes) follow Ingrid's cost asymmetry."

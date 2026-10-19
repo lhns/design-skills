@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q4.skill.opus.ba.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 14067,
+ "total_cost_usd": 0.0440822,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5591,
+ "final_text": "# Design 2 (Candidate A) is better\n\n## Constraints\n\n- **C1.** The refund rule is a full refund if the learner withdraws on or before the deadline (first session minus 10 days), otherwise nothing. Withdrawing on the deadline day itself still gets the refund. The rule is in whole days.\n- **C2.** The board sets the cutoff and changes it every couple of years, so the cutoff must be easy to change.\n- **C3.** The confirmation email is the learner's legal copy of the terms. It must always match what the code actually refunds. The complaints log shows what a mismatch costs: 23 refunds in one term.\n- **C4.** Gwen edits the template wording without touching Python. Placeholders are acceptable if she can move them around.\n\n## Trying to break each design\n\n**Boundary (C1).** Both designs are correct. In Design 1, a withdrawal exactly 10 days out gives `.days == 10`, which passes `>= 10`. In Design 2, the deadline day gives `today == deadline`, which passes `<=`. Neither can fail at the boundary.\n\n**Cutoff change (C2 + C3).** The board moves the cutoff to 14 days, and the developer edits the constant.\n- **Design 1:** the code now refunds at 14 days, but the template still says \"ten days\". The email and the code disagree until someone notices and gets Gwen to fix the template. This is the March incident again, built into the structure. The cutoff is stated in two places, owned by two different people.\n- **Design 2:** the email's `$refund_deadline` and the refund check both come from `full_refund_deadline()`. They cannot diverge, so no input or event breaks C3.\n\n**Wording change (C4).** Both designs let Gwen rewrite the text freely. Design 2 adds one placeholder, which Gwen has said she is fine with. It also gives the learner a concrete date rather than \"ten days before\", which is clearer for someone working in whole days. Neither design makes her touch Python.\n\n## Concept count\n\nDesign 2 adds one function, `full_refund_deadline`. That function is the single source of the fact that both the email and the refund check depend on. Design 1 avoids the function by stating the fact twice. The extra concept is forced by C3, and it removes the duplicate.\n\nOne residual risk applies to both designs: Gwen could delete the placeholder and type a fixed sentence instead. That is a matter of template guidance, such as a comment in the template saying \"keep `$refund_deadline`\". It is not a difference between the designs.\n\n## Ledger\n\n- **Forced:** the deadline is computed in one place, and both the email and the refund derive from it (C3).\n- **Designer choice:** show the deadline as a calendar date rather than a day count. This is clearer for learners, and Gwen can still reword around it.\n- **Deleted:** the hard-coded \"ten days\" in the template.\n\n**Deciding reason:** Design 1 states the cutoff in both the code and the template, so the next board change reproduces the incident that cost 23 refunds. Design 2 derives the email's terms from the same function that decides the refund, so the two cannot disagree.\n\nWINNER: 2"
+}

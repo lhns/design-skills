@@ -1,0 +1,117 @@
+# Free badminton slots
+
+A community sports centre has four badminton courts, booked by the hour. Members book on the centre's website or at the desk; the website shows the free slots for each of the next 14 days. The booking module is being rewritten; two candidates are below.
+
+**Schema (shared by both candidates):**
+
+- `opening_hours(day, opens, closes)`: one row per date, written by the caretaker's admin page; a date with no row is closed.
+- `court_block(court, starts_at, ends_at)`: a court out of use, also from the admin page.
+- `booking(id, member, court, starts_at)`: unique on `(court, starts_at)`.
+
+**From the centre manager:**
+
+> We take about 40 bookings a day. The website is busiest on Monday mornings, when people book their week. The database is the small one that came with the website package; it's never been the problem.
+
+**From the caretaker, Mo:**
+
+> The hall is shared with the school next door. When the school tells me they need it for an exam or a parents' evening I change the opening hours on the admin page, sometimes only the afternoon before. Floor repairs are the same: if a board lifts I block that court straight away, it's a twisted ankle waiting to happen.
+
+**From the manager, a bit later in the thread:**
+
+> Last winter people turned up to a locked hall twice, with bookings they'd made online that same morning. I'd rather not have that again.
+
+**From the developer:**
+
+> `db` is a thin wrapper: `query`, `query_one`, `execute`, and `transaction()` as a context manager. Times are local; slots start on the hour.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+# free_slot(court, starts_at) lists every bookable, unbooked slot for the next
+# 14 days, so the website reads it with one indexed query. The nightly job
+# (jobs/rebuild_free_slots.py) regenerates it from opening_hours and
+# court_block; booking and cancelling keep it current during the day.
+
+
+def free_slots(db, day):
+    return db.query(
+        "SELECT court, starts_at FROM free_slot WHERE date(starts_at) = ? ORDER BY starts_at, court",
+        day,
+    )
+
+
+def book(db, member, court, starts_at):
+    with db.transaction():
+        taken = db.execute(
+            "DELETE FROM free_slot WHERE court = ? AND starts_at = ?", court, starts_at
+        ).rowcount
+        if not taken:
+            raise SlotUnavailable(court, starts_at)
+        db.execute(
+            "INSERT INTO booking (member, court, starts_at) VALUES (?, ?, ?)",
+            member, court, starts_at,
+        )
+
+
+def cancel(db, booking_id):
+    with db.transaction():
+        b = db.query_one("SELECT court, starts_at FROM booking WHERE id = ?", booking_id)
+        db.execute("DELETE FROM booking WHERE id = ?", booking_id)
+        db.execute("INSERT INTO free_slot (court, starts_at) VALUES (?, ?)", b.court, b.starts_at)
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+from datetime import datetime, timedelta
+
+SLOT = timedelta(hours=1)
+COURTS = (1, 2, 3, 4)
+
+
+def free_slots(db, day):
+    """Bookable, unbooked (court, start) pairs on `day`, from the current hours, blocks and bookings."""
+    hours = db.query_one("SELECT opens, closes FROM opening_hours WHERE day = ?", day)
+    if hours is None:
+        return []
+    booked = {
+        (r.court, r.starts_at)
+        for r in db.query("SELECT court, starts_at FROM booking WHERE date(starts_at) = ?", day)
+    }
+    blocks = db.query(
+        "SELECT court, starts_at, ends_at FROM court_block WHERE date(starts_at) <= ? AND date(ends_at) >= ?",
+        day, day,
+    )
+    free = []
+    start, closes = datetime.combine(day, hours.opens), datetime.combine(day, hours.closes)
+    while start + SLOT <= closes:
+        for court in COURTS:
+            blocked = any(b.court == court and b.starts_at < start + SLOT and start < b.ends_at for b in blocks)
+            if not blocked and (court, start) not in booked:
+                free.append((court, start))
+        start += SLOT
+    return free
+
+
+def book(db, member, court, starts_at):
+    with db.transaction():
+        if (court, starts_at) not in free_slots(db, starts_at.date()):
+            raise SlotUnavailable(court, starts_at)
+        # The unique (court, starts_at) index stops two desks booking the same slot.
+        db.execute(
+            "INSERT INTO booking (member, court, starts_at) VALUES (?, ?, ?)",
+            member, court, starts_at,
+        )
+
+
+def cancel(db, booking_id):
+    db.execute("DELETE FROM booking WHERE id = ?", booking_id)
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

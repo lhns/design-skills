@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q2.plain.sonnet.ba.s1",
+ "track": "rating",
+ "item": "q2",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 9201,
+ "total_cost_usd": 0.019424,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3408,
+ "final_text": "**Design 2 is the better design.**\n\nJonas's question was whether anyone needs old versions of the mapping. Rhea answered no, but only about resubmitting reports. Her last comment gives the real reason: each June the auditor re-runs two of the previous year's quarterly reports from the system and ticks them off line by line against the PDFs already sent to the trust.\n\nThat requires the app to reproduce a past report exactly, long after the mapping has changed.\n\n**Design 1** reads a single mutable mapping at run time. On 1 April, Rhea will move VOL-TRAVEL and VOL-SUBS into \"Programme delivery\". After that, re-running any earlier quarter would:\n- show no \"Volunteer expenses\" row, even though the sent PDF has one;\n- inflate \"Programme delivery\" by the same amount.\n\nThe totals would no longer tick off against the PDFs, and the audit would show discrepancies that are really just the mapping having moved. Nothing in the data would explain the difference. The comment \"one answer for where a code belongs\" describes the flaw: that single answer is only correct for the present.\n\n**Design 2** keeps the mapping as append-only rows with a valid-from date, and resolves each expense's line by the expense date. Quarters before 1 April 2026 keep resolving to \"Volunteer expenses\", and later ones resolve to \"Programme delivery\". Rhea just appends rows such as `(\"VOL-TRAVEL\", \"Programme delivery\", date(2026, 4, 1))`, so the cost to her is small. Because expenses are never deleted and corrections are new rows, the expense data is also stable, so reruns are deterministic. The history is not speculative. It is needed for the audit and it is only a few lines of code.\n\nDesign 2 does need one note. Expenses dated before the earliest valid-from date raise a `KeyError`. That is acceptable, because it fails loudly rather than silently misreporting.\n\nWINNER: 2"
+}

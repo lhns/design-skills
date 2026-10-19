@@ -1,0 +1,48 @@
+# Redesign the solar-credit allocation
+
+A community energy co-operative owns a solar array on the roof of a secondary school. About 180 households in the town hold shares in it, roughly 2,500 shares in all; a member can hold anything from 1 to 120. Each month the array's output is turned into bill credits for members: the co-op sends its partner electricity supplier a file with one line per member account and a number of kWh, and the supplier takes that many kWh off the member's bill. The allocation was written as a script five years ago by a volunteer who has since moved away, and has been patched since. A change in the supplier's terms from January no longer fits, and the co-op wants the allocation redesigned rather than patched again.
+
+## How it works today
+
+- `register`: one row per member with their current number of shares. A share transfer, a new purchase or a redemption overwrites the row; a member who redeems everything is deleted.
+- The monthly script reads the register as it stands when the script is run, the array's generation for the month (export meter, whole kWh), and splits generation pro rata to shares. Each member's credit is rounded to the nearest kWh; the rounding difference goes to the co-op's "community account" so the file adds up.
+- Members with fewer than 5 shares are left out of the file. This was added when the supplier rejected the whole file because of lines with 0 kWh.
+- Share transfers dated after the 15th of a month count from the next month; transfers up to the 15th count for the whole month. This came out of the complaint below.
+- Statements to members are produced by running the script again for the month in question. For older months the treasurer keeps CSV copies of the register in a folder, when she remembers to.
+- The supplier sends each member's metered grid import for the month, in whole kWh, a few days after month end. Today this is only printed on the statement for interest. Late corrections from the supplier overwrite the stored reading.
+
+## From the treasurer, Mei (email thread, September)
+
+> The supplier's new terms from 1 January: a member's credit in a month can't be more than what that member imported from the grid that month. Anything above that is simply lost to the member, it's no longer carried forward on their bill. Some of our bigger shareholders have solar of their own and import very little in summer, so this will bite.
+>
+> At the AGM we changed the rules to match, section 4.3 (copied below). The idea is that no kWh the array makes goes to waste if any member can still use it.
+>
+> Also: the auditor was not happy this year. She takes three past months, has us run them again, and compares them with the statements and supplier files we sent. Two of the three didn't match, because people had transferred shares since and because the supplier had corrected a couple of import readings in the meantime. She also asked why the "community account", which has no meter and no bill, was getting credit.
+>
+> On corrections: the supplier does revise import readings, up to about three months later. Our rule is that statements are final once sent. When a correction comes in we work out what the member should have had and put the difference on their next statement, plus or minus. The supplier accepts negative adjustment lines.
+
+## Co-op rules, section 4 (as amended at the AGM)
+
+> 4.2 The credit for a month is shared among the members in proportion to the shares each holds, counted for each day of that month on which they hold them.
+>
+> 4.3 No member is credited more in a month than they imported from the grid in that month. Credit a member cannot use is shared among the other members in the same proportions. Energy that no member can use is sold to the supplier at the export rate, for the community fund.
+>
+> 4.4 Credits are in whole kWh. The kWh credited for a month, together with any kWh sold under 4.3, equal the array's metered generation for that month.
+
+## Ticket history
+
+> **#14** Hal transferred 10 of his shares to his daughter on 14 May. The May statement gave all of May's credit for those shares to his daughter and none to Hal. (Led to the 15th-of-the-month rule.)
+>
+> **#22** Supplier rejected the March file: zero-kWh lines are not accepted. (Led to the 5-share minimum.)
+>
+> **#29** Reprinted a member's January statement for her mortgage application; the figures didn't match the one she had. Closed, could not reproduce.
+
+## Scale
+
+Monthly generation runs from about 2,500 kWh in December to 11,000 kWh in June. Households import 150 to 450 kWh a month. The allocation runs once a month on the treasurer's laptop; the file goes to the supplier by the 8th.
+
+## Your task
+
+Design the monthly allocation, statements and supplier file so that they do what the co-op needs, including the January change. Write the design to `answer.md`, at most 600 words. Cover the concepts and stored data; how a month's credits are worked out; how statements, re-runs and late corrections work; and what each kind of change to the share register does. Keep only what the co-op needs.
+
+No user is available: choose, and label your own design choices.

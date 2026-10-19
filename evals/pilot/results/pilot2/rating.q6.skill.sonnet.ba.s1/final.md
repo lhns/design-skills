@@ -1,0 +1,26 @@
+**Design 2 (Candidate A) is better. Design 1 breaks the gateway's hard limit.**
+
+**Constraints**
+- C1 (gateway 4.2): at most one message per sender ID in any one-second interval. Extra messages get a 429.
+- C2 (gateway 4.3): more than 20 rejections in a day suspends the sender ID for 24 hours, and only the operator's support desk can lift it.
+- C3 (owner, implied by C2): every flood-warning recipient must get the message. A suspension in the middle of a flood alert would skip people, so staying unsuspended is part of this.
+- C4 (owner): about 30 minutes to reach everyone is acceptable, and faster is better.
+- C5 (developer): single-threaded worker, monotonic clock, failed submits are re-queued through `pace()`.
+
+**Trying to break each design**
+- **Design 1:** The bucket starts with 10 tokens, so the first flood alert sends 10 messages back to back. That is 9 rejections under C1 on the first button press. A second alert, or a burst after any idle period, passes 20 and triggers C2 suspension. The "burst" feature serves the "faster is better" wish in C4, but C1 forbids it, so the gateway's rate is not a soft target. The bucket also paces at exactly 1.0 s with no margin, so ordinary jitter between the worker and the gateway can still produce a 429.
+- **Design 2:** Every submit is at least 1.05 s after the previous one, on a monotonic clock. That holds for retries too, because they go through `pace()` (C5). I found no input that makes it submit faster than the limit. The 0.05 s margin absorbs network jitter, which C2's cost makes worth paying. The cost is that 1,500 recipients take about 26 minutes and 2,000 take about 35 minutes. The upper end is a little past the owner's "half an hour", which they described as acceptable from years of experience, so I judge it to meet C4. Design 1 can't beat that in steady state anyway, since both are limited by C1.
+
+**Concepts**
+- Design 2 has one concept: a minimum gap between submits. It has one unforced number, the 1.05 margin, and it has a stated reason.
+- Design 1 has two concepts, rate and capacity. The capacity (`BURST = 10`) is a number no constraint supports, and C1 contradicts it.
+
+**Deciding reason:** Design 1's burst capacity violates the gateway's one-per-second rule and risks a 24-hour suspension during a flood warning, while Design 2 keeps every constraint with a single concept.
+
+**Ledger**
+- Constraints: C1–C5 above.
+- Forced: a minimum gap of at least 1 s between submits, with no burst.
+- Designer choice: the 1.05 s margin. It is unmeasured, so tune it from observed 429 rates; if the owner needs 2,000 inside 30 minutes, the margin would have to be under about 0.8 s, which leaves no safety margin.
+- Deleted: `BURST` and the token-bucket state.
+
+WINNER: 2

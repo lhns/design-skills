@@ -1,0 +1,45 @@
+# Care home visiting slots: design record
+
+Written by the designer with Odile, the visits coordinator, in sessions on 2026-06-02, 2026-06-09 and 2026-06-16, with a follow-up on 2026-06-23.
+
+## Context
+The home has 48 residents in three wings: Rose (residents living with dementia), Ash and Elm. Visits happen in the main lounge, the garden room, the quiet room off Rose wing, or residents' own rooms. Families book by phoning the office, and on Sundays the lounge is packed.
+
+## What Odile said
+- 2026-06-02: "Families shouldn't have to ring the office to book. The office is drowning."
+- 2026-06-02: "Keep it simpler than the old phone list: one visit per family per day, that's always been our rule."
+- 2026-06-09: "Rose residents shouldn't be brought into the lounge at all. And the Rose rooms are all shared, so no visits in the rooms there either."
+- 2026-06-09: "If we have an outbreak, every family with a booking that week has to hear about it the same day."
+- 2026-06-09: "A handful of families only have a landline. They can still ring; the office can live with that."
+- 2026-06-16: Odile looked at the slot mock-up (45-minute slots, four families per room) and said "looks good, let's try it in July".
+- 2026-06-16, on whether children under 12 may visit: "Not sure yet. I'll ask the manager."
+- 2026-06-23, by email: "The garden room is being refurbished from 1 July to 31 August, so it's out for the summer."
+
+## Constraints
+- C1: Rose residents are not visited in the lounge. (Odile, 06-09)
+- C2: No visits in Rose wing's shared rooms. (Odile, 06-09)
+- C3: Families can book without phoning the office. (Odile, 06-02)
+- C4: At most one visit per family per day. (Odile, 06-02)
+- C5: Every family with a booking that week hears of an outbreak the same day. (Odile, 06-09)
+- C6: Some families can be reached only by landline. (Odile, 06-09)
+- C7: The garden room is closed from 1 July to 31 August. (Odile, 06-23)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 Where Rose residents are visited | lounge; garden room; quiet room; own room | lounge: C1; own room: C2; garden room: C7 | quiet room | forced until 31 Aug; reported to Odile 06-23, not asked (was garden room, designer default); open again from 1 Sep |
+| D2 How families book | web form only; web form plus phone for landline families; phone only | phone only: C3 | web form plus phone for landline families | decided by Odile 06-09 |
+| D3 Visits per family per day | one; no limit | no limit: C4 | one | decided by Odile 06-02 |
+| D4 Slot length and size | 30, 45 or 60 minutes; 3 to 6 families per room | - | 45 minutes, four families (designer default, shown in the 06-16 mock-up) | open; review after July |
+| D5 Outbreak notice | email only; email plus a recorded call to landline families; office phones each booked family | email only: C5, C6 | email plus recorded call (designer default) | open, asked Odile 06-16 |
+| D6 Children under 12 | allowed in every room; garden room only | - | every room (designer default, as today) | open: Odile "not sure yet" (06-16) |
+
+## Design
+The booking page shows a week of 45-minute slots per room (D4). A family picks a resident, a room and a slot; only rooms allowed for that wing are offered (D1), and a second booking that day is refused (D3). The office enters landline families' phone bookings in the same calendar (D2).
+
+In July and August the garden room is hidden; Rose residents use the quiet room (D1). In an outbreak, one button emails every family booked that week and calls the landline families with a recorded message (D5).
+
+Children visit as today until Odile decides (D6); "garden room only" would stop child visits in July and August, which will be raised with her.
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

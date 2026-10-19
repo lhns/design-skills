@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q7.placebo.opus.ba.s1",
+ "track": "rating",
+ "item": "q7",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 12177,
+ "total_cost_usd": 0.041116,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5748,
+ "final_text": "**Design 2 (Candidate A) is the better design.**\n\n**Both are correct against the flyer.** They produce the same amounts:\n- Group and member discounts don't combine; the larger applies.\n- Early bird adds to either.\n- Total savings are capped at 30%.\n- The ticket total is rounded half-up to the cent.\n- The 2.00 fee is added after rounding and is never discounted.\n\nSo the choice is about design and readability.\n\n**Why Design 2 fits this festival better**\n\n- **It fits the actual review process.** Every autumn Bea and Kofi check the code line by line against the flyer, and Bea reads \"a bit of Python if it's plain.\" Design 2 is one function that reads top to bottom in the same order as the flyer. Each flyer sentence maps to one or two lines, with a comment where the rule isn't obvious (\"don't combine: the larger one applies\").\n- **It avoids last year's problem.** Last year's pain was \"nobody could tell what ran in which order.\" Design 1 brings that problem back:\n  - The order depends on step numbers (10, 20, 30, 90) and on a sort inside a decorator.\n  - Rules mutate a shared `Quote` in place.\n  - `group_or_member` only works because it runs after both `group` and `member` have written to the dict.\n  - To be sure of the outcome, Bea would need to understand decorators, registration at import time, sort stability, and `min(..., key=q.discounts.get)` deleting a dict entry.\n- **The plugin registry is speculative (YAGNI).** It is built for a residents' discount that \"hasn't happened yet.\" Even if that discount arrives, Bea says it will have \"its own rules about what it combines with.\" The registry doesn't help with that, because combination rules are cross-cutting, as `group_or_member` already shows. A new discount would still need ordering decisions and probably another \"resolver\" rule. In Design 2, adding it means a few plain lines in the obvious place, and those lines get checked in the same afternoon review.\n- **Scale doesn't justify the extra layers.** It's one call per order and a few thousand orders a year, with one developer. The registry, dataclass, and fee accumulator add indirection without adding any capability anyone needs.\n\n**Minor notes on Design 1**\n- `RULES` is mutable global state filled in at import time, which is harder to test in isolation.\n- The `fees` accumulator generalises a single flat fee.\n\n**Possible small improvement to Design 2**\nName the rates as constants next to `TICKET`, for example `EARLY_BIRD_RATE`, `GROUP_RATE`, `GROUP_MIN_TICKETS` and `MEMBER_RATE`. All of next year's committee numbers would then sit in one block at the top, which is where Bea will check them each autumn.\n\nWINNER: 2"
+}

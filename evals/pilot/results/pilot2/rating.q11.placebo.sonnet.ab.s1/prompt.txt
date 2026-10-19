@@ -1,0 +1,125 @@
+# Holiday club opening days
+
+A charity runs a holiday club for children aged 5 to 11 in a primary school's hall. It opens on weekdays during the local council's school holidays, and parents book days online. The booking site asks one function which days the club runs; that function is being rewritten. Two candidates are below.
+
+**From the club manager, Nadia:**
+
+> We're open every weekday of the council's school holidays, bank holidays included, and never in term time. Our play workers are mostly teaching assistants from the council's schools, so they're only free in the holidays, and the hall is the school's.
+>
+> The council publishes its term dates as a table on its website, a school year at a time, after a consultation with schools and parents. The pattern is pretty steady, but they do move things: for 2026-27 they pushed the February half-term back a week to line up with the next county, and next summer starts on a Wednesday because of the way the training days fall.
+>
+> Parents can book up to twelve months ahead. Lots of them book the whole year in one go in October, as soon as the autumn newsletter goes out.
+
+**From the council's term-dates page (copied 12 October):**
+
+> 2025-26 and 2026-27: confirmed (see tables).
+> 2027-28: proposed dates are out for consultation until 30 November. Final dates will be published in December.
+
+**From the volunteer developer:**
+
+> `club_days(first, last)` returns the dates in that range the club runs, inclusive. The booking page calls it for the next twelve months. I've checked both candidates against the council's tables for 2025-26 and 2026-27 and they agree on every date.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+from datetime import date, timedelta
+
+
+def easter(year):
+    """Easter Sunday in the Gregorian calendar (anonymous Gregorian algorithm)."""
+    a, (b, c) = year % 19, divmod(year, 100)
+    d, e = divmod(b, 4)
+    g = (b - (b + 8) // 25 + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = divmod(c, 4)
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    month, day = divmod(h + l - 7 * m + 114, 31)
+    return date(year, month, day + 1)
+
+
+def monday_on_or_after(d):
+    return d + timedelta(days=-d.weekday() % 7)
+
+
+def monday_on_or_before(d):
+    return d - timedelta(days=d.weekday())
+
+
+def weeks(first_monday, n):
+    return first_monday, first_monday + timedelta(weeks=n - 1, days=4)
+
+
+# Where the council departed from its usual pattern: (school year, holiday) -> (first, last).
+COUNCIL_CHANGES = {
+    (2026, "february"): (date(2027, 2, 22), date(2027, 2, 26)),
+    (2026, "summer"): (date(2027, 7, 21), date(2027, 8, 31)),
+}
+
+
+def holidays(y):
+    """Holidays of the school year starting in September of year `y`, as (first, last) weekdays."""
+    usual = {
+        "october": weeks(monday_on_or_before(date(y, 10, 27)), 1),
+        "christmas": weeks(monday_on_or_after(date(y, 12, 19)), 2),
+        "february": weeks(monday_on_or_after(date(y + 1, 2, 15)), 1),
+        "easter": weeks(easter(y + 1) - timedelta(days=6), 2),
+        "may": weeks(monday_on_or_before(date(y + 1, 5, 31)), 1),
+        "summer": (monday_on_or_after(date(y + 1, 7, 20)), date(y + 1, 8, 31)),
+    }
+    return [COUNCIL_CHANGES.get((y, name), period) for name, period in usual.items()]
+
+
+def club_days(first, last):
+    days = []
+    d = first
+    while d <= last:
+        school_year = d.year if d.month >= 9 else d.year - 1
+        if d.weekday() < 5 and any(a <= d <= b for a, b in holidays(school_year)):
+            days.append(d)
+        d += timedelta(days=1)
+    return days
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+from datetime import date, timedelta
+
+# School holidays as published by the council, (first, last) inclusive.
+# Add a school year when the council confirms it.
+HOLIDAYS = [
+    # 2025-26
+    (date(2025, 10, 27), date(2025, 10, 31)),
+    (date(2025, 12, 22), date(2026, 1, 2)),
+    (date(2026, 2, 16), date(2026, 2, 20)),
+    (date(2026, 3, 30), date(2026, 4, 10)),
+    (date(2026, 5, 25), date(2026, 5, 29)),
+    (date(2026, 7, 20), date(2026, 8, 31)),
+    # 2026-27
+    (date(2026, 10, 26), date(2026, 10, 30)),
+    (date(2026, 12, 21), date(2027, 1, 1)),
+    (date(2027, 2, 22), date(2027, 2, 26)),
+    (date(2027, 3, 22), date(2027, 4, 2)),
+    (date(2027, 5, 31), date(2027, 6, 4)),
+    (date(2027, 7, 21), date(2027, 8, 31)),
+]
+
+
+def club_days(first, last):
+    days = []
+    d = first
+    while d <= last:
+        if d.weekday() < 5 and any(a <= d <= b for a, b in HOLIDAYS):
+            days.append(d)
+        d += timedelta(days=1)
+    return days
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

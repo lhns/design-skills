@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q12.skill.opus.ba.s1",
+ "track": "rating",
+ "item": "q12",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 14250,
+ "total_cost_usd": 0.040398199999999995,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5309,
+ "final_text": "# Design 2 (Candidate A) is the better design\n\n**Constraints**\n- **C1 (Ruth):** the hours shown must match the leaflet, the season-ticket cards and the gate boards.\n- **C2:** those printed times were fixed by the trustees in 2019 and have not changed since.\n- **C3:** opening is 10:00 and last entry is one hour before closing.\n\nThe 2011 policy is how the trustees *derived* the table once. It is not what the website must satisfy now. The printed table is the source of truth, because a mismatch with it produces the queue of unhappy season-ticket holders.\n\n**Trying to break each design against C1**\n- **Candidate B** recomputes the printed table from a sinusoidal sunset approximation, a DST rule and a rounding step. It matches the table only because those three happen to agree with it.\n  - The match was checked for 2026\u201327 only. Leap years shift the day-of-year by one, and the formula's error is a few minutes. Any month whose mid-month value sits near a half-hour boundary can therefore flip in some later year.\n  - If the UK changes or drops summer time, B's output moves while the painted boards stay the same.\n  - B has no notion of \"the trustees decided\", so it cannot express a trustee revision that departs from the formula.\n\n  Each of these is a concrete event that breaks C1.\n- **Candidate A** states the printed fact once, in the same shape it has on the boards. No date input can make it disagree with them. If the trustees revise the times, one row changes in the same place the boards change. That is the smallest possible blast radius.\n\n**Counting concepts.** B adds a sunset model, magic coefficients (1071, 105, 81), a DST rule, `last_sunday`, mid-month sampling, rounding and a cap. Not one of these is forced by a current constraint, because the table already holds their result. B looks principled (\"derived from policy\"), but it derives from the wrong source. It also ties correctness to an approximation instead of the decree. A has two concepts (`OPENS` and `CLOSES`) plus the last-entry rule.\n\n**Ledger**\n- **Constraints:** C1, C2, C3.\n- **Forced decision:** closing times come from the trustees' table, not from a calculation.\n- **Deleted:** the sunset model, the DST rule, the rounding and the cap.\n- **Designer choice:** cite the 2019 trustee decision in the table's comment so a future reader doesn't \"fix\" it back into a formula.\n\n**Deciding reason:** A encodes exactly what the boards say, so it cannot drift from them. B only reproduces the boards by coincidence of an approximation, and that coincidence can break with the calendar or with legislation.\n\nWINNER: 2"
+}

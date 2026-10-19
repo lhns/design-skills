@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b4.collapse.opus.-.s1",
+ "track": "audit",
+ "item": "b4",
+ "condition": "collapse",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 31250,
+ "total_cost_usd": 0.07579,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-by-collapse"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 9702,
+ "final_text": "PROBLEM: Constraints: Wen's 08-03 flat-share statement is not recorded as a constraint and no fork addresses it. Wen said \"a parcel's for one person, but the leaseholder gets told\", which is the actual problem. D3 then notifies \"the flat's register contact\", which recreates the problem Wen described.\n\nPROBLEM: D3: The fork mixes two independent problems: the channel (text, email or card) and the recipient (the register contact or the named addressee). Wen answered only the channel (\"Text.\"). Recording \"text to the flat's register contact\" as \"decided by Wen\" claims an answer Wen never gave. The recipient axis also lacks the option the flat-share complaint calls for: notifying the person named on the parcel.\n\nPROBLEM: D4: The fridge is ruled out by \"needs its own temperature log and a separate shelf map\". That is a cost or simplicity value, not a constraint, so it may rank the options but cannot eliminate one.\n\nPROBLEM: D4: The fork is marked \"decided 08-10\", but Wen made no choice. Wen only stated a problem: \"Chilled bags sit for hours and go off.\" The recorded choice, \"handled like any parcel\", is the option that keeps causing that problem.\n\nPROBLEM: Constraints: The grocery statement is a problem Wen wants solved but has no K item. Because of that, nothing stops the design from failing it. A chilled bag delivered at 20:30 sits on the intake shelf until 08:00 and gets no notice until then.\n\nPROBLEM: C3: The constraint paraphrases Wen beyond the quote. Wen ruled out more hours (\"budget won't stretch to more hours\"), not different hours. \"Stay 08:00 to 20:00\" is stronger than what was said, and it hides a live option: shifting the same 12 hours. Shifted hours still don't cover the 14-hour courier window, so D1 survives, but the elimination should cite what Wen actually said.\n\nPROBLEM: D1: \"lockers: no space\" eliminates an option using a fact that is not in the constraint list. The fact is real (the lobby has no free wall or floor space), but it should be recorded as a constraint with its source so the elimination can be traced.\n\nPROBLEM: D2: This open fork has no question, no decide-by event and no asked text. A standing code per firm can be shared freely, and the parcel room holds everyone's parcels. That bears on C1's purpose (theft), but it is not raised as an assumption or a risk.\n\nPROBLEM: D5: Correctly kept open, since \"looks fine to me\" approves a document and answers nothing. But the fork has no decide-by event, and the shelving is being fitted now, numbered by floor, which is hard to reverse. The specific question should be asked before fit-out.\n\nPROBLEM: D6: The fork has no decide-by event. The \"two weeks\" threshold is a designer number shown to Wen, not something Wen stated, so it should be its own fork or have a stated reason.\n\nPROBLEM: Missing fork: C4 rules out returning parcels to the depot, so uncollected parcels have nowhere to go. Shelf capacity and what happens to parcels that are never collected are undecided behaviors, and no fork covers them. D6's charge does not answer this.\n\nPROBLEM: Missing fork: \"Residents open the parcel room with their door fob\" lets any resident take any parcel. Given the theft history (C1's purpose) and the flat-share disputes, who may open the room and take which parcel is an undecided behavior that the design fixes silently."
+}

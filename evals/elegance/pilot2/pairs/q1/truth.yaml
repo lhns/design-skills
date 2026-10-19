@@ -1,0 +1,4 @@
+better: b
+longer: b
+kind: shorter-drops-buried-constraint
+reason: "The terms say a return leaves the balance 'as if you had not bought' the returned items, and points are earned on the whole-euro part of the purchase total. A floors each refund on its own, which drifts from that: a 25.98 order (two books at 12.99) earns 25; returning one book A removes int(12.99) = 12, leaving 13, but a 12.99 purchase earns 12, so 13 must go (B removes 25 - 12 = 13). Three refunds of 3.50 on a 10.50 order remove 3+3+3 = 9 of the 10 points in A, leaving 1 point for a fully refunded order; B removes exactly 10. B computes points for what is kept before and after each refund, so any sequence of partial refunds ends where a smaller purchase would have."

@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q4.skill.opus.ab.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 19388,
+ "total_cost_usd": 0.0499902,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5887,
+ "final_text": "# Candidate A is the better design\n\n**The deciding reason:** Candidate A states the refund cutoff once, and both the email and the refund calculation derive from it. Candidate B states it twice, once in Python and once in Gwen's prose, which is exactly the duplicated fact behind the spring complaints.\n\n## Constraints\n\n- **C1.** Full refund if the learner withdraws at least N days before the first session, and nothing after. No partial refunds.\n- **C2.** The board sets N and changes it from time to time. It has changed twice in four years.\n- **C3.** The office team owns the email wording. Gwen edits the template, never Python, and placeholders she can move around are fine.\n- **C4.** The confirmation email is the learner's copy of the terms. If the email and the computed refund disagree, the centre pays, as with the 23 spring refunds.\n- **C5.** The system works in whole days, and a withdrawal on the deadline day itself still gets the full refund.\n\n## Testing each design against them\n\n**C1 and C5.** Both designs compute the same boundary. Candidate A refunds when `today <= first_session - 10 days`. Candidate B refunds when `(first_session - today).days >= 10`. These conditions are equivalent, and both include the deadline day. Neither design breaks here.\n\n**C2 combined with C4.** This is where they differ.\n- In Candidate B, the board changing N from 10 to 14 means a developer edits `FULL_REFUND_DAYS`. The template still says \"ten days\" until Gwen notices. That is the March\u2013June scenario again: the code refunds by one rule while the email promises another, and under the trading standards advice the email wins.\n- Candidate B also fails the other way round. Gwen rewording the paragraph to \"two weeks\" changes nothing in the code. The template is a second, unenforced copy of the policy.\n- In Candidate A, the same change is a single edit, and every subsequent email shows the matching date. Gwen's file contains no number to drift.\n\n**C3.** Both designs keep Gwen out of Python. Candidate A adds one placeholder, `$refund_deadline`, which is exactly the kind of movable placeholder she said she accepts. It also gives the learner a concrete date (\"Friday 12 September\") rather than arithmetic to do themselves, which is fairer to learners and easier at the desk.\n\n## Concept count\n\n| | Candidate A | Candidate B |\n|---|---|---|\n| Policy fact stated | once (`FULL_REFUND_BEFORE`) | twice (constant and template prose) |\n| Derived concept | `full_refund_deadline`, used by both the email and the refund | none |\n| Special cases | 0 | 0 |\n\nCandidate A has one more function. That function is forced: it is the single place where C4's \"email equals rule\" invariant holds. The extra concept traces to a constraint, so it is not overhead.\n\n## A gap neither design closes\n\nC4 says the email is the learner's copy of the terms. Consider a learner who enrols under a 10-day rule and withdraws after the board has moved to 14 days.\n- Both candidates compute that learner's refund with the *current* constant.\n- That contradicts the email they were sent.\n\nThe fix fits naturally into Candidate A:\n1. Compute `full_refund_deadline` once, at enrolment.\n2. Store it on the enrolment record.\n3. Use the stored date for both the email and `refund_on_withdrawal`.\n\nThen the invariant becomes \"a learner's refund is decided by the deadline printed in their email\", which is exactly what trading standards said. Candidate B has no deadline concept to store, so it would have to grow one, and in doing so it would turn into Candidate A.\n\nWINNER: 1"
+}

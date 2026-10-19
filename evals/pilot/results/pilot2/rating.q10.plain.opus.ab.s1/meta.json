@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q10.plain.opus.ab.s1",
+ "track": "rating",
+ "item": "q10",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 12268,
+ "total_cost_usd": 0.037152000000000004,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2926,
+ "final_text": "# Design 1 (Candidate A) is better\n\n## The deciding issue: Candidate B breaks on 1 November\n\nCandidate B handles group loops (#118) by capping nesting depth. `MAX_DEPTH = 3` is set to the deepest chain that exists today: Parks > Grounds > Crew > Seasonal. The HR email adds a level. From 1 November the chain becomes:\n\n```\nParks (0) > Grounds (1) > North/South (2) > Crew (3) > Seasonal (4)\n```\n\nTimesheets is granted to Parks. When `members(Parks)` reaches the Seasonal groups, they are at depth 4, which is greater than `MAX_DEPTH`, so they return an empty set. **Every seasonal worker loses Timesheets access** as soon as the IT officer makes the restructure.\n\nThis is the worst way for it to fail:\n- **It is silent where it matters.** The permissions page just answers \"no\". The only signal is a log warning that a team which rarely changes groups is unlikely to read.\n- **It is partial.** The tool store (granted to Grounds) and minibus (granted to crews) still work for seasonal staff. So the problem looks like a strange Timesheets bug, not a nesting limit.\n- **It mislabels the cause.** The warning says deep nesting \"is treated as a group loop\". Someone investigating would go looking for a cycle that doesn't exist.\n\nRaising the constant would fix this case, but that is the real flaw. The limit encodes today's org chart into the code, and that limit is wrong whenever the org chart grows. It also doesn't detect loops properly. It just stops after N levels, and on a loop it still walks and repeats work up to that depth.\n\n## Why Candidate A is right\n\n- **Loops are handled correctly.** The `seen` set stops a cycle like Admin \u21c4 Facilities after one visit, so the #118 hang cannot happen again. Nothing is skipped.\n- **Depth doesn't matter.** Adding North/South, or any later restructure, needs no code change.\n- **It's iterative.** There's no recursion limit and no extra bookkeeping.\n- **Performance is fine.** With about 60 groups and 400 people, recomputing `members` for each check costs nothing, as the IT officer says.\n\n## Minor notes (not deciding)\n\n- Candidate A drops the loop warning that B has. If you want to know a loop exists (#118 was removed by hand), you could log when a group is reached twice on the same path. But a group can also legitimately appear under two parents, so that check needs care.\n- Neither candidate addresses #131 (\"why does this person have this permission\"). Candidate A's traversal could easily be changed to record the path to the person, but that ticket is parked.\n\nWINNER: 1"
+}

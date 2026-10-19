@@ -1,0 +1,13 @@
+**Candidate A is the better design.**
+
+**The constraint that matters.** The gateway accepts at most one message per sender ID in any one-second interval. Extra messages are rejected with 429. More than 20 rejections in a calendar day suspends the sender ID for 24 hours, and only the operator's support desk can lift it. A suspension during a flood warning would be a serious failure, because it would stop all alerts to the people the service exists to protect.
+
+**Candidate B violates the contract.** It starts with a full bucket of 10 tokens, so the first 10 `pace()` calls return immediately. That sends 10 messages within a fraction of a second, and the gateway accepts only the first. The other 9 are rejected, and one flood-warning button press burns almost half of the daily budget of 20 rejections. A second burst, or the same burst after the bucket refills during idle periods, pushes the sender over the limit. Every idle gap refills the bucket, so the problem recurs on every burst. Token buckets suit limits stated as "N per window, averaged", where bursts are allowed. This gateway has a hard per-second cap with no burst allowance, so the burst feature is the defect. B also gets the failed-submit retries wrong: re-queued messages draw on a bucket that may have refilled, which can trigger further bursts.
+
+**Candidate A matches the contract.** It enforces a minimum spacing between consecutive submits, which is what "one per second" means. Its 1.05 s interval adds a 5% margin for clock and network jitter, since the gateway measures arrival time, not our submit time. Retries go through `pace()` like everything else, so they are spaced too. A uses the monotonic clock, as it should, and it records `last` after sleeping, so the spacing holds even if the sleep overshoots.
+
+**Cost of the safe choice.** At 1.05 s per message, 2,000 messages take about 35 minutes. That is slightly over the owner's "half an hour is acceptable", but it is close to what they have lived with for years. The wait matters far less than the guarantee that "all of them go out and nobody is skipped". Dropping the margin to about 1.02 would bring 2,000 messages to roughly 34 minutes, and 1,500 messages take about 26 minutes at 1.05 s. A worst-case flood alert is therefore acceptable, and a suspension is not. B's speed advantage is only about 9 seconds, which is meaningless here.
+
+**Minor notes on A.** The margin constant could be documented with the 4.2 reference. A tiny extra margin might be worth considering if network jitter between submit and arrival is significant. Neither is blocking.
+
+WINNER: 1

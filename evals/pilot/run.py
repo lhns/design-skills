@@ -78,7 +78,7 @@ def item_ids(track):
     if track == "gen":
         return sorted(d.name for d in GEN.glob("*") if d.is_dir())
     if track == "audit":
-        return sorted(f.stem for f in AUDIT.glob("a*.md"))
+        return sorted(f.stem for f in AUDIT.glob("*.md") if f.stem.lower() != "readme")
     return sorted(d.name for d in FIRST.glob("*") if d.is_dir())
 
 

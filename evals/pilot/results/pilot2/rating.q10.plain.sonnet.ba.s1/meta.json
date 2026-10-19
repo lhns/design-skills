@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q10.plain.sonnet.ba.s1",
+ "track": "rating",
+ "item": "q10",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 9037,
+ "total_cost_usd": 0.015942,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2665,
+ "final_text": "**Design 2 (Candidate A) is better.** Design 1 will silently break on 1 November.\n\n**Design 1 (depth cap)**\n- It guards against the #118 loop with `MAX_DEPTH = 3`, justified by the deepest current chain, Parks > Grounds > Crew > Seasonal. That chain reaches depth 3 from Parks, which is exactly the cap.\n- The HR email adds a level: Grounds becomes North/South, with the crews and their Seasonal groups beneath. The chain is then Parks > Grounds > North > Crew > Seasonal, which is depth 4.\n- Anything below the cap returns `set()` with only a log warning. Seasonal staff would lose Timesheets, the tool store and the minibus, with no error. Nobody would notice until staff complained, probably in April when the seasonal intake arrives.\n- The cap also doesn't really detect loops. A loop that starts below depth 0 still recurses up to the cap, and it can repeat work or re-add members.\n- A person who is reachable only through the over-deep path looks the same as someone with no permission. That is a silent failure in an access-control check.\n\n**Design 2 (visited set)**\n- It tracks the groups it has already seen, so a loop terminates however the groups are nested. Loops like #118 are harmless, and the result is correct because group membership through a cycle is simply the union of all the groups in it.\n- It has no assumption about nesting depth, so the North/South reorganisation and any later restructuring work without code changes.\n- It also visits each group once, so diamond-shaped nesting is handled efficiently. It is iterative, so there is no recursion limit either.\n- It is simple and correct for the current scale of 60 groups and 400 people.\n\nNeither candidate addresses #131 (showing why someone has a permission). That feature is parked, and a visited-set traversal could be extended to record the path later.\n\nWINNER: 2"
+}

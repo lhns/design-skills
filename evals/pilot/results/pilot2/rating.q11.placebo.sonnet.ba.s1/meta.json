@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q11.placebo.sonnet.ba.s1",
+ "track": "rating",
+ "item": "q11",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 15063,
+ "total_cost_usd": 0.025434,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 6409,
+ "final_text": "**Design 1 is better.** The deciding factor is what each one does with dates the council hasn't confirmed.\n\n**Design 1 (explicit table)**\n- It encodes exactly what the council has published, and the developer checked it against both confirmed years.\n- Beyond the data it returns no days. Booking opens only where dates are confirmed, so the failure is safe: the club shows as closed, nobody pays for a day that doesn't run, and the fix is a short edit once the council publishes in December.\n- The council changes dates by consultation, so a table matches how the real rules are made. The comment says how to extend it.\n- It is plain and easy to review against the council's page.\n\n**Design 2 (computed pattern plus exceptions)**\n- It matches the two confirmed years, but only because `COUNCIL_CHANGES` patches the departures from the pattern. That list shows the pattern is not reliable.\n- For 2027-28 it silently invents dates. Those dates are still under consultation until 30 November and could move, and this council has already moved February and summer.\n- Parents book a year ahead in October. A wrong guess means families book and pay for days when the club, its staff (TAs who are only free in the holidays) and the school hall are not available. That is a real cost to the charity and to families, and it is hard to undo.\n- Adding exceptions later means editing the pattern code and the override keys. The Easter algorithm and the week-offset helpers are also more machinery than the problem needs (YAGNI), and the logic is harder to check against the council's table.\n- It also recomputes holidays for every day in the loop, which is wasteful, though minor.\n\n**Caveat on Design 1:** it silently returns nothing for years it has no data for. Ideally it would raise or flag \"dates not yet published\" for dates past the last table entry, so a forgotten update is noticed. That is a small addition, and it is still a safer default than guessing.\n\nDesign 2's cleverness predicts something that is decided by people and still open, and its wrong answers cost real money and trust.\n\nWINNER: 1"
+}

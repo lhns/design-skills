@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q9.skill.opus.ab.s1",
+ "track": "rating",
+ "item": "q9",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 16318,
+ "total_cost_usd": 0.045270200000000003,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5558,
+ "final_text": "# Candidate B is the better design\n\n**Constraints**\n- **C1:** A missed duplicate costs the payment. A false hold costs a few minutes. So when unsure, hold.\n- **C2:** Invoice numbers vary in format, so normalise them.\n- **C3:** Don't match on amount.\n- **C4:** Some suppliers restart numbering every January. Don't flood January with false alarms.\n- **C5:** The printed invoice date is sometimes empty.\n- **C6:** Quarterly statements carry copies of every invoice from the quarter. They arrive a couple of weeks after the quarter ends, and the post room can't always tell a copy from an original.\n\nBoth candidates handle C2 and C3 the same way. The difference is how they deal with C4.\n\n**Breaking Candidate A**\n\nThe scenery-hire firm sends an invoice that arrives on 5 January. The Q1 statement arrives around 14 April with a copy stapled behind it. That is about 99 days between receipts, which is more than the 60-day window, so A does not hold the copy and it gets paid. This is last year's incident, through exactly the channel Theo described. Any copy of an invoice from the first month or so of a quarter falls outside the window.\n\nThe 60 is an unforced number trying to meet two opposing pressures:\n- C6 needs a window of at least about 3.5 months.\n- C4 needs it short.\n\nNo single value satisfies both. Widening it to about 110 days still causes January clashes for the reset suppliers, because their December invoices would match new January ones. Receipt date is the wrong representation: it is incidental to when the invoice was issued.\n\n**Breaking Candidate B**\n\n- **Statement copy:** it carries the same printed date as the original, so the years are equal and B holds it. C6 is met however late the statement arrives.\n- **January reset:** a new 0001 is dated this year and last year's 0001 is dated last year, so there is no false alarm. C4 is met.\n- **Missing date:** `same_invoice_year` returns True and the invoice is held. That costs minutes, which C1 explicitly accepts. C5 is met in the safe direction.\n- **December invoice copied in a January statement:** the printed year is still the same, so B holds it.\n\nI could not construct an input that makes B miss a real duplicate. The exception is a mistyped printed year, and A has an equivalent blind spot in receipt timing.\n\nB's one concept is \"a supplier doesn't reuse a number within a printed year\". It is derived from Theo's description of the reset suppliers. It replaces an arbitrary bound with a condition, and the null case leans the way Ingrid's cost asymmetry says it should.\n\n**Deciding reason:** A's 60-day receipt window misses the statement copies that caused last year's double payment, while B keys on the printed year, which handles both the January resets and late statement copies.\n\nWINNER: 2"
+}

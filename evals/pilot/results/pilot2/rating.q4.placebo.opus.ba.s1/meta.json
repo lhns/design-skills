@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q4.placebo.opus.ba.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 10942,
+ "total_cost_usd": 0.036836,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5396,
+ "final_text": "**Design 2 (Candidate A) is better.**\n\n**The key issue is the rule written in two places.** In Design 1 the refund cutoff exists twice: `FULL_REFUND_DAYS = 10` in Python, and the words \"at least ten days\" in Gwen's template. Different people maintain those two copies. The board changes the rule and a developer edits the code; Gwen owns the wording and has no reason to touch it. This is exactly how the spring-term incident happened. The email said \"one week\", the system used ten days, and because the email counts as the learner's copy of the terms, the centre paid 23 refunds. Design 1 rebuilds that failure.\n\nDesign 2 gives the rule one home. `FULL_REFUND_BEFORE` drives both `refund_on_withdrawal` and the `$refund_deadline` placeholder, through the same `full_refund_deadline` function. If the board changes the cutoff, one constant changes, and the email and the refund decision change together. The template no longer states the number of days at all, so it can't fall out of date.\n\n**It also fits the stated needs:**\n- **Gwen:** she gets one more placeholder she can move around the text, and no Python. That is what she said she's fine with.\n- **Learners and the desk:** \"on or before Tuesday 14 January\" is a concrete date. Learners don't have to count days and wonder whether the deadline day itself counts. The rule says a withdrawal on the deadline day still gets the full refund, and `today <= deadline` with \"on or before\" states that directly.\n- **Correctness:** both versions treat the boundary the same way (`days >= 10` and `today <= first_session - 10 days`), so Design 2 adds no behaviour risk. The `full_refund_deadline` function also has a clear name and is easy to test on its own.\n\n**Minor caveats:**\n- The template still describes the shape of the policy (\"full refund, then nothing\"). If the board ever introduced partial refunds, someone would need to change both the code and the wording. That would be a policy change rather than a parameter change, though, and needs coordination either way.\n- `Template.substitute` raises an error if Gwen deletes or misspells a placeholder. That is a good fail-fast behaviour. It's worth adding a test that renders the real template file, so a broken edit is caught before any emails go out.\n\nWINNER: 2"
+}

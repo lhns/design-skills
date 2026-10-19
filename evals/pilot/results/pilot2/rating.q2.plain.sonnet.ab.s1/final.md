@@ -1,0 +1,13 @@
+**Design 1 is better.**
+
+Rhea and Jonas agree there's no need for mapping history, but the audit comment says otherwise. In June the auditor re-runs two of the previous year's quarterly reports from the system and ticks them off line by line against the PDFs sent to the trust. A report therefore has to be reproducible long after it was sent.
+
+**Design 2** keeps one current mapping and edits it in place. Once Rhea moves VOL-TRAVEL and VOL-SUBS into "Programme delivery" on 1 April, any re-run of an earlier quarter puts those expenses under the new line. The "Volunteer expenses" row disappears and "Programme delivery" grows, so the re-run no longer matches the PDFs. The audit would fail on exactly the change the ticket describes. Nothing warns anyone, because the code runs without error and just returns different numbers. The comment "one answer for where a code belongs" is also wrong, because the right answer depends on when the expense was made.
+
+**Design 1** stores each mapping row with a valid-from date and looks up the line using the expense date. Rhea only appends rows, for example `("VOL-TRAVEL", "Programme delivery", date(2026, 4, 1))`, and the old rows stay. Re-running an old quarter gives the same lines as the PDF, as long as the expenses themselves haven't changed. That holds here, because expenses are never deleted and corrections are posted as new rows. This costs very little: one extra column, a small lookup function, and an append-only list that Rhea edits a few times a year. It also fails loudly with a `KeyError` if a code has no line for that date, instead of silently misreporting.
+
+Design 1 isn't the "history nobody uses" that Jonas wanted to avoid, because the audit uses it every year.
+
+One caveat for both designs: a correction row posted later for an old date would change a re-run of that quarter. That is a separate concern from the mapping, and it would apply equally to either design.
+
+WINNER: 1

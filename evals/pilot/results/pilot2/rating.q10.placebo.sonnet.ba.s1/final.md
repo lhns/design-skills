@@ -1,0 +1,11 @@
+**Design 2 is better.**
+
+**Design 1 will break on 1 November.** It treats any nesting deeper than `MAX_DEPTH = 3` as a loop, and the constant is tuned to today's chain, Parks > Grounds > Crew > Seasonal. That chain sits exactly at the limit, with Seasonal at depth 3. The HR email says Grounds becomes North and South, with the crews and their seasonal staff beneath them. The chain then becomes Parks > Grounds > North > Crew > Seasonal, which is depth 4.
+
+`members()` would return an empty set for every Seasonal group and only log a warning. Seasonal staff would silently lose Timesheets, the tool store, and the minibus, all of which are granted higher up. The org chart is going to change, so a hard-coded depth limit is a fragile way to detect loops. It also confuses "deep" with "cyclic".
+
+**Design 2 detects cycles directly.** The `seen` set stops revisiting a group, so a loop like the Admin/Facilities one in #118 terminates and returns the correct membership. It has no depth assumptions, so the restructuring needs no code change. It is iterative, so there is no recursion limit, and it is about as short as Design 1. Re-walking subtrees for each permission group is a minor cost, and with 60 groups and 400 people nothing is slow.
+
+**Trade-off:** Design 2 tolerates loops silently, while Design 1 at least logs. That does not make up for Design 1 dropping legitimate members. If visibility into loops matters, a warning can be added to Design 2 later when a group is seen twice. Doing so would need care, because a diamond-shaped hierarchy also revisits a group without being a loop.
+
+WINNER: 2

@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q4.placebo.opus.ab.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 12942,
+ "total_cost_usd": 0.040156000000000004,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5562,
+ "final_text": "# Candidate A (Design 1) is the better design\n\n## The central issue: one rule, one home\n\nThe complaints log describes a specific failure. The board changed the cutoff, the code (or the desk) followed the new rule, and the email still showed the old one. The email counts as the learner's copy of the terms, so the stale wording cost 23 refunds.\n\n**Candidate B repeats that failure.** The cutoff lives in two places:\n\n- `FULL_REFUND_DAYS = 10` in Python\n- \"at least ten days before your first session\" typed into Gwen's template\n\nWhen the board next changes the terms, someone must update both. They are owned by different people: developers own the constant and Gwen owns the text. Nothing links the two copies, and no test fails if they disagree. This is the DRY case where duplication is truly dangerous: a business rule copied across a team boundary.\n\n**Candidate A fixes this.** `FULL_REFUND_BEFORE` drives both:\n\n- `refund_on_withdrawal`, through `full_refund_deadline`\n- the email, through the `$refund_deadline` placeholder\n\nWhen the policy changes, a developer edits one constant, and every email after that states the new deadline. The email cannot contradict the code that decides refunds.\n\n## It also suits the people involved\n\n- **Gwen** keeps full control of the wording. She has one more placeholder, `$refund_deadline`, which she can move around as she asked. She never edits Python.\n- **Learners** get a concrete date, such as \"Monday 12 January\", instead of \"ten days before\". This is clearer and leaves less room to argue at the desk.\n- **The deadline-day rule** (\"a withdrawal on the deadline day itself still gets the full refund\") is spelled out in A. A named function returns the \"last day on which a withdrawal still gets the full fee back\", and the code compares with `today <= deadline`. The template's \"on or before\" matches it exactly. In B, the reader has to work out that `.days >= 10` gives the same boundary.\n\n## Correctness\n\nBoth versions compute the same boundary. With plain dates, `today <= first_session - 10 days` is equivalent to `(first_session - today).days >= 10`. So B is not wrong today. It is fragile, because its correctness depends on two separately maintained copies staying in sync.\n\n## Minor points that apply to both\n\n- The template is read at import time. A missing file fails at startup, which is fine (fail fast), but Gwen's edits only take effect after a restart.\n- `Template.substitute` raises an error if Gwen deletes or misspells a placeholder. This is the right behaviour. A test that renders the real template file would catch the problem before deployment.\n- A's template still states the shape of the policy (\"full refund\u2026 after that no refund\") in prose. If the board ever brought in partial refunds, the template would need rewording anyway. That is a real change of terms, not a number drifting out of sync, so it is acceptable under YAGNI.\n\nWINNER: 1"
+}

@@ -1,0 +1,15 @@
+**Design 1 (Candidate A) is better.** The deciding issue is whether the refund rule has one source of truth.
+
+**The complaint repeats under Candidate B.** In B the cutoff lives in two places: `FULL_REFUND_DAYS = 10` in Python, and the words "at least ten days" in Gwen's template. The board has changed the terms twice in four years. The next change will need a developer to edit the constant and Gwen to edit the wording, and nothing links the two. That is exactly how spring term went wrong: the code moved to ten days while the emails kept saying "one week". Because trading standards treats the email as the learner's copy of the terms, every mismatch costs refunds. Last time it was twenty-three.
+
+**Candidate A uses one value for both.** `full_refund_deadline()` drives the refund check and fills the `$refund_deadline` placeholder in the email. If the board changes the rule, a developer edits `FULL_REFUND_BEFORE` and every new email shows the new deadline. Gwen never needs to know the number.
+
+**A is also clearer for learners and the desk.** "If you withdraw on or before Monday 12 January" is harder to misread than "at least ten days before your first session". The second leaves open whether day ten counts, and the learner has to count back on a calendar. A states the boundary explicitly, which matches Odile's rule that a withdrawal on the deadline day still gets the full refund. The desk can also check a date on screen against the date in the email.
+
+**Gwen's requirements are met.** She gets one more placeholder, which she said is fine as long as she can move it around in the text. `string.Template` allows that, and she never touches Python.
+
+**Both compute refunds correctly.** `today <= first_session - 10 days` and `(first_session - today).days >= 10` are the same test on plain dates, including the deadline day. The difference between the designs is entirely whether the email can drift from the rule.
+
+**A remaining risk in A.** Gwen could delete `$refund_deadline` and type a number by hand, which would bring back the drift. A cheap guard is to check at startup that the template contains `$refund_deadline` and refuse to load if it doesn't. Optionally, also reject any template containing a hard-coded number of days.
+
+WINNER: 1

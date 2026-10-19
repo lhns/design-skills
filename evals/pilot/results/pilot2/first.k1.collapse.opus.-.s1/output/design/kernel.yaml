@@ -1,0 +1,78 @@
+# Kernel. Every item quotes the owner (from) or a checkable fact (source).
+# Ids never change; a change supersedes. Inferences are NOT here: they sit in forks' assumes lists.
+items:
+  - id: K1
+    statement: The hall lets three spaces - the main hall (seats 120, with a stage), the kitchen, and the small meeting room upstairs.
+    from: [V1]
+  - id: K2
+    statement: Everyone is a volunteer; nobody is employed and there is no money to pay anybody.
+    from: [V2]
+  - id: K3
+    statement: The premises licence allows amplified music until 23:00 and not a minute after.
+    from: [V3]
+  - id: K4
+    statement: The stage sockets go through a sound limiter with a time switch fitted; as far as Gwen knows it has never been set.
+    from: [V4]
+  - id: K5
+    statement: Controls that depend on the hirer (such as a hire-agreement clause) are not adequate; the committee, as licence holder, must be able to show that the 23:00 condition is enforced.
+    from: [V17]
+  - id: K6
+    statement: A further breach of the 23:00 condition is likely to lead to a review of the licence.
+    from: [V17]
+  - id: K7
+    statement: People can see which dates are free without asking Gwen.
+    from: [V7]
+  - id: K8
+    statement: Regular hirers - the lunch club (Tuesdays), the whist drive (Thursday evenings), Pilates (twice a week), the dance school (every Saturday morning since 2022).
+    from: [V8]
+  - id: K9
+    statement: The lunch club and whist drive organisers are in their eighties, have never sent an email, and ring for every extra date (Christmas lunch, AGM, summer outing tea).
+    from: [V25]
+  - id: K10
+    statement: Hirers stop ringing Gwen at home.
+    from: [V21]
+  - id: K11
+    statement: Gwen is available on Monday and Wednesday mornings.
+    from: [V26]
+  - id: K12
+    statement: Gwen is away from January to March; something should be in place before then (before 2027-01-01).
+    from: [V27]
+  - id: K13
+    statement: Prices - small room 12 GBP/hour, main hall 25 GBP/hour, 30 GBP/hour on Saturday nights.
+    from: [V23]
+  - id: K14
+    statement: Deposits were scrapped in spring 2023 after a withheld deposit caused a public row; the hall takes no deposit today.
+    from: [V14, V15]
+  - id: K15
+    statement: The neighbours complained about a party that went on past midnight.
+    from: [V16]
+  - id: K16
+    statement: The committee has a treasurer.
+    from: [V28]
+  - id: K17
+    statement: A clock or time switch drifts and must be changed for summer time unless it does so itself; a switch set to exactly the limit can end up after it.
+    source: physics of time switches; UK clocks change on the last Sundays of March and October (next 2026-10-25, then 2027-03-28)
+  - id: X1
+    statement: Keys stay as they are - hirers collect them from the shop and return them through the shop's letterbox.
+    from: [V12]
+  - id: X2
+    statement: No volunteer goes to the hall at night, and nobody is on call at night, at the hall or from home.
+    from: [V13]
+  - id: W1
+    statement: Saturday-night parties with a disco matter; they pay for the roof fund.
+    from: [V5]
+  - id: W2
+    statement: Peace in the village; the deposit row is not to be repeated.
+    from: [V14, V15]
+  - id: W3
+    statement: Less chasing of cheques and fewer dates lost to pencilled bookings that come to nothing.
+    from: [V18, V19]
+  - id: W4
+    statement: No more double bookings.
+    from: [V6]
+  - id: W5
+    statement: Families should be able to get a Saturday for a christening tea or a child's party.
+    from: [V10]
+  - id: W6
+    statement: The kitchen is left fit for the next user.
+    from: [V22]

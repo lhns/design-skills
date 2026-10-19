@@ -1,0 +1,116 @@
+# Wave 2: planted errors per audit doc. Kinds:
+#   inference-as-constraint, value-rules-out-option, bundled-decision,
+#   forced-decision-incomplete-options, approval-as-constraint, stale-choice
+# forced-decision-incomplete-options (new in wave 2): a decision recorded as forced
+#   ("only option left", reported not asked) whose option list silently omits a viable
+#   option that no constraint rules out, so it was not forced and should have been asked or kept open.
+# A finding matches when it names the same kind (or an equivalent description) at the same place.
+# Consequences of a planted error (rows it rules out, choices it forces, design text that follows
+# from it) are part of that error, not extra errors.
+# acceptable_extra (end of file) lists real but unplanted weaknesses a strict reviewer may
+# legitimately flag. A finding that matches one is neither a hit nor a false alarm.
+
+b1:
+  - kind: inference-as-constraint
+    where: "C2 'Members book at the boathouse on the morning they go out.', used in D1 to rule out booking up to 7 days ahead and in D2 to rule out the cox booking ahead"
+    why: "Annika said 'Most members book at the boathouse on the morning they go out' (03-04). Dropping 'Most' turns a habit into a rule. It removes advance booking, the only option that serves the eights problem (03-11: crews spend the week agreeing a time, then find the boat gone). D2's 'first crew to book on the day' leaves that problem unsolved."
+  - kind: stale-choice
+    where: "D3 'Who a booking records', choice 'the member who books' (decided 03-11), and the design text where only the booker picks a name and taps out/back"
+    why: "C5 (03-25, insurer: from 1 May the club can say who was in the boat for every outing) rules out recording only the booker for crew boats. The 03-25 change note updated D5 (duration) but left D3 and the dependent design text unchanged; D3 should have moved to recording each crew member."
+
+b2: []
+# Clean, with look-alikes:
+# - D1 is forced with a complete option list (Context names the four places visits happen) and reported, not asked;
+#   it was moved when C7 arrived on 06-23 (was garden room), and is marked open again from 1 Sep.
+# - "simpler" appears only in Odile's own quote (06-02); D3 is ruled by C4, her stated rule.
+# - Odile's "looks good" on the 06-16 mock-up is recorded as an event; D4 stays an open designer default and rules nothing out.
+# - C3 'Families can book without phoning the office' is a faithful rewording of "Families shouldn't have to ring the office to book";
+#   phone booking for landline families is kept (D2), as Odile decided on 06-09.
+# - D5 rules out only email-only, by C5 + C6; the remaining two options stay open with a labelled default.
+# - D6 stays open with a labelled default after "not sure yet", and the design flags its interaction with C7.
+
+b3:
+  - kind: value-rules-out-option
+    where: "D2 Booking channel, phone bookings ruled out by 'adds a second entry path that has to be kept in step with the web calendar'"
+    why: "No constraint from Farid is behind this; it is the designer's preference for one channel, phrased as a technical cost (and contact-centre staff would enter bookings on the same platform anyway). It removes the only option that serves Farid's Saturday pensioners who have never booked anything online (04-13); with Saturday booking required, they have no way to book."
+  - kind: forced-decision-incomplete-options
+    where: "D3 How Saturday bookings are checked, 'number-plate camera', status 'forced; reported to Farid 04-20, not asked'"
+    why: "C5 bans stopping cars for a check in the lane or at the barrier, nothing more. The option list omits checking the booking at the skip bays, past the barrier, where cars already park and staff already check van permits (Context) and where the design itself handles unbooked cars. Nothing rules it out, so D3 is not forced; and the camera costs 4,800 a year and needs committee approval, so it had to be asked."
+
+b4:
+  - kind: bundled-decision
+    where: "D3 Arrival notice, all options addressed to 'the flat's register contact', choice 'text to the flat's register contact'"
+    why: "Two problems are settled by one choice: the channel (Wen chose text on 08-10) and who is told. Every option silently fixes the recipient as the register contact, usually the leaseholder, which is exactly Wen's 08-03 flat-share problem ('the leaseholder gets told, and then it's a whole argument'). Recipient (register contact vs the addressee on the label) should be its own open decision."
+  - kind: value-rules-out-option
+    where: "D4 Chilled groceries, fridge ruled out by 'needs its own temperature log and a separate shelf map'"
+    why: "Nobody asked for a temperature log or forbade a second shelf map; this is the designer's wish to keep one storage type, phrased as technical overhead. It removes the only option that serves Wen's grocery problem (08-10: chilled bags go off), although a spare fridge is available (Context). Chilled bags still sit, out of hours until morning."
+
+b5:
+  - kind: approval-as-constraint
+    where: "C4 'Orders for the following week close on Thursday at 18:00. (Lucia, 05-12)', used in D2 to rule out 18:00 the day before and 09:00 on the day"
+    why: "Thursday 18:00 came from the designer's mock-up; Lucia's 'looks good' on 05-12 approved a proposal and gave no constraint. The two later deadlines still meet C1 (numbers by 09:30) and are the options that serve Lucia's 05-12 problem of meals binned when a child is off sick. D2 is a designer choice and should be open."
+  - kind: inference-as-constraint
+    where: "C2 'Pupils on free meals are never identifiable.', used in D4 to rule out marking each served meal as free or paid in the office's records"
+    why: "Lucia said they must never be identifiable 'at the till' (05-05). Dropping 'at the till' widens the constraint to all records. That removes the per-meal record she needs for her monthly claim 'pupil by pupil, off the cook's till sheets' (05-12); the design replaces it with pupils x school days, which is not the claim she described. (D3's ruling-out of payment type on the till screen is correct under either reading.)"
+
+b6:
+  - kind: forced-decision-incomplete-options
+    where: "D3 Arrivals after 18:00, 'waiting pontoon', status 'forced; reported to Mateo 07-14, not asked'"
+    why: "C2 rules out only the radio after 18:00. The option list omits giving boats that booked ahead their berth in advance by text or email (half of visitors book ahead and give a mobile number; the text service exists, Context), and e.g. a posted list of free berths. Nothing rules these out; the design itself already tells booked-ahead skippers their berth by email when the office assigns it, yet D3 still sends every late arrival to the waiting pontoon. The waiting pontoon holds three boats, so the late-arrival problem (boats tying up anywhere, the fuel berth included, 07-14) is not solved and the decision should have been asked."
+  - kind: stale-choice
+    where: "D1 How berths are assigned, choice 'smallest free berth that fits the length' (decided 07-07), and the design text 'the smallest free berth that fits its length'"
+    why: "C5 (07-21: boats drawing more than 1.2 m don't use C1 to C6) rules out assigning by length alone. The 07-21 change note added draft to the forms and depths to the office chart, but D1's rule and the design text still assign by length only, so a deep boat can be given an inner berth."
+
+b7: []
+# Clean, with look-alikes:
+# - D1 is forced with a complete option list (repairs app: C2 + C5; spreadsheet: C2) and reported, not asked.
+# - "standard" appears only in Ruth's own quote (01-20); D3 is ruled by C3.
+# - D6 carries a designer value ("a shorter form") only as the reason for a labelled default on an open row; nothing is ruled out by it.
+# - Ruth's "nice and clear" on the 01-27 status-page mock-up is recorded as an event; D5 stays an open designer default.
+# - C6 (02-03) moved D4 (contractor's line until 31 March, then the co-op on-call phone) and the design text with it.
+# - C4 is a faithful rewording that keeps "without a smartphone"; C2 rewords "if it isn't in there, it didn't happen".
+# - Reporting (D2) and progress updates (D5) are separate decisions, not bundled.
+# - D7 stays open with a labelled default after "not sure yet".
+
+b8:
+  - kind: approval-as-constraint
+    where: "C5 'Meetings last one hour, and each handler takes at most two a day. (Bea, 09-22)', used in D2 to rule out 30 minutes and per-dog length, and in D3 to rule out three or four meetings per handler"
+    why: "Both numbers came from the designer's meeting-flow sketch; Bea's 'looks good' on 09-22 was an approval, not a constraint. Per-dog length serves Bea's 09-15 point (big young dogs need a long walk, old and nervous ones are done in twenty minutes), and more meetings per handler serve the backlog of forty approved adopters (09-08). D2 and D3 are designer choices and should be open. (D4, also from the sketch, is correctly an open designer default.)"
+
+acceptable_extra:
+  b1:
+    - "C1 restates Annika's double-booking complaint as a rule rather than quoting a requirement"
+    - "The out/back log depends on members remembering to tap; missed taps undercount outings for C4"
+    - "No fallback if the single boathouse tablet fails"
+  b2:
+    - "Phone bookings by landline families still land on the office Odile called overloaded (accepted by Odile on 06-09, but a reviewer may note the tension)"
+    - "In July and August Ash and Elm families can also book the quiet room, which is then Rose wing's only room; no rule protects Rose capacity"
+    - "D4's four families per room is not derived from room sizes"
+    - "D1's option list covers the four indoor places named in Context; a reviewer might add outdoor visits in summer"
+    - "C1 paraphrases 'shouldn't be brought into the lounge at all' as 'not visited in the lounge', slightly narrower (not used beyond ruling out lounge visits)"
+  b3:
+    - "Unbooked Saturday cars are still let in once, so C1 depends on people booking"
+    - "C4's 'about twenty' becomes a hard cap of 20 in D5"
+    - "D6 slot size rests on a designer count, unconfirmed"
+    - "Residents-only (C3) is checked only by postcode on Saturday bookings; weekdays rely on the existing skip-bay check"
+  b4:
+    - "Every resident's fob opens the parcel room, so theft (the C1 problem) can move inside the room"
+    - "Standing courier codes per firm (D2 default) can be passed around; no rotation stated"
+    - "D1's 'lockers: no space' rests on a Context fact rather than a stakeholder constraint"
+    - "Parcels delivered out of hours are not announced until the concierge shelves them next morning"
+  b5:
+    - "D5 gives a pupil with no order the vegetarian dish without checking their allergies (C3 covers only what the cook sees)"
+    - "A meal ordered for an absent pupil is still cooked and charged (follows from the planted D2 error but a reviewer may list it separately)"
+    - "How the monthly credit handles trips, absences or mid-month changes is not stated"
+  b6:
+    - "The fuel berth (C4) is protected only by a sign (D4 is an open default)"
+    - "D2 allows rafting on outer berths without a limit on boat size or number"
+    - "D1 assigns by size with no regard to length of stay or later bookings"
+  b7:
+    - "C2 'Every repair is recorded in the housing system' reads a requirement into 'if it isn't in there, it didn't happen'; defensible but a reviewer may call it an inference"
+    - "Out-of-hours emergencies are logged only next morning, so the record lags (C2 is met eventually)"
+    - "D2 'decided with Ruth' has no quote recording her choice"
+  b8:
+    - "Nervous or adult-only dogs get no limit on meetings per day"
+    - "Applicants without a booking link (approved before go-live) are not covered"
+    - "C1's morning feeding hour falls before opening, so only 16:00 to 17:00 matters; stated loosely"

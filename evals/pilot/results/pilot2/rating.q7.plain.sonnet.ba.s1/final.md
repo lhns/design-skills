@@ -1,0 +1,19 @@
+**Design 2 (Candidate A) is the better design.**
+
+**Correctness:** Both compute the same price for every order.
+- Both take the larger of the group and member discounts, then add early bird (15%).
+- Both cap the total at 30%, round the ticket total half-up to the cent, and add the 2.00 fee after discounting.
+- Both treat 28 February as inclusive, which matches "book by 28 February".
+
+So the choice comes down to how well each design serves the people who maintain it.
+
+**Why Design 2 fits this situation:**
+- **It matches the review process.** Bea and Kofi check the code line by line against the flyer each autumn. Design 2 is about 10 lines of logic in the same order as the flyer: the larger of group and member, early bird added, cap, then fee. Bea can read it without help, and the comments map directly to flyer sentences.
+- **It fixes last year's problem.** Last year's code was hard to follow because nobody could tell what ran in which order. In Design 2 the order is simply the order of the lines. In Design 1 the order depends on numeric step values (10, 20, 30, 90), on `RULES.sort` at import time, and on rules mutating a shared `Quote`. Reviewers have to hold all of that in their heads and jump between functions. That is a milder version of the problem the rewrite is meant to solve.
+- **The scale is small.** There is one call per order and a few thousand orders a year, so there is no performance or throughput reason for a plugin structure.
+- **The residents' discount is only a possibility.** The committee has discussed it for years and it hasn't happened. If it does, Design 2 needs a few added lines, such as a new term in the `max(...)` or an extra `+=`, depending on what it combines with. Those lines are visible and reviewable in context. Design 1's registry makes adding a rule look easy, but the combination rules are the hard part, and they still need cross-rule "keep the larger" fix-up steps like `group_or_member`. The step numbers also have to be chosen carefully to interact correctly with the existing ones. The registry therefore adds indirection without removing the real work.
+- **Design 1 carries more risk.** It has module-level mutable state, a `RULES.sort` on every registration, and a rule that deletes entries by comparing dict values. Ordering mistakes would be silent, for example a new rule given the wrong step number.
+
+If the discount rules grow to the point where the single function becomes unwieldy, it can be refactored then. Today, Design 2 is the simpler, more reviewable choice.
+
+WINNER: 2

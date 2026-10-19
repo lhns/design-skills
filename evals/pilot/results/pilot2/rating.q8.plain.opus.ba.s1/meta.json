@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q8.plain.opus.ba.s1",
+ "track": "rating",
+ "item": "q8",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 13135,
+ "total_cost_usd": 0.040276000000000006,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3492,
+ "final_text": "**Design 1 (Candidate B) is the better design.**\n\n**The deciding factor is staleness.** Mo changes opening hours and blocks courts during the day, \"sometimes only the afternoon before\", and blocks a court \"straight away\" when a board lifts. The manager's main complaint is people booking online the same morning and finding the hall locked.\n\n- **Design 2 (Candidate A)** builds `free_slot` from `opening_hours` and `court_block` only in the nightly job. After that, only `book` and `cancel` change the table. If Mo shortens the hours or blocks a court at 3pm, the website keeps offering those slots until the next rebuild, and `book` accepts them, because it only checks that a row exists in `free_slot`. That is the locked-hall incident again, built into the design. It also lets members book a court with a lifted board. To fix this, you would need to rebuild or adjust the cache whenever the admin page changes. That is a second write path that must agree with the generator, and it is easy to get wrong.\n- **Design 2's `cancel` makes it worse.** It puts the slot straight back into `free_slot` without checking whether that time is still open and unblocked. So a cancellation can bring back a slot that is now closed or blocked. It also fails with an error if the booking id doesn't exist (`b` is `None`).\n- **Design 1 (Candidate B)** works out free slots from the current `opening_hours`, `court_block` and `booking` on every call. `book` repeats that check inside the transaction. A change on the admin page therefore takes effect on the next page load and the next booking. The unique `(court, starts_at)` index still stops two people taking the same slot.\n\n**Design 2's advantage, performance, isn't needed here.** The centre has about 40 bookings a day, 4 courts, at most around 60 slots per day, and a 14-day window. Even on a busy Monday morning, Design 1's three small queries per day shown are trivial, and the manager says the database \"has never been the problem.\" The cache adds a moving part and a correctness risk to solve a problem the centre doesn't have.\n\n**Minor points about Design 1, none of which change the verdict:**\n- Changing hours or adding a block doesn't affect bookings already made. The admin page should list the affected bookings so the centre can contact those members.\n- `cancel` doesn't check that the booking exists, which does no harm.\n- Two desks booking the same slot at once will get an integrity error from the unique index rather than `SlotUnavailable`. That error should be caught and turned into `SlotUnavailable`.\n\nWINNER: 1"
+}

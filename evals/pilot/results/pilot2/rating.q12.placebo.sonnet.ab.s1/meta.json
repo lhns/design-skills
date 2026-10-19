@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q12.placebo.sonnet.ab.s1",
+ "track": "rating",
+ "item": "q12",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 11264,
+ "total_cost_usd": 0.017842000000000004,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5243,
+ "final_text": "**Candidate A is the better design.**\n\n**What the requirements say.** The policy describes how the trustees chose the times in 2019. Ruth says the times have stayed the same since then and are now printed on the leaflet, the season-ticket cards and the gate boards. The website must match them, and a mismatch has already caused real trouble. So the published table is the source of truth, and the sunset rule only explains where it came from.\n\n**Candidate A** encodes the published table directly.\n- It returns exactly what the boards show, for every year, with no drift.\n- It is trivial to verify: anyone can compare 12 entries against the leaflet.\n- When the trustees change the times, a maintainer edits one visible table.\n- Its only derived logic is last entry, one hour before closing, which is a stable rule.\n\n**Candidate B** re-derives the times from an astronomical approximation.\n- It matches the table for 2026 and 2027 only because it was tested against those years. The sinusoidal sunset formula is accurate to a few minutes at best, and the result is rounded down to the half hour. In any year where the daylight-saving dates shift or the approximation lands near a rounding boundary, a month could flip by 30 minutes. The website would then disagree with the painted boards, which is the failure Ruth described.\n- It is much harder to read. It contains magic numbers (1071, 105, 81, 365), a hand-rolled last-Sunday calculation and daylight-saving logic.\n- It tries to be faithful to the policy's wording, but the policy is not what is printed on the boards.\n- It would need continuous re-checking against the table, which makes the table the real spec anyway.\n\n**Trade-off.** B follows the policy's rule, so it would adapt if the policy were applied to a new location or year. That flexibility is not needed, and it works against the requirement that the website match fixed physical signage. Following YAGNI and KISS, A is the right choice. A short comment noting that the table comes from the 2019 trustee decision and the policy would help future readers.\n\nWINNER: 1"
+}

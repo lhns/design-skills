@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b5.collapse.opus.-.s1",
+ "track": "audit",
+ "item": "b5",
+ "condition": "collapse",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 23107,
+ "total_cost_usd": 0.06119,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-by-collapse"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 8951,
+ "final_text": "PROBLEM: Constraints, C4: This is not an owner constraint. Lucia only approved a mock-up the designer drew (\"looks good, parents will get that\"). Approving a document states nothing, so C4 is at most an accepted recommendation (R). It must not eliminate options.\n\nPROBLEM: D2: The two shorter deadlines are \"ruled out by C4\". But C4 is just the chosen option restated, so the reasoning is circular. \"18:00 the day before\" and \"09:00 on the day\" both still satisfy C1 and should stay live. D2 should be open, not \"decided 05-12\". No specific question settling it was ever asked.\n\nPROBLEM: D2 / What Lucia said 05-12: Lucia's complaint about choosing a week ahead appears nowhere in the constraints or decisions. Her words: \"Parents moan that they choose a week ahead, then the child is off sick and the meal gets binned anyway.\" It is at least a value (W) that ranks against the Thursday deadline, and the recorded choice goes against it. Keeping it out of the record hid the conflict.\n\nPROBLEM: Missing fork: What happens to an order when the child is absent is never decided. That covers cancellation, refund, or the meal being binned, and it bears on the 40-portion waste. Lucia raised it on 05-12. Every undecided behavior should be a fork.\n\nPROBLEM: Constraints, C2: The paraphrase drops Lucia's qualifier \"at the till\". She said free-meal pupils must never be identifiable *at the till*. The record turns this into \"never identifiable\" anywhere. The broader version is the designer's inference, not her statement.\n\nPROBLEM: D4: \"Marked per meal\" is eliminated by C2, but only by the broadened C2. A per-meal free/paid mark in the office records is never shown at the till, so Lucia's actual statement does not rule it out. The elimination rests on an inference.\n\nPROBLEM: D4 / Design (council claim): Lucia's 05-12 statement is not recorded as a constraint and is not checked against the design. She said: \"Every month I claim the free meals back from the council, pupil by pupil, off the cook's till sheets.\" The design replaces her process with \"number of free-meal pupils \u00d7 school days\". That claims meals that were never served, for example to absent pupils. It is not pupil by pupil. It also no longer comes from till records. The design silently overrides the owner's process, which is a conflict that should go to her.\n\nPROBLEM: D4 status: The record says \"decided 05-12\" but does not say who decided it or quote the answer. No owner statement chooses the monthly credit. It reads as a designer choice recorded as a collapse.\n\nPROBLEM: D5: This open fork has no recorded question, `asked` date or decide-by event. Its default was not checked against C3 or C1. A pupil with no order is given the vegetarian dish regardless of allergies. The design also does not say how these unordered pupils enter the firm 09:30 numbers.\n\nPROBLEM: D6: The fork is open on \"not sure yet\", but its decide-by event is not recorded. That event is presumably the trips calendar being available, or the first trip that needs packed lunches. The exact question asked is also not recorded, so a later session could ask it again.\n\nPROBLEM: What Lucia said 05-05: \"We throw away about forty portions a day\" is the motivating value: reduce waste. It is not recorded as a value, so no decision cites it. D2, D5 and absence handling should be ranked against it."
+}

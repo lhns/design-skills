@@ -1,0 +1,4 @@
+better: b
+longer: a
+kind: honest-lookup-table-vs-forced-clean-model
+reason: "The council sets the dates by consultation and publishes them as a table; the 'pattern' is only a fit, which already needs two exceptions for the two published years, and every future change means adding another. Parents book twelve months ahead, many in October: from October 2026 that window reaches the October 2027 half-term, whose year is still in consultation. A computes 25-29 October 2027 from its rules and the booking page sells those days, though the club can only run on the council's real holidays (school staff, school hall), which aren't fixed until December. B has no rows for 2027-28, so nothing is bookable until the council confirms the year and someone adds six rows. Both agree on every published date, which makes A's Easter algorithm and rules look validated."

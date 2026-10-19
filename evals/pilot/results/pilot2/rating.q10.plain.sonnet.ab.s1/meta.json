@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q10.plain.sonnet.ab.s1",
+ "track": "rating",
+ "item": "q10",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 8488,
+ "total_cost_usd": 0.016298,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2700,
+ "final_text": "**Candidate A is the better design.**\n\n**Candidate B has a hard-coded depth limit that the 1 November reorganisation breaks.**\n- `MAX_DEPTH = 3` is justified by the current deepest chain, Parks > Grounds > Crew > Seasonal. That puts Seasonal at depth 3, which is just allowed.\n- The HR email says Grounds will be split into North and South, with the crews and their seasonal staff moving under them. The chain becomes Parks > Grounds > North > Crew > Seasonal, so Seasonal sits at depth 4.\n- Anyone reaching Timesheets (granted to Parks) or the tool store (granted to Grounds) only through a Seasonal group would silently lose the permission. The only trace is a log warning, and `members` returns an empty set for that branch.\n- The limit is also a poor way to detect loops. It cuts off legitimate deep nesting, and a real loop is still re-walked up to the depth limit, repeating work and logging warnings each time.\n- Fixing it means someone has to remember to edit the constant. The IT officer makes the group changes personally, so a mistake here would be easy to miss.\n\n**Candidate A handles the actual problem, loops, directly.**\n- It tracks visited groups, so a cycle like Admin \u21c4 Facilities (#118) terminates after visiting each group once.\n- It has no limit on depth, so adding North and South levels, or any later restructuring, needs no code change.\n- It is iterative, so there is no recursion limit.\n- At about 60 groups and 400 people, the cost of recomputing membership per check is irrelevant.\n\nNeither candidate implements #131 (showing why someone has a permission), but that is parked and not a deciding factor. A would be easier to extend for it by recording the path while traversing.\n\nWINNER: 1"
+}

@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b7.placebo.opus.-.s1",
+ "track": "audit",
+ "item": "b7",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 30804,
+ "total_cost_usd": 0.0735326,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-process"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 9743,
+ "final_text": "PROBLEM: Whole record, dates: Today is 2026-10-19, and the last entry is from 2026-02-03. The record still describes 1 April as a future switchover (\"until 31 March, then\u2026\"). It does not say whether the on-call phone went live. D5, D6 and D7 have been open for eight months without being raised with Ruth.\n\nPROBLEM: C5 and D1: C5 ran \"until the June meeting\", and that meeting has passed. Nobody has checked whether the freeze was lifted or extended. D1 used C5 to rule out a repairs app. D1 is still forced by C2, but the ledger shows C5 as a live reason, which may now be false.\n\nPROBLEM: Context and Constraints, missing goal: Ruth's main complaint was \"half our calls are chasers\". That is the reason the project exists, but it is not recorded as a goal or constraint. As a result, D5 (progress updates), the decision that serves this goal, has nothing to trace to. It sits open as a designer default even though it is central to the design.\n\nPROBLEM: Design section: It describes the D5, D6 and D7 defaults (texts plus status page, optional photo, handyman sets times) as settled design. It does not mark them as open designer choices. A reader who was not in the room would take them as agreed.\n\nPROBLEM: D5 and 01-27 note: Ruth's \"nice and clear\" was a reaction to a mock-up. That is acceptance of a designer proposal, not a decision. The table correctly leaves D5 open. But the plan to \"raise with Ruth\" has no owner or date, and the design text already depends on the outcome.\n\nPROBLEM: D4 and C1: From 1 April the on-call phone replaces the contractor's line. Nothing records who answers it or who attends within 24 hours. C6 only says that a phone exists. C1 (attendance) is not shown to be met after 1 April, and this gap is not on any risk list.\n\nPROBLEM: D4 record keeping: The decision was changed by editing the row in place (\"was contractor's line\"). It was not recorded as a superseding decision with its own context. The reason and date are given only in passing.\n\nPROBLEM: D2, D5 and C5: Both depend on switching on the portal, which has never been used. They also depend on sending texts from the housing system. The record never confirms that either is free under the existing licence and not a new subscription or per-message charge. That assumption is unstated and unvalidated, and there is no assumptions list or risk list at all.\n\nPROBLEM: Design, contractor jobs: The flow covers only the handyman (\"the handyman sets appointments\"). For larger jobs done by the contracted firm, it does not say who books them or who updates the housing system with booked and done statuses. Without those updates, both C2 (the audit record) and the status updates fail for those jobs.\n\nPROBLEM: C3 and the Constraints list: Only the emergency timescale is captured. The tenancy agreement's categories almost certainly set timescales for urgent and routine repairs too. These are not recorded as inferred constraints or as an open question.\n\nPROBLEM: D5 and C4: The record accepts that tenants may lack a smartphone (C4), but progress goes only by text and the web portal. A tenant with only a landline gets no updates and will keep making chaser calls. This is not considered."
+}

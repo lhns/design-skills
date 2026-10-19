@@ -1,0 +1,35 @@
+# Vision: village hall bookings
+
+The owner is Gwen, the bookings volunteer. These are her words, verbatim. Classes: C constraint, V value, X exclusion, O open, R accepted recommendation.
+Session 1 (2026-10-19) is her opening brief, put together from notes she made over the summer.
+
+| Id | Class | Statement |
+|----|-------|-----------|
+| V1 | C | "Main hall (seats 120, with a stage), a kitchen, and the small meeting room upstairs." (2026-10-19) |
+| V2 | C | "We're all volunteers; the hall hasn't employed anyone since the caretaker retired, and there's no money to pay anybody now." (2026-10-19) |
+| V3 | C | "The premises licence lets us have amplified music until 23:00 and not a minute after." (2026-10-19) |
+| V4 | C | "When the stage sockets were put through a sound limiter a few years back, the electrician fitted a time switch on it too. As far as I know nobody has ever set it." (2026-10-19) |
+| V5 | V | "Saturday-night parties pay for the roof fund, and round here a party without a disco isn't a party." (2026-10-19) |
+| V6 | C | "Everything lives in my diary at home. People ring me, I pencil them in, and every so often I find I've put two parties on one Saturday." (2026-10-19) |
+| V7 | C | "What I'd really like is for people to see which dates are free without asking me." (2026-10-19) |
+| V8 | C | "Regulars: the lunch club on Tuesdays, the whist drive on Thursday evenings, Pilates twice a week, and the dance school, which has had every Saturday morning since 2022." (2026-10-19) |
+| V9 | O | "The Pilates lady now wants Saturday afternoons as well." (2026-10-19) |
+| V10 | C | "Meanwhile I'm telling families there's no Saturday for a christening tea or a child's party until next spring." (2026-10-19) |
+| V11 | O | "Maybe nobody should get more than, oh, twelve Saturdays a year? Just thinking aloud." (2026-10-19) |
+| V12 | X | "Keys are fine as they are: hirers pick them up from the shop and put them back through the shop's letterbox. Please don't fix what isn't broken." (2026-10-19) |
+| V13 | X | "None of us goes near the hall at night any more, and none of us is on call at night either, at the hall or from home. We agreed that when I took the diary on." (2026-10-19) |
+| V14 | C | "We used to take a hundred-pound deposit. In 2023 we held back the toddler group's deposit over a sticky floor and two broken glasses, and it ended up in the parish magazine: letters for three issues, and two committee members resigned." (2026-10-19) |
+| V15 | V | "We scrapped deposits that spring, and it's been peaceful since." (2026-10-19) |
+| V16 | C | "The neighbours complained about a fortieth that went on past midnight." (2026-10-19) |
+| V17 | C | Licensing team email, quoted by Gwen: "Controls that depend on the hirer, such as a clause in your hire agreement, are not in my view adequate. As licence holder, the committee must be able to show that the 23:00 condition on amplified music is enforced. A further breach is likely to lead to a review of the licence." (2026-10-19) |
+| V18 | C | "I'm forever chasing cheques; I still have three outstanding from June." (2026-10-19) |
+| V19 | C | "people pencil in a date, go quiet for weeks, and then cancel. This year I turned away two wedding receptions for a Saturday that ended up empty." (2026-10-19) |
+| V20 | O | "Should we just make everyone pay online when they book, and be done with it?" (2026-10-19) |
+| V21 | C | "I'd also like hirers to stop ringing me at home. It's every evening and Sunday lunchtimes, and my husband has had enough." (2026-10-19) |
+| V22 | C | "The kitchen. People leave it in a state. Last month somebody left a bin of prawn shells over a hot weekend, and the Tuesday lunch club walked into it." (2026-10-19) |
+| V23 | C | "The upstairs room is £12 an hour, the main hall £25, £30 on Saturday nights." (2026-10-19) |
+| V24 | O | "(Whether the small room is still ours to let next year is another matter. The playgroup want it full-time, and the committee keeps putting off deciding.)" (2026-10-19) |
+| V25 | C | "The lunch club and the whist drive are run by people in their eighties. Neither has ever sent an email, and they ring for every extra date: the Christmas lunch, the AGM, the summer outing tea." (2026-10-19) |
+| V26 | C | "I'm about on Monday and Wednesday mornings." (2026-10-19) |
+| V27 | C | "I'm away at my sister's from January to March, so it would be lovely to have something in place before then." (2026-10-19) |
+| V28 | C | "the committee has finally agreed I can have some help. Our treasurer passed on your name." (2026-10-19) |

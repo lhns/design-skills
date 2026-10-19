@@ -1,0 +1,23 @@
+# Design 1 (Candidate B) is better
+
+The code shows three rules, but the business has only two separate concerns. They come from different sources and will change at different times.
+
+| Concern | Source | Will it change? |
+|---|---|---|
+| Who is "behind" (dashboard and reminder letter) | Treasurer's request and board policy | Yes. The board agreed to trial **3 days** from January for six months. |
+| When a late fee may be charged | Tenancy agreement, clause 4.3 | No. It is fixed at **7 days** in every tenancy contract. |
+
+The treasurer's email sets one constraint: the dashboard and the reminder letter must use exactly the same rule. The late fee is not part of that constraint. It is governed by the contract.
+
+**Design 2** puts all three behaviours on a single `OVERDUE_AFTER` constant, and the comment ties that constant to clause 4.3. In January, someone will change it to `timedelta(days=3)` to run the board's trial. That one change will also start posting £15 late fees after 3 days. The contract only allows a fee after 7 days, so the co-op would be charging households fees it has no right to charge. The comment makes this more likely, because it presents the number as a single concept. A careful maintainer has nothing to warn them that two different rules are hiding behind it.
+
+**Design 1** models the business accurately:
+- `is_overdue` and `REMINDER_AFTER` drive both `dashboard` and `reminders_due`. The auditor's finding (households on the dashboard but never sent a letter) cannot happen again, because both use one predicate.
+- `late_fee_applies` and `LATE_FEE_AFTER` are separate, and the code cites clause 4.3 as their source.
+- The January trial is a one-line change to `REMINDER_AFTER`. The contractual fee rule is untouched. When the trial ends in July, reverting the change is just as safe.
+
+Both constants are 7 days today. That is a coincidence, not one shared rule, and Design 1 is right not to merge them.
+
+**Small improvement for Design 1:** add a comment on `REMINDER_AFTER` saying it is board policy, not contract. For example: "board policy; trial of 3 days from January (September minutes, item 6)". Then a future maintainer won't "tidy" the two constants into one.
+
+WINNER: 1

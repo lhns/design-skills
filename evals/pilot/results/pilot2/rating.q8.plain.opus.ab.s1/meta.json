@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q8.plain.opus.ab.s1",
+ "track": "rating",
+ "item": "q8",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 13263,
+ "total_cost_usd": 0.039612,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3460,
+ "final_text": "**Design 2 (Candidate B) is better.**\n\n**What decides it: Candidate A's free-slot table goes stale, and that is the exact failure the manager described.**\n\nCandidate A's `free_slot` table is rebuilt from `opening_hours` and `court_block` only by the nightly job. During the day, only booking and cancelling update it. Mo's changes are the ones that happen during the day:\n\n- He changes opening hours, sometimes only the afternoon before.\n- He blocks a court the moment a board lifts.\n\nNeither change reaches `free_slot` until the night's rebuild. In the meantime:\n\n- **Hall closures:** if the school takes the hall tomorrow and Mo edits the hours this afternoon, the website keeps offering tomorrow's slots until the rebuild. Members can book them. This is how people \"turned up to a locked hall with bookings they'd made online that same morning.\"\n- **Court blocks:** a court Mo blocked for a lifted board stays bookable for the rest of the day. That is the \"twisted ankle waiting to happen.\"\n- **Cancellations:** `cancel` puts the slot back into `free_slot` without checking hours or blocks. Cancelling a booking on a newly blocked court, or in newly closed hours, makes that slot bookable again even after the nightly rebuild has run.\n\nYou could patch this by having the admin page also rewrite `free_slot`. But then every writer of `opening_hours` and `court_block` has to keep a second copy in sync, which is fragile.\n\n**Why the cache isn't worth it:** the cache exists to make reads fast, and nothing here needs that.\n\n- The centre takes about 40 bookings a day.\n- There are four courts, so at most a few dozen slots per day.\n- The manager says the database has never been the problem.\n\nCandidate B works out each day's free slots directly from the current hours, blocks and bookings, using three small queries. Even the Monday-morning peak won't strain that.\n\n**Candidate B's correctness:**\n\n- `book` checks availability against live data inside a transaction, so a change Mo made a minute ago is respected.\n- The unique `(court, starts_at)` index catches two people booking the same slot at once. Ideally the code would catch that constraint violation and raise `SlotUnavailable` instead of letting the database error through.\n- `cancel` only has to delete the booking. There is no derived data to keep consistent, so freeing a slot on a blocked court can't happen.\n\n**Small issues in B, none of which change the verdict:**\n\n- `free_slots` will show slots for today whose start time has already passed.\n- Multi-day blocks are matched by date and then by overlap, which works correctly.\n\nWINNER: 2"
+}

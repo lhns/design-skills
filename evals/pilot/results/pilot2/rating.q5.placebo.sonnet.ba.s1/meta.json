@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q5.placebo.sonnet.ba.s1",
+ "track": "rating",
+ "item": "q5",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 13280,
+ "total_cost_usd": 0.022470000000000004,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5749,
+ "final_text": "**Design 1 (Candidate B) is the better design.**\n\n**The underlying model.** All three tickets have the same cause: scans arrive in a different order from the one in which they were taken. Each scan carries a reliable timestamp, because the handhelds sync their clocks on every connection. So the right model is to store the scans ordered by time taken and derive the location from the latest one.\n\n**Candidate B does this.**\n- **#41:** A late move sorts before the shipped scan, so the pallet correctly shows as not in the building.\n- **#47:** A late receive sorts before the first move, so the move wins and the pallet stays put.\n- **#49:** Out-of-order moves are sorted, so the latest one wins.\n- **Refused pallets:** A new `received` scan after `shipped` is simply the latest event, so the pallet shows at DOCK. No special case is needed.\n- **Future problems:** Because arrival order no longer matters, other late-scan cases are covered without new rules.\n- **Cost:** Volumes are a few thousand scans a day, so keeping every scan and using `insort` is cheap. Scans are never edited or deleted, so an append-only history fits.\n\n**Candidate A encodes the three fixes as separate rules.** Each ticket became a rule about arrival order, and the rules interact badly.\n- **Late `shipped` scans:** The operations manager says the loading-bay handhelds are nearly as unreliable as the freezers. If a `shipped` scan arrives late, after the pallet was refused, returned and moved again, A wipes its location to `None`. The pallet vanishes from stock.\n- **Stale `shipped` flag after a return:** A late move from before the original shipment arrives after the re-receive. The flag was reset, so the stale move is applied and puts a returned pallet in the wrong place.\n- **Comparing only against `moved_at`:** A receive and a ship are not compared with a move by time at all. The \"receive doesn't override a known location\" rule also quietly depends on the shipped-then-`None` state.\n- **Maintenance:** Each new ordering bug needs another special case, and the result depends on the order in which scans happen to arrive. That is hard to reason about and test.\n\n**Minor points on B.** `location_of` on a defaultdict creates empty entries for unknown pallets, and `\"DOCK\"` could be a named constant. Both are cosmetic compared with A's correctness gaps.\n\nWINNER: 1"
+}

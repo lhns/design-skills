@@ -1,0 +1,22 @@
+{
+ "run_id": "gen.h2.placebo.sonnet.-.s1",
+ "track": "gen",
+ "item": "h2",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 47196,
+ "total_cost_usd": 0.136764,
+ "mode": "full",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": "clean-code",
+ "skills_invoked": [
+  "clean-code"
+ ],
+ "timed_out": false,
+ "tokens": 97193,
+ "final_text": "I refactored `fares.py` and fixed #402. The 6 visible tests and my 7 new ones pass. pytest isn't installed here, so I ran them as plain scripts.\n\nThe files sit at the repo root, not in `fixture/` as the brief said, so I worked in place.\n\n**What changed**\n- Single and return trips now share one code path. The passenger and vehicle lines for one leg are built once, then repeated for \"Outbound\" and, if there's a return date, \"Return\".\n- Every fare fact now lives in one table at the top of the module:\n  - **Passenger bands:** adult from 16, child from 4, infant from 0, with their prices.\n  - **Flat-fare vehicle classes:** car up to 5.00 m, van up to 7.00 m, with their prices.\n  - **Long vehicles:** the per-metre rate, plus the 18.75 m longest-lane limit.\n  - **Booking fee:** 2.50.\n- The yearly fare change is now an edit to those tables. The motorbike class next year is one more row in the vehicle table, with no new branches.\n- `quote` now reads as validate, price one leg, repeat per leg, add the fee.\n\n**Tickets**\n- **#402 (fixed):** a single crossing used `< 5.00` for cars while return trips used `<= 5.00`. There is now one rule, so a 5.00 m car pays the car fare either way.\n- **#311 (kept):** both legs are priced on the outward date, per clause 7.2. I replaced the old \"should the return leg use its own date?\" TODO with a comment citing the clause.\n- **#288 and #377 (kept):** infant lines still print at 0.00, and long vehicles still charge per started metre.\n- **#350, #415, #421:** left alone. #350 was fixed in the booking service, and #415 and #421 have no decision yet.\n\n**Design choices (mine)**\n- I used `Season` as an `IntEnum`, and each price is a three-value tuple (high, shoulder, low). That way every row states its prices once, without repeating season keys.\n- Passengers go in the first age band they qualify for, so a band's age limit is written once.\n- `total` is now a `sum` seeded with `Decimal(\"0.00\")`, so it behaves as before.\n- Ages for return tickets are still taken on the outward date, as before.\n\nThe new tests are in `test_fares.py`. They cover the 5.00 m boundary on single and return trips, 8.1 m charged as 9 m, return-trip season and infant lines, and the vehicle length limits."
+}

@@ -1,0 +1,4 @@
+better: a
+longer: b
+kind: complexity-hidden-elsewhere-vs-plain
+reason: "Both compute the same prices. B's rules look small and independent, but the flyer's real content is how discounts combine, and B moves that into step numbers, a shared mutable Quote, and a rule (group_or_member) that only works because it runs after two others and before the cap applied in price(). To check the code against the flyer, which Bea and Kofi do line by line every autumn and could not do last year because nobody could tell what ran in which order, they must reconstruct the order from the decorators and the effect of each rule on the dict. A states the flyer in sentence order in one place. The residents' discount, B's motivating extension, comes with its own combination rules, so in B it would also need edits to group_or_member or a new step between existing ones; in A it is one more line in the same expression."

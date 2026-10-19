@@ -1,0 +1,4 @@
+better: a
+longer: b
+kind: arbitrary-limit-vs-condition-or-reasoned-bound
+reason: "B's depth cap stands in for loop detection and is sized to today's org chart. The HR reorganisation adds a level (Parks > Grounds > North > Crew 3 > Seasonal), and Timesheets is granted to Parks: from 1 November B reaches Seasonal at depth 4 > MAX_DEPTH, logs a warning nobody reads and returns no one, so every seasonal worker silently loses Timesheets (and anything else granted to Parks), while A still finds them. A stops on the actual condition, a group already visited, which handles the #118 loop at any depth and needs no number. B's comment even records the assumption the reorg breaks."

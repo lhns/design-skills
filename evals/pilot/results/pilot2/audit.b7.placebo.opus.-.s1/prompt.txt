@@ -1,0 +1,46 @@
+# Housing co-operative repair requests: design record
+
+Written by the designer with Ruth, the housing officer, in sessions on 2026-01-13, 2026-01-20 and 2026-01-27, with a follow-up on 2026-02-03.
+
+## Context
+The co-operative owns 180 homes. Tenants report repairs by phoning the office, which types them into the housing system it uses for rents. A handyman does small jobs; a contracted firm does larger ones and runs a 24-hour emergency line. The housing system can send text messages and has a tenant web portal that was never switched on.
+
+## What Ruth said
+- 2026-01-13: "Tenants ring, then ring again three days later to ask what's happening. Half our calls are chasers."
+- 2026-01-13: "No heating, water coming through a ceiling, a front door that won't lock: someone has to be there within 24 hours. That's in the tenancy agreement."
+- 2026-01-13: "The board audits repairs from the housing system every quarter. If it isn't in there, it didn't happen."
+- 2026-01-20: "Stick to the standard categories from the tenancy agreement: emergency, urgent, routine. Everyone knows them."
+- 2026-01-20: "Some tenants don't have a smartphone. They must still be able to report a repair by phone."
+- 2026-01-20: "No new subscriptions. The board has frozen them until the June meeting."
+- 2026-01-27: Ruth looked at the status-page mock-up (reported, booked, done) and said "nice and clear".
+- 2026-01-27, on letting tenants choose their own appointment: "Not sure yet. The handyman likes planning his own week."
+- 2026-02-03, by email: "The contractor is dropping its out-of-hours line at the end of March. From 1 April we run our own on-call phone."
+
+## Constraints
+- C1: Emergencies are attended within 24 hours. (Ruth, 01-13)
+- C2: Every repair is recorded in the housing system. (Ruth, 01-13)
+- C3: Repairs are categorised emergency, urgent or routine, as in the tenancy agreement. (Ruth, 01-20)
+- C4: Tenants without a smartphone can still report repairs by phone. (Ruth, 01-20)
+- C5: No new subscriptions before June. (Ruth, 01-20)
+- C6: From 1 April the co-op's on-call phone replaces the contractor's line. (Ruth, 02-03)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 Where requests are recorded | housing system; a separate repairs app; a shared spreadsheet | repairs app: C2, C5; spreadsheet: C2 | housing system | forced; reported to Ruth 01-20, not asked |
+| D2 How tenants report | phone only; phone and a web form | - | phone and a web form | decided with Ruth 01-20 |
+| D3 Categories | the tenancy agreement's three; a five-level scale | five-level: C3 | the three | decided by Ruth 01-20 |
+| D4 Out-of-hours emergencies | contractor's line; co-op on-call phone; next working day | next working day: C1; contractor's line from 1 April: C6 | contractor's line until 31 March, then the co-op on-call phone | changed 02-03 (was contractor's line) |
+| D5 Progress updates | a text at each step; a status page; both | - | a text at each step, plus the status page (designer default) | open, to raise with Ruth |
+| D6 Photos on the web form | optional; required | - | optional (designer default; a shorter form, and the phone route stays equal) | open |
+| D7 Appointment times | handyman sets them; tenant picks from his free slots | - | handyman sets them (designer default, as today) | open: Ruth "not sure yet" (01-27) |
+
+## Design
+A tenant reports a repair by phone or on the portal's web form, with an optional photo; either way it lands in the housing system under one of the three categories (D1, D2, D3, D6).
+
+At each step (reported, booked, done) the tenant gets a text, and the portal's status page shows the same (D5). The handyman sets appointments and the tenant is texted the time (D7).
+
+Out of hours, the office answerphone gives the contractor's number until 31 March and the co-op's on-call number from 1 April, and the job is logged in the housing system next morning (D4, C2).
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

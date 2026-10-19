@@ -1,0 +1,26 @@
+**Design 2 (Candidate A) is better.**
+
+**Why Design 1 fails**
+
+Design 1 keeps a single current mapping, so every report uses wherever a code points *today*. That conflicts with two facts in the ticket:
+
+1. **The mapping is about to change.** From 1 April, VOL-TRAVEL and VOL-SUBS move from "Volunteer expenses" to "Programme delivery." Rhea will edit the dict in place.
+2. **Old reports do get re-run.** Rhea says they never resubmit reports, which is why she answered "no" to Jonas about history. But her later comment shows that the June auditor picks two of the previous year's quarterly reports, re-runs them from the system, and checks them line by line against the PDFs sent to the trust.
+
+After the change, re-running any quarter before 1 April under Design 1 puts volunteer spend into "Programme delivery." The "Volunteer expenses" row disappears and the "Programme delivery" row grows, so the output no longer matches the submitted PDFs. The audit fails, and nothing in the system can reproduce what was actually reported. Jonas's question was the right one, but the answer is "yes, history is used," just not by Rhea.
+
+**Why Design 2 holds up**
+
+- Each mapping row has a `valid from` date, and rows are only appended, never edited. `line_for(code, spent_on)` picks the most recent row whose start date is on or before the expense date. Old quarters therefore always reproduce exactly. The same applies to the reporting lines: expenses never change, corrections are new rows, and the mapping is append-only, so a past report is a pure function of unchanging data.
+- Re-running any report gives the same numbers, which is exactly what the auditor checks.
+- Rhea's workflow barely changes. She adds two rows (`VOL-TRAVEL`/`VOL-SUBS` → "Programme delivery", valid from the 1 April date) instead of editing two.
+- It keys on the expense date rather than the report date. That is correct for a quarter that falls entirely within one grant year, and also handles late corrections dated in an old quarter.
+- Unknown or not-yet-valid codes raise a clear `KeyError` naming the code and date. Design 1 gives a bare `KeyError`.
+- The cost is small: a linear scan over a few dozen rows for a few thousand expenses is negligible in a single-user app.
+
+**Minor notes on Design 2**
+
+- If two rows for the same code share a start date, `max` silently breaks the tie alphabetically by line name. A load-time check that rejects duplicate `(code, start)` pairs would close that gap.
+- A short test would be worthwhile: re-run a pre-April quarter after adding the April rows and assert it still matches the original totals. That is the audit scenario.
+
+WINNER: 2

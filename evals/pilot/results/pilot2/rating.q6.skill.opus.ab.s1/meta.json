@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q6.skill.opus.ab.s1",
+ "track": "rating",
+ "item": "q6",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 20906,
+ "total_cost_usd": 0.050994199999999996,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5762,
+ "final_text": "# Candidate A is the better design\n\n**Deciding reason:** B starts with a full bucket of 10 tokens. 4.2 forbids more than one message in any one-second interval, so B's burst causes the very 429s that 4.3 punishes with a 24-hour suspension. The suspension would land in the middle of a flood warning.\n\n## Constraints\n- **C1 (4.2):** at most one submit per sender ID in any one-second interval. This is a sliding window with no burst allowance.\n- **C2 (4.3):** more than 20 rejections in a day means a 24-hour suspension, lifted only by hand. Rejections are a scarce budget, not a retry signal.\n- **C3 (owner):** every message goes out and nobody is skipped.\n- **C4 (owner):** the first messages should go out as fast as possible, and about half an hour to reach everyone is acceptable.\n- **C5 (developer):** one thread, `pace()` before every submit (retries included), monotonic clock.\n\n## Trying to break each design\n\n**Candidate B (token bucket, BURST = 10)**\n- **Break of C1 and C2:** the river team presses the button after a quiet period. The bucket is full, so `pace()` returns immediately 10 times and about 10 submits go out within the first second. That is about 9 rejections. A second burst the same day (an update, or a bin-day batch after an idle spell) gives about 18. A few rejected messages coming back through the queue push the count past 20, and the sender ID is suspended for 24 hours. That breaks C3 for every later alert, including flood warnings.\n- **No gain on C4:** the gateway caps throughput at 1/s, so a burst cannot deliver anything sooner. It can only get messages rejected.\n- **Unforced concepts:** `BURST`, the fractional token state and `_refill` have no constraint to serve. \"Standard token bucket\" is a known structure whose guarantee (long-run average rate) is not the guarantee C1 needs (minimum spacing). The fit is false. With `BURST = 1` it would reduce to A with more machinery.\n\n**Candidate A (minimum interval)**\n- **C1:** consecutive `pace()` returns are at least 1.05 s apart, and submits follow `pace()` directly in a single thread. Every one-second window therefore contains at most one submit. Retries also pass through `pace()` (C5), so they cannot jump the spacing.\n- **C2:** no 429s come from pacing. The 0.05 s margin covers jitter between the local clock and the gateway's arrival time. It is a named bound with a stated reason, which is the correct form for a limit whose value reality doesn't fix.\n- **C4:** the first message goes out immediately (`last is None`), which is as fast as C1 allows.\n- **Concepts:** one state value (`last`), one bound. Nothing to delete.\n\n## A note on C4 that applies to both designs\nAt the gateway's 1/s ceiling, 2,000 messages take about 33 minutes at best, and A's margin makes it about 35. 1,500 messages take about 26 minutes. The owner's \"half an hour\" therefore can't be met for the largest floods under 4.2 by any pacer. That is a fact about the agreement, not a defect in A. If it matters, the options are another registered sender ID or a higher-rate agreement with the operator. Shrinking the margin toward 1.0 s would trade suspension risk for about two minutes.\n\n## Ledger\n- **Forced:** strict minimum spacing between submits, because of C1 and C2. A burst allowance is ruled out by C1, not by taste.\n- **Designer choice:** a 0.05 s clock margin. It is reasoned, and could be tuned against observed jitter.\n- **Deletions (B to A):** `BURST`, token accounting, refill logic.\n\nWINNER: 1"
+}

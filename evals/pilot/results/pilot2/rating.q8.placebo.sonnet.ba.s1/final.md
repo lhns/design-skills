@@ -1,0 +1,26 @@
+**Design 1 (Candidate B) is better.**
+
+**Scale doesn't justify a cache.** About 40 bookings a day, four courts, and at most a dozen or so hours a day. Computing free slots for one day means three small queries and a few hundred in-memory comparisons. The manager says the database has never been the problem, and Monday-morning peaks at this scale are trivial. Candidate A's `free_slot` table is a precomputed read model solving a performance problem that doesn't exist.
+
+**Candidate A goes stale on exactly the events that matter.** Mo changes opening hours and blocks courts via the admin page, sometimes the afternoon before, or immediately for a dangerous floor. In A, `free_slot` is regenerated only by the nightly job, and only `book` and `cancel` touch it during the day. So:
+
+- A court blocked mid-day for a lifted board stays bookable until the next rebuild.
+- Hours shortened for an exam or parents' evening still show slots as free, and `book` succeeds because it only checks the cache.
+- Those are the same failure as last winter: members with online bookings made that morning turning up to a locked hall.
+
+The manager explicitly said they don't want that repeated. A's design makes it structurally likely, since there are three sources of truth (hours, blocks, cache) with no synchronization between the admin page and the cache.
+
+A also has smaller flaws: `cancel` re-inserts a free slot even if the court has since been blocked or the hours changed, and a missing booking (`b` is None) crashes with an unhelpful error.
+
+**Candidate B derives availability from current truth on every call.** Changes by Mo take effect immediately, with no invalidation logic. `book` re-checks availability inside a transaction, and the unique index backstops concurrent bookings by two desks.
+
+B has weaknesses, but they're minor:
+
+- `book` doesn't validate that `starts_at` is on the hour, though a non-aligned time simply won't be in the free list, so it is rejected anyway.
+- `date(starts_at)` in queries may not use an index, but at this data size it doesn't matter.
+- A concurrent insert race surfaces as an integrity error rather than `SlotUnavailable`; it could be translated, but the data stays correct.
+- Bookings already made are not cancelled when hours or blocks change afterward. That is a gap in both designs and needs a process or a separate feature, but B at least never offers or accepts new bookings for closed times.
+
+B is simpler, correct with respect to the admin changes, and fast enough for the load.
+
+WINNER: 1

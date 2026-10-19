@@ -1,0 +1,22 @@
+**Design 2 is better.** It is the only one that meets the card's promise that the balance ends up "as if you had not bought them".
+
+**The core problem with A.** Points are earned on whole euros of the whole purchase, so the earning function is `int(amount) * rate`. A applies it to each refund separately. Rounding down per refund and rounding down once on the total are different things, and the shop manager says orders routinely receive several refunds over a few weeks:
+
+- Order paid 10.00 earns 10 points. Refund 5.50, then 4.50, which is a full refund.
+  - A takes back `int(5.50) + int(4.50) = 5 + 4 = 9`, so the customer keeps 1 point on an order they fully returned.
+  - B takes back 10 and leaves the balance exactly as before the purchase.
+- Order paid 9.00. Refund 0.60 twice.
+  - A takes back 0 points both times, so the customer keeps the points for goods they returned.
+  - B takes back 1 point on each refund, because the kept amount falls from 9.00 to 8.40 to 7.80, which is 9 → 8 → 7 whole euros.
+
+Since `int(a) + int(b) <= int(a + b)`, A always under-takes points, and the leak grows with the number of refunds. Because the till allows refunds across several weeks, this is the expected case, not an edge case.
+
+**Why B works.** It computes the points for the amount kept before the refund and after it, and takes back the difference. The sum of these differences telescopes, so after any sequence of refunds the total taken back is `points(paid) - points(kept)`. The result does not depend on how the refunds were split or in what order they arrived. A full refund returns the balance to its original value, and a partial refund leaves the customer with the points a purchase of the kept amount would have earned. It also uses the rate stored on the order, so a refund on a different day does not change the rate, as the manager requires.
+
+**Other points.**
+- Both reject non-positive refunds and refunds larger than what is left on the order, as the developer asked. Both allow negative balances.
+- B has `points_for` as the single place for the earning rule, so `purchase` and `refund` cannot drift apart. That is a real DRY benefit, because the rule is the knowledge at stake here.
+- B's `_add` helper is small and also removes the `KeyError` risk: A's `refund` uses `self.balances[order.customer]` directly and would fail for a customer with no balance entry, for example after a restart or data migration.
+- Both mutate `order.refunded`, which is acceptable here because refunds are recorded on the order.
+
+WINNER: 2

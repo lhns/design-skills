@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q2.placebo.opus.ab.s1",
+ "track": "rating",
+ "item": "q2",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 12976,
+ "total_cost_usd": 0.041652,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5779,
+ "final_text": "# Design 1 (Candidate A) is better\n\n## The deciding requirement\n\nJonas and Rhea agreed that mapping history isn't needed because \"we never resubmit old reports.\" Rhea's later comment contradicts that. Every June the auditor reruns two of the previous year's quarterly reports from the app and checks them line by line against the PDFs sent to the trust.\n\nFrom 1 April, VOL-TRAVEL and VOL-SUBS move into \"Programme delivery\":\n\n- **Candidate B** edits the mapping in place. After the change, rerunning any earlier quarter puts those codes under \"Programme delivery\", and \"Volunteer expenses\" disappears. The rerun no longer matches the submitted PDF, and the audit fails. The only workarounds are reverting the mapping by hand during the audit or keeping old copies of the code, which is exactly the retyping and side-channel work FIN-31 is meant to remove. B's comment \"the app has one answer for where a code belongs\" is the bug: the correct answer depends on *when*.\n- **Candidate A** stores rows with a `valid from` date and never edits or removes them. `line_for` resolves each expense against the mapping in force on `spent_on`. Old quarters reproduce exactly, and new quarters pick up the change. The audit rerun works with no extra steps.\n\nThis isn't speculative generality (YAGNI). There is a known, recurring consumer (the annual audit) and a known upcoming change (1 April). B is simpler only because it skips a real requirement.\n\n## Cost of A\n\nThe cost is small:\n\n- About ten extra lines and one helper with a clear name and docstring.\n- An append-only list is easy for Rhea to maintain: she adds `(\"VOL-TRAVEL\", \"Programme delivery\", date(<year>, 4, 1))` and leaves the old row in place.\n- Performance is a linear scan per expense, which is trivial for a few thousand expenses a year and a few dozen mapping rows.\n- An unknown code still fails loudly. A's `KeyError` message names the code and date, which is more actionable than B's bare `KeyError: 'XYZ'`.\n\n## Suggested tweaks to A (non-blocking)\n\n1. **Duplicate start dates.** If the same code gets two rows with the same `valid from`, `max(starts)` silently breaks the tie by comparing line names alphabetically. Add a load-time check that `(code, start)` pairs are unique.\n2. **Tests.** Cover a quarter before 1 April and one after for VOL-TRAVEL, so a rerun of an old quarter is pinned to the old line. Also test a code used before its first `valid from`.\n3. **Document the rule.** A short comment should say that expenses are mapped by `spent_on`, not by report run date, since that's what makes audit reruns stable.\n\nWINNER: 1"
+}

@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b5.placebo.opus.-.s1",
+ "track": "audit",
+ "item": "b5",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 26852,
+ "total_cost_usd": 0.0697486,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-process"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 9510,
+ "final_text": "PROBLEM: Constraints, C4: The Thursday 18:00 cut-off is the designer's own proposal from the 05-12 mock-up. Lucia's \"looks good, parents will get that\" accepts that proposal, but accepting it does not make it a constraint. C4 should be a designer choice, not a constraint.\n\nPROBLEM: Decisions, D2: The record rules out \"18:00 the day before\" and \"09:00 on the day\" by citing C4. C4 is the very choice under decision, so the reasoning is circular, and no real constraint has eliminated either option. C1 (a firm number by 09:30) permits both, so D2 is still an open fork. The record shows it as decided.\n\nPROBLEM: What Lucia said (05-12, sick children) / D2: Lucia complained that parents order a week ahead and the meal is binned when the child is off sick. This bears directly on the deadline and on her 40-portions-a-day waste problem. The record never captures it as a constraint or weighs it at D2, and the chosen week-ahead deadline makes the problem worse.\n\nPROBLEM: Constraints, C2: Lucia said free-meal pupils must never be identifiable \"at the till\". C2 drops \"at the till\" and widens her statement to \"never identifiable\" anywhere. That is a constraint strengthened beyond what the user said.\n\nPROBLEM: Decisions, D4: The record rules out \"marked per meal in the office's records\" by citing the widened C2. Lucia's actual constraint covers only the till, and office records are not shown at the till, so no constraint eliminates that option. The monthly credit was chosen on a misapplied constraint.\n\nPROBLEM: Constraints / D4 / Design (council claim): Lucia said she claims free meals \"pupil by pupil, off the cook's till sheets\". This per-pupil, per-meal claim requirement is missing from the constraint list. The design replaces it with \"free-meal pupils \u00d7 school days\", which drops per-pupil detail. It also claims meals that were never served (absences, trips), which risks over-claiming council funds. This is false elegance: the design got simpler by dropping a constraint, and no one checked the change with Lucia.\n\nPROBLEM: Decisions, D4 status: The status says \"decided 05-12\" but does not say who decided. No statement from Lucia supports it. If the designer made the choice, it should be labelled a designer choice, not a decision.\n\nPROBLEM: Constraints (allergies): Never serving a pupil a dish containing their allergen is a plainly implied requirement, but the record does not list it as an inferred constraint. C3 only makes the allergies visible to the cook. As a result, nothing checks that the D5 default (the vegetarian dish for pupils with no order) or the dishes parents pick in the grid are safe for each pupil's allergies.\n\nPROBLEM: Decisions, D5 / D6: Both have been open since May with no owner, no validating question and no next step. Today is 2026-10-19, and D6 was waiting on a trips calendar that should exist by now. Neither item appears in an assumptions or open-questions list.\n\nPROBLEM: Record as a whole: There is no assumptions list, no risk list and no record of approval or sign-off. Designer defaults (D5, D6, the D4 claim method) and the reinterpreted constraints (C2, C4) are therefore not tracked as things Lucia still has to confirm."
+}

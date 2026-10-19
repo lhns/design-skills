@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q1.skill.opus.ab.s1",
+ "track": "rating",
+ "item": "q1",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 12916,
+ "total_cost_usd": 0.057420000000000006,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5419,
+ "final_text": "# Design 2 is better\n\n**Deciding reason:** Design 2 keeps the invariant the terms require, and Design 1 breaks it whenever refund amounts have cents.\n\n## The governing constraint\n\nThe terms say: \"we take back the points you earned on them, so that your balance ends up as if you had not bought them.\"\n\nPoints are earned per *whole euro spent in one purchase*. So after any number of refunds, the points an order has contributed must equal the points that the kept amount would have earned:\n\n> points from order = `int(paid \u2212 refunded) \u00d7 rate`\n\nBoth designs meet the other constraints equally well:\n- the rate comes from the purchase day (`order.rate`);\n- refunds are bounded;\n- several refunds per order are recorded;\n- balances can go negative.\n\n## Breaking Design 1\n\nDesign 1 takes back `int(amount) \u00d7 rate` for each refund on its own. Truncation does not distribute over subtraction, so it drifts:\n\n- **Single refund with cents:** the order is paid 30.50 and 10.75 is refunded. The kept amount is 19.75, which should earn 19 points. Design 1 removes 10 points and leaves 20, one point too many.\n- **Several small refunds:** this is the manager's typical case. The order is paid 20.00, then refunded 0.50 and later another 0.50. The kept amount is 19.00, which should earn 19 points. Design 1 removes 0 + 0 and leaves 20. Every refund under 1.00 removes nothing, however many there are.\n- **Full refund in pieces:** the order is paid 10.00 and refunded 4.50 and then 5.50. The balance should go back to 0. Design 1 removes 4 + 5 = 9 and leaves 1 point for a fully returned order.\n\nSince points are spendable like money, this is real value leaking. It is a failure of a stated constraint, not a style issue.\n\n## Why Design 2 holds\n\nEach refund adjusts the balance by `points_for(kept_after) \u2212 points_for(kept_before)`. These differences telescope. After any sequence of refunds, the order's net contribution is exactly `points_for(paid \u2212 refunded)`. That is the invariant, and it holds by construction for any number of partial refunds.\n\n## Concept count\n\nThe extra pieces in Design 2 are justified:\n- `points_for` states the earning rule once and both operations reuse it. Design 1 states the rule twice, and its second statement is the wrong one.\n- `_add` removes a duplicated balance update. It also handles a refund for a customer missing from `balances` without a `KeyError`.\n\nDesign 2 is a few lines longer. Every addition traces to the \"as if you had not bought them\" constraint, and Design 1 is shorter only because it drops that constraint.\n\nWINNER: 2"
+}

@@ -1,0 +1,15 @@
+PROBLEM: D1 status / Design: The status says "open again from 1 Sep", but it is now 19 Oct and the fork has not been settled. The Design section only covers July and August, so it doesn't say where Rose residents are visited now. The garden room choice it would fall back to was a designer default that Odile was never asked about.
+
+PROBLEM: C7: The constraint expired on 31 Aug. The record still lists it as active and doesn't note that it no longer applies.
+
+PROBLEM: D2 status: "decided by Odile 06-09" overstates what she said. She asked only that families can book without phoning (C3) and that landline families can still ring. She never chose a web form; that medium is a designer choice and should be labelled as one. The record also never rules out "web form only". C6 rules it out, since landline-only families couldn't book that way, but the table doesn't say so.
+
+PROBLEM: D4 status: The record says "review after July", but it is now October and no review is recorded. Odile's "looks good, let's try it in July" is correctly not treated as a constraint. Still, the trial's outcome should have been gathered and written down.
+
+PROBLEM: D5 status: The record says "asked Odile 06-16", but "What Odile said" has no entry for that question and no answer since. Four months later the decision is still an unrecorded designer default.
+
+PROBLEM: D5 choice: A recorded call that goes unanswered or reaches no voicemail does not guarantee the family "hears of it the same day" (C5). The record doesn't show that the chosen option meets C5. It needs either a confirmed-delivery step, such as the office following up on unanswered calls, or the option should be listed as a risk. The design also doesn't say how the system knows which families are landline-only.
+
+PROBLEM: D6: Odile said "I'll ask the manager", so the decision maker is the manager. The record names no owner and has no follow-up date. The deferred question is now overdue: the July–August period that the Design says "will be raised with her" has passed with nothing recorded. The option list may also be incomplete, since it doesn't consider no child visits or supervised-only visits.
+
+PROBLEM: Whole record: No session after 06-23 is recorded, although the July trial, the garden room reopening and three open decisions (D4, D5, D6) all fall in that gap. There is also no record of sign-off on the design as a whole; Odile's 06-16 remark approved only the slot mock-up.

@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q8.skill.opus.ba.s1",
+ "track": "rating",
+ "item": "q8",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 15401,
+ "total_cost_usd": 0.0459942,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5845,
+ "final_text": "# Design 1 (Candidate B) is better\n\n**Constraints**\n- **C1.** Opening hours and court blocks change at short notice: \"sometimes only the afternoon before\", and blocks go in \"straight away\".\n- **C2.** Never sell a slot when the hall is closed or the court is blocked. This is the manager's locked-hall complaint, and the ankle risk.\n- **C3.** Two desks must not book the same slot.\n- **C4.** Load is about 40 bookings a day, with a Monday-morning peak. The database \"has never been the problem\".\n\n**Trying to break Design 2 (Candidate A, the `free_slot` table)**\n- **Changed hours (C1, C2).** At 3pm Mo closes tomorrow afternoon for a parents' evening. `free_slot` was built by last night's job, so the website still offers those slots, and `book` accepts them because the row exists. This is the locked-hall incident again. The same happens when a board lifts and Mo blocks a court: that court stays bookable until the job runs that night.\n- **Cancellations.** `cancel` puts the slot back into `free_slot` without checking hours or blocks. Cancelling a booking on a court that has since been blocked makes the blocked slot bookable again, even after the next nightly rebuild has removed it.\n- **Two copies of one fact.** Free slots are stated twice: once implicitly by hours, blocks and bookings, and once in `free_slot`. Three writers (the job, `book` and `cancel`) must keep them in sync, and the admin page, which is the one writer that matters for C1, doesn't. Fixing this means making the admin page rebuild or patch the table too. That adds more concepts to serve a cache no constraint asks for.\n- **What justified it.** \"One indexed query\" answers a performance need that C4 explicitly rules out. Computing about 4 courts \u00d7 15 hours of slots from three small queries costs nothing.\n\n**Trying to break Design 1 (Candidate B)**\n- **C1, C2.** It reads current hours, blocks and bookings every time, so a change Mo makes takes effect on the next page load and the next `book` call. `book` re-checks inside the transaction, so a slot that became blocked after the page loaded is rejected.\n- **C3.** Two desks racing for one slot are stopped by the unique `(court, starts_at)` index.\n- **Remaining gaps.** It doesn't enforce the 14-day window or reject past start times, but Design 2 doesn't either. Neither design warns existing bookings when hours change later, so that doesn't separate them.\n\n**Count**\n- Design 2 adds a derived table, a nightly job and synchronisation logic in `cancel`, and still fails C2.\n- Design 1 has none of these. Free slots are computed on demand from what's already stored, so there is no second copy that can go stale.\n\n**Deciding reason:** Design 2 caches free slots in a table rebuilt nightly, so same-day changes to hours or blocks are ignored and members can book a locked hall or a broken court; Design 1 computes from live data, and the load easily allows that.\n\nWINNER: 1"
+}

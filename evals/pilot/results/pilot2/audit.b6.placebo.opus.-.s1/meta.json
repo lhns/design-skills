@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b6.placebo.opus.-.s1",
+ "track": "audit",
+ "item": "b6",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 25904,
+ "total_cost_usd": 0.061016600000000004,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-process"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 9092,
+ "final_text": "PROBLEM: D1 / Design: The assignment rule was not re-derived when C5 was added on 07-21. It still reads \"smallest free berth that fits the length\", and the Design repeats \"fits its length\". A 9 m boat drawing 1.8 m can still be given C3 when C3 is the smallest free berth. The 07-21 change only collects draft and puts depths on the chart; nothing uses them in the assignment. D1 should become \"smallest free berth that fits length and draft\".\n\nPROBLEM: Constraints / D1: Mateo's own statement on 07-07, \"Smallest berth that fits. Don't waste a 15-metre berth on a little boat\", is a constraint. It is cited in D1's \"Ruled out by\" column but is missing from the constraints list, so D1 rests on a source that isn't recorded as one.\n\nPROBLEM: D3: The decision is marked \"forced\" and reported to Mateo without being asked, but only one alternative, on-call radio, was ruled out. Other options were never considered. For example, the text-message service could send a berth ahead of time to the roughly half of skippers who book by email with a mobile number, so they need no one on duty when they arrive. Calling it forced removed a decision Mateo should have made.\n\nPROBLEM: D3 / Constraints: The waiting pontoon holds three boats. That physical limit is in the Context but not among the constraints, and D3 doesn't check it. A fourth boat arriving after 18:00 has nowhere to go and will tie up \"wherever, the fuel berth included\". That is exactly the 07-14 problem, and it would also break C4.\n\nPROBLEM: D4: Neither option is shown to meet C4. \"Moved by staff at 08:00\" is ruled out by the office hours, since staff start at 08:00 and can't have the berth clear by 08:00, but the column says \"-\". The chosen sign is only advisory and doesn't guarantee C4. A designer default was picked for a hard constraint without showing where C4 is actually met.\n\nPROBLEM: Design: The prose presents D2 (rafting alongside on C7 to C18) and D4 (the sign) as settled design. Both are open designer defaults: D2 is \"to raise with Mateo\" and D4 is \"open\". The reader of the design section can't tell which parts Mateo agreed to."
+}

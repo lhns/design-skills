@@ -1,0 +1,96 @@
+# Rent arrears: dashboard, reminders and late fees
+
+A housing co-operative with about 140 homes collects rent monthly. A volunteer developer is tidying the arrears module, which drives three things: the arrears dashboard the treasurer reviews each week, the friendly reminder letter, and the late-payment charge. Some background from the co-op's records:
+
+**Tenancy agreement, clause 4.3 (same wording in every tenancy):**
+
+> Rent is due on the first day of each month. If any rent remains unpaid seven days after it is due, the Co-operative may add a late-payment charge of 15.00 to the account, once for each unpaid month.
+
+**Email from the treasurer, last spring:**
+
+> Can we please make sure the dashboard and the reminder letters agree about who is behind? At the year-end review the auditor found three households on the dashboard who had never been sent a letter, and asked us why. It looked sloppy. Whatever counts as "behind" on the dashboard should be exactly what triggers a letter.
+
+**Minutes of the September board meeting, item 6 (arrears):**
+
+> Arrears are up slightly on last year. Discussed whether letters go out too late to help. Agreed: from January, trial sending the friendly reminder sooner, after three days, for six months, and compare. Housing officer to report back in July.
+
+**Notes from the developer:**
+
+> Each monthly charge is one row with `due` (a date), `paid`, `reminded` and `fee_charged` flags. The nightly job calls the three functions below and acts on what they return. Everything runs once a day, so dates are enough.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+from datetime import timedelta
+from decimal import Decimal
+
+# Rent counts as overdue once it is still unpaid seven days after its due date
+# (tenancy agreement, clause 4.3).
+OVERDUE_AFTER = timedelta(days=7)
+LATE_FEE = Decimal("15.00")
+
+
+def is_overdue(charge, today):
+    return not charge.paid and today >= charge.due + OVERDUE_AFTER
+
+
+def dashboard(charges, today):
+    """Charges shown on the treasurer's arrears dashboard."""
+    return [c for c in charges if is_overdue(c, today)]
+
+
+def reminders_due(charges, today):
+    """Charges whose household gets the friendly reminder letter today."""
+    return [c for c in charges if is_overdue(c, today) and not c.reminded]
+
+
+def late_fees_due(charges, today):
+    """(charge, fee) pairs to post today, at most one fee per charge."""
+    return [(c, LATE_FEE) for c in charges if is_overdue(c, today) and not c.fee_charged]
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+from datetime import timedelta
+from decimal import Decimal
+
+REMINDER_AFTER = timedelta(days=7)
+
+# A late-payment charge may be added once rent is still unpaid seven days after
+# its due date (tenancy agreement, clause 4.3).
+LATE_FEE_AFTER = timedelta(days=7)
+LATE_FEE = Decimal("15.00")
+
+
+def is_overdue(charge, today):
+    """Overdue for the dashboard and the reminder letter."""
+    return not charge.paid and today >= charge.due + REMINDER_AFTER
+
+
+def late_fee_applies(charge, today):
+    return not charge.paid and today >= charge.due + LATE_FEE_AFTER
+
+
+def dashboard(charges, today):
+    """Charges shown on the treasurer's arrears dashboard."""
+    return [c for c in charges if is_overdue(c, today)]
+
+
+def reminders_due(charges, today):
+    """Charges whose household gets the friendly reminder letter today."""
+    return [c for c in charges if is_overdue(c, today) and not c.reminded]
+
+
+def late_fees_due(charges, today):
+    """(charge, fee) pairs to post today, at most one fee per charge."""
+    return [(c, LATE_FEE) for c in charges if late_fee_applies(c, today) and not c.fee_charged]
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

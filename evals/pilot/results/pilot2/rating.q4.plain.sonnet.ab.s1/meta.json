@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q4.plain.sonnet.ab.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 6001,
+ "total_cost_usd": 0.014492,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2772,
+ "final_text": "**Design 1 is better.**\n\nThe key fact is the complaints log: the email is the learner's copy of the terms, and when the board changed the cutoff from seven to ten days, emails that still said \"one week\" cost the centre 23 refunds. The email text and the refund rule must therefore never disagree.\n\n**Candidate B** hard-codes \"ten days\" in the template prose while the rule lives in `FULL_REFUND_DAYS` in Python. These are two independent sources of truth. The board has changed the terms twice in four years, so a third change is likely. A developer updating the constant can easily forget the template, or Gwen can edit the wording without knowing the rule changed. That is exactly the spring-term failure, and nothing in the code ties the two together.\n\n**Candidate A** keeps a single source of truth. The email is rendered from the same `full_refund_deadline()` function the refund logic uses, so the email and the refund cannot drift apart. It also gives the learner a concrete date, which is clearer than \"ten days before\" and leaves less room for dispute. The deadline-day rule is satisfied: `today <= deadline` gives a full refund on the deadline day itself, which matches B's `>= 10` days check for whole-day dates.\n\nOn Gwen's needs: the template is still a plain text file she can edit without touching Python. She only has to keep a `$refund_deadline` placeholder, which she is happy with and can move around in the text. The wording around it (parking notes, caf\u00e9 hours) is hers to change freely.\n\nA minor point is that `timedelta` and the extra function add slight complexity, but this is small and justified. A's remaining weakness is that the template could drop the placeholder, but that is a much smaller risk than a hard-coded number going stale.\n\nWINNER: 1"
+}

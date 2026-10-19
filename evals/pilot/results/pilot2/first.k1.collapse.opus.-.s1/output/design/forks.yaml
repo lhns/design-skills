@@ -1,0 +1,319 @@
+# One problem per fork. Only K/X eliminate; W only ranks. chosen = designer suggestion; only the owner collapses an open fork.
+forks:
+  # ---------- 23:00 curfew ----------
+  - id: F1
+    problem: How the 23:00 limit on amplified music is enforced.
+    chosen: f
+    options:
+      - id: a
+        text: A clause in the hire agreement.
+        eliminated_by: [K5]
+        why: The licensing officer named exactly this as not adequate.
+      - id: b
+        text: A volunteer attends at 23:00 to stop the music.
+        eliminated_by: [X2]
+        why: Nobody goes near the hall at night.
+      - id: c
+        text: A volunteer on call who can be phoned by neighbours.
+        eliminated_by: [X2]
+        why: Nobody is on call at night, at the hall or from home.
+      - id: d
+        text: A paid steward or security firm on party nights.
+        eliminated_by: [K2]
+        why: There is no money to pay anybody.
+      - id: e
+        text: The hirer signs a declaration; neighbours report breaches afterwards.
+        eliminated_by: [K5]
+        why: Depends on the hirer, and a report afterwards shows a breach, not enforcement.
+      - id: f
+        text: The limiter's time switch cuts power to the sound-system sockets before 23:00, every night, with no one present.
+  - id: F2
+    problem: Which sockets the time switch must cut.
+    chosen: b
+    question: "(For the electrician, not Gwen.) Apart from the stage sockets, is there any socket in the main hall or the upstairs room that a sound system could be plugged into?"
+    default: b
+    decide_by: "the electrician's visit to set the switch (before the next Saturday party with a disco)"
+    assumes:
+      - "Wall sockets outside the stage circuit exist in the main hall (most halls have them)."
+    options:
+      - id: a
+        text: Stage sockets only, as fitted - enough if no other socket in a music-capable room could power a sound system.
+      - id: b
+        text: Every socket a sound system could use in the main hall and upstairs room, except kitchen appliances and safety circuits (extend the switched circuit if needed).
+      - id: c
+        text: Stage sockets only, plus a hire rule that sound systems may only use the stage sockets.
+        eliminated_by: [K5]
+        why: The rule depends on the hirer, so the switch is no control for any other socket.
+  - id: F3
+    problem: What time the switch cuts the power.
+    chosen: b
+    options:
+      - id: a
+        text: Exactly 23:00.
+        eliminated_by: [K3, K17]
+        why: Any drift or missed clock change puts the cut after 23:00, and the licence allows not a minute after.
+      - id: b
+        text: Earlier than 23:00 by the switch's worst drift between checks (suggested 22:55 for a switch checked monthly).
+  - id: F4
+    problem: How the switch keeps the right time through clock changes and power cuts.
+    chosen: b
+    question: "Can the committee pay for a digital time switch that changes for summer time itself (a one-off purchase, roughly the price of a hire evening), if the fitted one is a dial type?"
+    default: b
+    decide_by: "the electrician's visit"
+    assumes:
+      - "The fitted switch may be a mechanical dial type that needs resetting by hand."
+      - "A one-off equipment purchase is not 'paying anybody' (K2)."
+    options:
+      - id: a
+        text: Keep the fitted switch; a volunteer resets it by day at each clock change (2026-10-25, then 2027-03-28 while Gwen is away).
+      - id: b
+        text: A digital switch with automatic summer time and a battery reserve; checked by day, monthly.
+  - id: F5
+    problem: How the committee can show the officer that the limit is enforced.
+    chosen: b
+    question: "Will the committee send the licensing officer a one-page description of the switch arrangement and ask whether it meets the condition?"
+    default: b
+    decide_by: "the switch is set and working"
+    options:
+      - id: a
+        text: Nothing written; rely on the switch existing.
+        eliminated_by: [K5]
+        why: The committee must be able to show enforcement, which needs a record.
+      - id: b
+        text: A written statement of the control (what is cut, at what time, who holds the cupboard key) plus a dated log of daytime checks, sent to the officer for confirmation.
+  - id: F6
+    problem: Whether hirers can get at the time switch.
+    chosen: b
+    options:
+      - id: a
+        text: The switch stays where hirers can reach and override it.
+        eliminated_by: [K5]
+        why: Then enforcement depends on the hirer leaving it alone.
+      - id: b
+        text: The switch and limiter sit in a locked cupboard whose key is never given to hirers (hirers' keys from the shop are unchanged, so X1 holds).
+  - id: F7
+    problem: Events wanting stage power after 23:00 without music (a play, a quiz with a microphone).
+    chosen: a
+    options:
+      - id: a
+        text: No exceptions; the switch cuts every night.
+      - id: b
+        text: The committee sets a later cut for a booked non-music event.
+        eliminated_by: [K5]
+        why: On that night the music limit would rest on the hirer's promise.
+  - id: F8
+    problem: When a party hire ends, compared with the 22:55 music cut.
+    chosen: b
+    question: "On party nights, when must the hirer be out of the hall?"
+    default: b
+    decide_by: "the hire terms are published with the online calendar"
+    assumes:
+      - "Clearing up takes about half an hour."
+    options:
+      - id: a
+        text: Hire ends at 23:00, the same time as the music.
+      - id: b
+        text: Hire ends at 23:30 - music off at 22:55, half an hour to clear up and leave.
+      - id: c
+        text: Hire ends at midnight.
+  # ---------- bookings ----------
+  - id: F9
+    problem: When a one-off booking takes its date (Gwen's question "should we make everyone pay online when they book?").
+    chosen: c
+    question: "Should a one-off booking only count once it's paid in full online at the time of booking?"
+    default: c
+    decide_by: "the online booking service is set up (November 2026, so it runs on its own before January)"
+    asked: "2026-10-19: Should a one-off booking only count once it's paid in full online at the time of booking? Regulars would stay as they are."
+    assumes:
+      - "Most one-off hirers can pay by card or bank transfer online."
+      - "A hire fee paid in advance is not seen in the village as a deposit, because nothing is ever held back for damage."
+      - "Regulars are not included (see F11)."
+    options:
+      - id: a
+        text: As now - pencil the date, pay later by cheque.
+      - id: b
+        text: The date is held for a few days and reopens by itself if it isn't paid in that time.
+      - id: c
+        text: The date is taken only when the full fee is paid online at booking; unpaid means not booked.
+        preferred_by: [W3, W4]
+      - id: d
+        text: A booking fee is paid online at booking; the rest is due a few weeks before the date.
+  - id: F10
+    problem: Refunds when a paid one-off booking is cancelled.
+    chosen: b
+    question: "How many weeks before the date can a hirer cancel and still get their money back?"
+    default: b
+    decide_by: "the online booking service is set up"
+    assumes:
+      - "F9 is c or d (money taken in advance)."
+      - "A Saturday can be re-let at about eight weeks' notice."
+    options:
+      - id: a
+        text: Always a full refund.
+      - id: b
+        text: Full refund if cancelled at least 8 weeks before; none after (the committee may refund anyway if the date is re-let).
+      - id: c
+        text: No refunds.
+  - id: F11
+    problem: How regulars book and pay.
+    chosen: b
+    question: "How do the regulars pay at the moment, and are they among the cheques you chase?"
+    default: b
+    decide_by: "the 2027 standing bookings are entered"
+    assumes:
+      - "Regulars pay by the term or month, not per session."
+    options:
+      - id: a
+        text: Each session is booked and paid online like a one-off.
+      - id: b
+        text: A standing booking for the year (dates entered once by Gwen), billed by the treasurer per term, paid by standing order or as now.
+  - id: F12
+    problem: How the regulars' extra dates (Christmas lunch, AGM, summer outing tea) get booked.
+    chosen: b
+    question: "Could the lunch club and whist drive give you all their extra dates for 2027 in one go, before you leave?"
+    default: b
+    decide_by: "Gwen leaves in January 2027"
+    options:
+      - id: a
+        text: They ring for each one, as now.
+      - id: b
+        text: All of next year's extra dates are booked in one call each year, alongside the standing booking.
+  - id: F13
+    problem: How people who don't book online reach the hall (the regulars, and anyone else) without ringing Gwen at home.
+    chosen: c
+    question: "Would you be willing to answer a hall phone (a cheap mobile kept just for the hall) on Monday and Wednesday mornings only?"
+    default: c
+    decide_by: "the online calendar is published"
+    options:
+      - id: a
+        text: Email only.
+        eliminated_by: [K9]
+        why: The lunch club and whist drive organisers have never sent an email.
+      - id: b
+        text: They keep ringing Gwen's home number.
+        eliminated_by: [K10]
+        why: Hirers are to stop ringing Gwen at home.
+      - id: c
+        text: A hall phone number with voicemail, answered on Monday and Wednesday mornings; it is the only number published.
+      - id: d
+        text: In person at a fixed time each week.
+  - id: F14
+    problem: Who answers the hall phone and handles exceptions (refunds, problems) from January to March.
+    chosen: a
+    question: "Is there anyone on the committee who could cover the hall phone while you're away?"
+    default: a
+    decide_by: "December 2026"
+    assumes:
+      - "Gwen does not want to do bookings from her sister's."
+    options:
+      - id: a
+        text: Nobody; online booking runs by itself, the regulars' dates are already in (F12), voicemail waits until April and the treasurer handles refunds.
+      - id: b
+        text: Another volunteer covers the hall phone on set mornings.
+      - id: c
+        text: Gwen answers the hall phone from her sister's on Monday and Wednesday mornings.
+  - id: F15
+    problem: How the booking record is kept and published.
+    chosen: c
+    question: "Can the committee pay a monthly fee for a hall-booking service?"
+    default: c
+    decide_by: "November 2026"
+    assumes:
+      - "A subscription is not 'paying anybody' (K2)."
+    options:
+      - id: a
+        text: Gwen's paper diary.
+        eliminated_by: [K7]
+        why: People can't see free dates without asking Gwen.
+      - id: b
+        text: A free public online calendar that Gwen updates by hand, plus a printed month in the shop window.
+      - id: c
+        text: A hall-booking service of the kind many UK village halls use - public calendar, online booking and card payment, standing bookings, confirmations by email.
+        preferred_by: [W3, W4]
+      - id: d
+        text: A website built for the hall.
+  - id: F16
+    problem: Who gets scarce Saturday slots (the dance school, Pilates' request for afternoons, families' parties).
+    chosen: c
+    question: "Should Saturday afternoons and evenings be kept for one-off hires, with regulars limited to Saturday mornings?"
+    default: a
+    decide_by: "Gwen answers the Pilates request, or the 2027 calendar opens online, whichever is first"
+    assumes:
+      - "Saturday afternoons and evenings are what families need; the dance school uses only mornings."
+      - "Gwen's twelve-a-year idea would, read literally, take forty Saturdays from the dance school."
+    options:
+      - id: a
+        text: First come, first served (as now).
+      - id: b
+        text: No hirer gets more than twelve Saturday afternoons or evenings a year (Gwen's idea, applied to afternoons and evenings so the dance school keeps its mornings).
+      - id: c
+        text: Saturday afternoons and evenings are for one-off hires only; regulars may have Saturday mornings.
+        preferred_by: [W1, W5]
+      - id: d
+        text: Regulars' Saturday dates are confirmed one term at a time, so one-off hirers can book further ahead.
+  - id: F17
+    problem: Whether the small room is let next year.
+    chosen: a
+    question: "(For the committee.) Is the small room still let by the hour in 2027, or does the playgroup have it full-time?"
+    default: a
+    decide_by: "2027 small-room dates open for online booking"
+    options:
+      - id: a
+        text: Still let by the hour, shown on the public calendar.
+      - id: b
+        text: The playgroup has it full-time, as a standing booking; it disappears from the public calendar.
+  - id: F18
+    problem: When the 30 GBP Saturday-night rate starts.
+    chosen: a
+    question: "From what time on a Saturday does the £30 rate apply?"
+    default: a
+    decide_by: "prices are entered in the booking service"
+    options:
+      - id: a
+        text: From 18:00.
+      - id: b
+        text: From 17:00.
+      - id: c
+        text: The whole Saturday booking, if it runs past 18:00.
+  # ---------- kitchen ----------
+  - id: F19
+    problem: How hirers are led to leave the kitchen clean.
+    chosen: a
+    question: "Would 'all food rubbish goes home with the hirer, and there's a checklist on the kitchen door' be acceptable?"
+    default: a
+    decide_by: "the hire terms are published with the online calendar"
+    options:
+      - id: a
+        text: All food rubbish goes home with the hirer; a short checklist on the kitchen door; a hirer who leaves a mess can't book online again until the committee agrees.
+        preferred_by: [W2, W6]
+      - id: b
+        text: A cleaning charge added to every hire, paying for a cleaner.
+      - id: c
+        text: Charging the hirer for cleaning after the event when it's left dirty.
+  - id: F20
+    problem: How the next user is protected if a hirer leaves the kitchen dirty anyway.
+    chosen: a
+    question: "Could someone look at the kitchen on Monday mornings, before the lunch club on Tuesday?"
+    default: a
+    decide_by: "the hire terms are published"
+    assumes:
+      - "Gwen's Monday mornings fit, but someone else would be needed from January to March."
+    options:
+      - id: a
+        text: A daytime look at the kitchen on Monday morning, after weekend hires and before the Tuesday lunch club.
+      - id: b
+        text: Nothing; the next user finds whatever was left.
+  # ---------- keys ----------
+  - id: F21
+    problem: How the shop knows who is collecting keys, especially while Gwen is away.
+    chosen: a
+    question: "How does the shop know who to hand the keys to at the moment?"
+    default: a
+    decide_by: "Gwen leaves in January 2027"
+    options:
+      - id: a
+        text: As now, whatever that is.
+      - id: b
+        text: The shop gets a printed list of the coming week's bookings.
+      - id: c
+        text: The hirer shows the booking confirmation at the shop.

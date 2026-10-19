@@ -1,0 +1,86 @@
+# Duplicate supplier invoices
+
+A regional theatre pays about 200 suppliers. Paper and PDF invoices are scanned by the post room and entered into the accounts system, which holds any invoice that looks like a duplicate of one already entered until someone in finance checks it. Last year the theatre paid a scenery-hire invoice twice and only got the money back after months of chasing. The duplicate check is being rewritten; two candidates are below.
+
+**From the finance manager, Ingrid:**
+
+> Each invoice has the supplier, the supplier's invoice number, the date printed on the invoice, the amount, and the date it reached us. Numbers come in all shapes: "INV-0045", "inv-0045 ", sometimes a bare "45". Amounts on a copy can differ by a few cents when the supplier's system adds a late-payment note, so I wouldn't match on amount.
+>
+> A held invoice costs us a few minutes to clear. A missed duplicate costs us the payment.
+
+**From the accounts assistant, Theo:**
+
+> Watch out for the printers and the lighting-hire firm: they start their numbering again at 0001 every January. In the old system every January was a mess of false alarms against last year's invoices.
+>
+> The post room types in the printed invoice date when they can read it. On some faxed or photocopied invoices they can't, and the date is left empty.
+>
+> The post room scans everything that arrives, including statements. The scenery-hire firm and the printers send a statement every quarter, a couple of weeks after the quarter ends, with a copy of each invoice from that quarter stapled behind it. The post room can't always tell a copy from an original.
+
+**From the developer:**
+
+> `possible_duplicates(new, existing)` returns the existing invoices that `new` should be held against; an empty list means it goes into the next weekly payment run. Volumes are small enough to scan the supplier's invoices in memory.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+```python
+import re
+
+
+def normalise(number):
+    """'INV-0045', 'inv-0045 ' and '45' all become '45'."""
+    digits = re.sub(r"\D", "", number)
+    return digits.lstrip("0") or "0"
+
+
+def same_invoice_year(a, b):
+    """A supplier never reuses a number within the year printed on its invoices;
+    some start again from 0001 each January. A missing date can't rule a match out."""
+    if a.invoice_date is None or b.invoice_date is None:
+        return True
+    return a.invoice_date.year == b.invoice_date.year
+
+
+def possible_duplicates(new, existing):
+    """Earlier invoices that `new` should be held against until finance checks it."""
+    return [
+        e for e in existing
+        if e.supplier_id == new.supplier_id
+        and normalise(e.number) == normalise(new.number)
+        and same_invoice_year(e, new)
+    ]
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+import re
+from datetime import timedelta
+
+# Long enough to catch a re-sent invoice, short enough that suppliers who restart
+# their numbering each January don't clash with last year's invoices.
+DUPLICATE_WINDOW = timedelta(days=60)
+
+
+def normalise(number):
+    """'INV-0045', 'inv-0045 ' and '45' all become '45'."""
+    digits = re.sub(r"\D", "", number)
+    return digits.lstrip("0") or "0"
+
+
+def possible_duplicates(new, existing):
+    """Earlier invoices that `new` should be held against until finance checks it."""
+    return [
+        e for e in existing
+        if e.supplier_id == new.supplier_id
+        and normalise(e.number) == normalise(new.number)
+        and abs(new.received_on - e.received_on) <= DUPLICATE_WINDOW
+    ]
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

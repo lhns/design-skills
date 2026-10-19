@@ -1,0 +1,43 @@
+# Marina visitor berths: design record
+
+Written by the designer with Mateo, the harbourmaster, in sessions on 2026-07-07 and 2026-07-14, with a follow-up on 2026-07-21.
+
+## Context
+The marina has 18 visitor berths on pontoon C: C1 to C6 on the inner side, C7 to C18 on the outer side. About half of visiting skippers book ahead by email and give a mobile number; the rest call on the radio as they approach. The harbour office is staffed from 08:00 to 18:00. The waiting pontoon at the entrance holds three boats. The marina's text-message service, used today for gale warnings, can send to any skipper whose number is on file.
+
+## What Mateo said
+- 2026-07-07: "Visitors are 7 to 15 metres. Anything longer goes to the town quay."
+- 2026-07-07: "I'm not doing night calls any more. Since last summer, nobody answers the radio after 18:00."
+- 2026-07-07: "Rafting is fine on the outer berths. Never on the inner ones, the fingers are too short."
+- 2026-07-07, on how berths are given out: "Smallest berth that fits. Don't waste a 15-metre berth on a little boat."
+- 2026-07-14: "Late arrivals are the problem. A boat comes in at 22:00, nobody's there, and they tie up wherever, the fuel berth included."
+- 2026-07-14: "The fuel berth has to be clear by 08:00 for the fishing boats."
+- 2026-07-14, on a discount for stays of a week or more: "Not sure yet."
+- 2026-07-21, by phone: "The dredging's off until next year. At low water springs C1 to C6 have 1.2 metres. Anything drawing more than that can't go in there."
+
+## Constraints
+- C1: Visiting boats are 7 to 15 metres long. (Mateo, 07-07)
+- C2: Nobody answers the radio after 18:00. (Mateo, 07-07)
+- C3: No rafting on C1 to C6. (Mateo, 07-07)
+- C4: The fuel berth is clear by 08:00. (Mateo, 07-14)
+- C5: Boats drawing more than 1.2 metres do not use C1 to C6. (Mateo, 07-21)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 How berths are assigned | smallest free berth that fits the length; first free berth by number | first free berth: Mateo, 07-07 | smallest free berth that fits the length | decided by Mateo 07-07 |
+| D2 Rafting when all berths are taken | second boat alongside on C7 to C18; turned away to the town quay | - | alongside on C7 to C18 (designer default; C3 keeps it off the inner side) | open, to raise with Mateo |
+| D3 Arrivals after 18:00 | harbourmaster on call by radio; boats wait on the waiting pontoon until 08:00 | on call: C2 | waiting pontoon | forced; reported to Mateo 07-14, not asked |
+| D4 Fuel berth overnight | sign at the fuel berth; boats on it moved by staff at 08:00 | - | sign (designer default) | open |
+| D5 Long-stay discount | 10% for seven nights or more; none | - | none (designer default) | open: Mateo "not sure yet" (07-14) |
+
+## Changes since 07-14
+- 2026-07-21: Added C5. The email reply to a booking and the office's radio script now ask for the boat's draft as well as its length, and the berth chart in the office shows each inner berth's low-water depth.
+
+## Design
+A skipper who books ahead gets an email asking for length and draft; a skipper who calls on the radio before 18:00 is asked the same. The office gives the boat the smallest free berth that fits its length (D1) and tells the skipper by email or radio. When every berth is taken, a second boat can lie alongside on the outer side (D2).
+
+A boat arriving after 18:00 ties up on the waiting pontoon, and the skipper comes to the office at 08:00 for a berth (D3). A sign at the fuel berth says it must be clear by 08:00 (D4). The discount stays off until Mateo decides (D5).
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

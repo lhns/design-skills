@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q1.plain.opus.ab.s1",
+ "track": "rating",
+ "item": "q1",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 10948,
+ "total_cost_usd": 0.037244,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3167,
+ "final_text": "**Design 2 is better.** The terms say a return should leave the balance \"as if you had not bought them\". Points are earned on whole euros of the amount kept, so a refund must take back the difference in points before and after. Design 1 instead takes back points on the refunded amount alone, and that comes out wrong whenever cents are involved.\n\n**Where Design 1 goes wrong:**\n\n- **Cents in a single refund.** An order paid 30.50 at rate 1 earns 30 points. A refund of 10.75 leaves 19.75 kept, which is worth 19 points. So 11 points should come back, but Design 1 takes back `int(10.75) = 10`. The customer keeps one point they shouldn't have.\n- **Several partial refunds.** The manager says an order can get several refunds over a few weeks, so the truncation error adds up. In an extreme case, a 30.00 order refunded entirely in 0.50 pieces loses 0 points per refund. The customer ends up with all 30 points and nothing bought. A realistic case: three refunds of 9.99 on a 29.97 order. Each takes back 9 points, so 27 in total. The correct answer is 29 points, because nothing is kept.\n- **Double Points Days.** Rate 2 doubles every one of these errors.\n\n**How Design 2 handles it:**\n\n- **It computes the correct total.** Each refund changes the balance by `points_for(kept_after) - points_for(kept_before)`. Summed over any sequence of refunds, the changes add up to exactly `points_for(final kept) - points_for(paid)`. The balance always equals what the kept part of the order would have earned, which is what the terms require.\n- **It keeps the rate from the purchase day.** It uses `order.rate`, as the manager asked, and Design 1 does too.\n- **It defines the earning rule once.** Both `purchase` and `refund` use `points_for`, so they can't drift apart if the rule changes later.\n- **It handles an unknown customer safely.** `_add` uses `.get(customer, 0)`. Design 1's `-=` would raise `KeyError` for a customer with no balance entry. Such an order shouldn't normally exist, but Design 2 is more robust.\n\nBoth designs validate the refund against what is left on the order, as the old system's developer asked. Both allow negative balances, which the manager accepts.\n\nWINNER: 2"
+}

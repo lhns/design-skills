@@ -1,0 +1,26 @@
+# Candidate B is the better design
+
+**Candidate B treats the scan log as the source of truth and derives the location from it.** It keeps every scan, ordered by the time it was taken, and answers "where is it?" with "what does the latest-taken scan say?" Scans arrive late and out of order, but each one carries a synced timestamp. Ordering by taken time therefore fixes all three tickets as consequences of one rule, with no special cases:
+
+- **#41:** a late move from before the ship is older than the `shipped` scan, so it is not the latest scan.
+- **#47:** a receive uploaded at end of shift is older than the first move, so it does not win.
+- **#49:** two moves are compared by when they were taken, not when they arrived.
+- **Refused pallets:** the return `received` scan is newer than the `shipped` scan, so the pallet is back in the building. A later move puts it away normally.
+
+**Candidate A applies each patch to arrival-order state, and the patches interact badly with a pallet's second visit.** These failures happen in the situations the operations manager describes:
+
+1. **A put-away is lost after a refused pallet returns.** A pallet ships, is refused, comes back and is received at the dock (re-receive at t3), then moved to F3 (t4). The dock PC uploads its receives at the end of the shift (#47), so the t4 move arrives while `shipped` is still `True`. The move is discarded. When the receive finally lands, it sets the location to `DOCK`. The stock screen shows the pallet at the dock while it is actually in F3, and nothing ever corrects it.
+2. **A late ship scan erases a returned pallet.** Loading-bay handhelds upload late. If the `shipped` scan (t2) arrives after the return receive (t3) or the put-away, A sets `location = None`. A pallet that is in a freezer disappears from stock.
+3. **The ship check ignores time.** Rule #41 asks "has it shipped?" rather than "is this move older than the ship?" After a return, that is the wrong question. Rule #47 has the same flaw: "does it have a location?" is not "is this receive newer?"
+
+Each fix in A fixed one ticket by adding a flag or condition tied to arrival order. The design accumulates special cases, and the domain (out-of-order uploads, pallets re-entering with the same barcode) keeps producing new ones. B removes the whole class of bug instead of patching instances.
+
+**B's trade-offs are acceptable here:**
+
+- **Memory:** it keeps all scans per pallet. At a few thousand scans a day, with scans never edited or deleted, that is negligible, and it also gives an audit trail.
+- **Equal timestamps:** `insort` keeps arrival order for ties. That is a minor edge case worth a note or a tiebreak, but A has no better answer for it.
+- **Reads:** a lookup is O(1) on the last element, and an insert is a cheap sorted insert into a short list.
+
+B is shorter, has no hidden state transitions, and its one rule is easy to state, test, and trust.
+
+WINNER: 2

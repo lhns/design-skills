@@ -1,0 +1,43 @@
+# Dog shelter adoption meetings: design record
+
+Written by the designer with Bea, the rehoming coordinator, in sessions on 2026-09-08, 2026-09-15 and 2026-09-22, with a follow-up on 2026-09-29.
+
+## Context
+The shelter houses about 35 dogs. People who want to adopt fill in an application on the website, and staff approve it after a home check. Today approved applicants turn up whenever they like to meet dogs in the paddock, and kennel staff are pulled away from their work. The shelter is open to visitors from 09:00 to 18:00.
+
+## What Bea said
+- 2026-09-08: "People turn up at feeding time and my staff drop everything. We feed at 08:00 and 16:00, and that hour is sacred."
+- 2026-09-08: "Nobody meets a dog until their application is approved. We've had dogs bond with people who then failed the home check."
+- 2026-09-08: "We've got forty approved adopters waiting, and some dogs have been here since spring."
+- 2026-09-15: "Some dogs can only go to adults; it says so on their profile. Families with children under 10 can't meet those."
+- 2026-09-15: "Every meeting needs one of our three senior handlers. The others aren't insured for it."
+- 2026-09-15: "The big young dogs need a long walk with the family before anyone can tell anything. The old and nervous ones are done after twenty minutes."
+- 2026-09-22: Bea reviewed the meeting-flow sketch (one-hour meetings, at most two a day per handler, adopters pick any free slot) and said "looks good, I like that it isn't complicated".
+- 2026-09-22, on allowing a second meeting before adopting: "Not sure yet."
+- 2026-09-29, by email: "From October we only have two senior handlers on Mondays."
+
+## Constraints
+- C1: No meetings during the feeding hours from 08:00 and 16:00. (Bea, 09-08)
+- C2: Only approved applicants meet dogs. (Bea, 09-08)
+- C3: Families with children under 10 cannot meet adult-only dogs. (Bea, 09-15)
+- C4: A senior handler is at every meeting. (Bea, 09-15)
+- C5: Meetings last one hour, and each handler takes at most two a day. (Bea, 09-22)
+- C6: From October, two senior handlers on Mondays. (Bea, 09-29)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 Who can book | anyone; approved applicants only | anyone: C2 | approved applicants only | forced; reported to Bea 09-15, not asked |
+| D2 Meeting length | 30 minutes; one hour; set per dog on its profile | 30 minutes, per dog: C5 | one hour | decided 09-22 |
+| D3 Meetings per handler per day | two; three; four | three, four: C5 | two | decided 09-22 |
+| D4 How slots are chosen | adopter picks any free slot; staff offer slots for a given dog | - | adopter picks any free slot (designer default, as in the 09-22 sketch) | open, to raise with Bea |
+| D5 Second meeting | allowed; not allowed | - | allowed (designer default) | open: Bea "not sure yet" (09-22) |
+| D6 Monday capacity | three handlers' meetings; two handlers' meetings | three handlers: C6 (from October) | two handlers' meetings | changed 09-29 |
+
+## Design
+When an application is approved, the applicant gets a link to the booking calendar (D1). The calendar offers one-hour meetings between 09:00 and 18:00, skipping 16:00 to 17:00 (C1, D2). Each senior handler takes two meetings a day, so the calendar offers six meetings a day, and four on Mondays from October (C4, D3, D6).
+
+The applicant picks a dog and any free slot (D4). Dogs marked adult-only are not shown to applicants with children under 10 (C3). A second meeting with the same dog can be booked the same way until Bea decides otherwise (D5).
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

@@ -1,0 +1,17 @@
+**Design 1 (Candidate A) is better.**
+
+**The source of truth is the trustees' table, not the policy formula.** Ruth is clear: the times were set in 2019, haven't changed, and are printed on the leaflet, the season-ticket cards and the painted gate boards. The website's job is to match those. Candidate A encodes exactly that table and says where it comes from. The policy text explains how the trustees got their numbers, but it isn't what visitors see.
+
+**Candidate B re-derives the table, and only matches it by coincidence.**
+- **Approximate sunset.** It uses a single sine curve (1071 ± 105 minutes GMT) and samples one day per month. Several months land close to a half-hour boundary after the rounding down. A slightly different approximation, or a leap year shifting the day-of-year by one, can flip a month by 30 minutes.
+- **Limited checking.** The developer checked 2026 and 2027 only. Nothing guarantees 2028 or later stays in line.
+- **Hard-coded clock rules.** The summer-time rule is built in. If the clock-change rules ever change, the gate boards won't move, but B's output will.
+- **No sign of which input matters.** If B ever diverges, nobody will notice until there's another queue of season-ticket holders at the gate, which is the exact failure Ruth described. A future maintainer reading B would think sunset is the governing input, when it is the painted boards.
+
+**Changing the times is easier with A.** If the trustees revise a time, they'll issue new numbers, and someone edits one dictionary entry. With B, someone would have to adjust a formula until it happens to produce the new decision.
+
+**B's one advantage is that it shows the reasoning from the policy.** That belongs in a comment on A's table, for example citing policy section 2 and the 2019 trustees' decision. It shouldn't be live logic.
+
+**A's last-entry calculation is safe.** `closes.hour - 1` can't go wrong, because every closing time is between 15:00 and 19:00.
+
+WINNER: 1

@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q1.placebo.opus.ba.s1",
+ "track": "rating",
+ "item": "q1",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 11549,
+ "total_cost_usd": 0.055880000000000006,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5444,
+ "final_text": "**Design 1 (Candidate B) is better.** It is the one that actually implements the scheme's terms.\n\n**The requirement that decides it:** \"we take back the points you earned on them, so that your balance ends up as if you had not bought them.\" After any sequence of refunds, the customer's points for an order must equal what they would have earned by paying only the kept amount: `int(paid - refunded) * rate`.\n\n**Design 1** computes exactly that. On each refund it takes the difference between the points for the kept amount before and after. The adjustments telescope, so after any number of partial refunds the order has contributed `points_for(kept, rate)`. That is the stated invariant.\n\n**Design 2** floors each refund on its own (`int(amount) * rate`). Flooring isn't additive, so the result drifts from the invariant, and it always drifts in the customer's favour:\n\n- Paid 30.00, refund 9.99. Design 2 takes back 9 points and leaves 21. Kept is 20.01, which should earn 20. Design 1 leaves 20.\n- Paid 25.50, refunded fully as 12.75 + 12.75. Design 2 takes back 12 + 12 = 24 of the 25 earned, so 1 point survives a full return. Design 1 ends at 0.\n- Any refund under 1.00 takes back nothing. Repeated small refunds leak points indefinitely.\n\nThe manager said orders \"can get several refunds over a few weeks\", and book prices are rarely whole euros. So this isn't an edge case; it is the normal path. Points are money (100 = 1.00), so the error is a real financial leak.\n\n**Smaller design points, also favouring Design 1:**\n- The earning rule `int(amount) * rate` lives in one place, `points_for`. Purchase and refund can't disagree about how points are computed. Design 2 duplicates the rule inline.\n- `_add` centralises the balance update. Design 2's `refund` uses `self.balances[order.customer] -= ...`, which would raise `KeyError` for a customer missing from `balances`. Design 1's `get(..., 0)` path is uniform.\n- Both validate the refund amount correctly and use the purchase-day rate stored on the order. They are equal on those requirements.\n\n**Minor nits on Design 1** (not blocking): `refund` mutates `order` before updating the balance, which is fine single-threaded but worth noting. A test asserting \"full refund in N parts leaves balance at the pre-purchase value\" would lock in the key invariant.\n\nWINNER: 1"
+}

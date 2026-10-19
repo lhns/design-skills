@@ -1,0 +1,123 @@
+# Festival ticket prices
+
+A volunteer-run folk festival sells weekend tickets online. The pricing function turns an order into the amount charged. It is being rewritten after last year's version became hard to follow; two candidates are below.
+
+**The price list for next year, as printed on the flyer:**
+
+> Weekend ticket 64.00. Early bird: book by 28 February and save 15%. Groups of six or more save 10%. Festival members save 20% (member and group savings don't combine; you get the better one). Early-bird savings combine with either. Total savings are capped at 30%. A booking fee of 2.00 per order applies to every order.
+
+**From the ticketing coordinator, Bea:**
+
+> Every autumn the committee sets next year's prices and discounts, then I sit down with Kofi (our one developer) and we go through the pricing code line by line against the flyer before tickets go on sale. Last year that took an afternoon because nobody could tell what ran in which order. I can read a bit of Python if it's plain.
+>
+> The committee talks every year about adding a residents' discount for the two villages next to the site. It hasn't happened yet, and if it does it'll have its own rules about what it combines with, like the others.
+
+**From Kofi:**
+
+> One order, one call, a few thousand orders a year. Amounts are Decimal; the ticket total is rounded to the cent, half-up, after discounts. `order` has `tickets` (int), `member` (bool) and `placed_on` (date).
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+```python
+from dataclasses import dataclass, field
+from datetime import date
+from decimal import Decimal, ROUND_HALF_UP
+
+TICKET = Decimal("64.00")
+BOOKING_FEE = Decimal("2.00")
+EARLY_BIRD_UNTIL = date(2027, 2, 28)
+MAX_DISCOUNT = Decimal("0.30")
+
+RULES = []  # (step, rule), run in step order
+
+
+def rule(step):
+    """Register a pricing rule; a new discount is one more decorated function."""
+    def register(fn):
+        RULES.append((step, fn))
+        RULES.sort(key=lambda r: r[0])
+        return fn
+    return register
+
+
+@dataclass
+class Quote:
+    order: object
+    discounts: dict = field(default_factory=dict)  # name -> rate
+    fees: Decimal = Decimal("0.00")
+
+
+@rule(10)
+def group(q):
+    if q.order.tickets >= 6:
+        q.discounts["group"] = Decimal("0.10")
+
+
+@rule(10)
+def member(q):
+    if q.order.member:
+        q.discounts["member"] = Decimal("0.20")
+
+
+@rule(20)
+def group_or_member(q):
+    """Group and member discounts don't combine: keep the larger."""
+    if "group" in q.discounts and "member" in q.discounts:
+        del q.discounts[min("group", "member", key=q.discounts.get)]
+
+
+@rule(30)
+def early_bird(q):
+    if q.order.placed_on <= EARLY_BIRD_UNTIL:
+        q.discounts["early"] = Decimal("0.15")
+
+
+@rule(90)
+def booking_fee(q):
+    q.fees += BOOKING_FEE
+
+
+def price(order):
+    """Amount charged: the tickets less discounts, plus fees (never discounted)."""
+    q = Quote(order)
+    for _, apply in RULES:
+        apply(q)
+    discount = min(sum(q.discounts.values(), Decimal(0)), MAX_DISCOUNT)
+    tickets = order.tickets * TICKET * (1 - discount)
+    return tickets.quantize(Decimal("0.01"), ROUND_HALF_UP) + q.fees
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+from datetime import date
+from decimal import Decimal, ROUND_HALF_UP
+
+TICKET = Decimal("64.00")
+BOOKING_FEE = Decimal("2.00")
+EARLY_BIRD_UNTIL = date(2027, 2, 28)
+MAX_DISCOUNT = Decimal("0.30")
+
+
+def price(order):
+    """Amount charged: the tickets less discounts, plus the booking fee (never discounted)."""
+    # Group and member discounts don't combine: the larger one applies.
+    discount = max(
+        Decimal("0.10") if order.tickets >= 6 else Decimal(0),
+        Decimal("0.20") if order.member else Decimal(0),
+    )
+    # Early bird combines with either.
+    if order.placed_on <= EARLY_BIRD_UNTIL:
+        discount += Decimal("0.15")
+    discount = min(discount, MAX_DISCOUNT)
+    tickets = order.tickets * TICKET * (1 - discount)
+    return tickets.quantize(Decimal("0.01"), ROUND_HALF_UP) + BOOKING_FEE
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

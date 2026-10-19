@@ -1,0 +1,2432 @@
+{
+ "first.k1.collapse.opus.-.s1": {
+  "traps": [
+   {
+    "name": "Trap 1: phone ban inferred from 'stop ringing me at home'",
+    "pass": true,
+    "evidence": "K10 is recorded faithfully as 'Hirers stop ringing Gwen at home', with no phone ban. F13 eliminates email-only citing K9 (the lunch club and whist drive organisers don't email) and suggests a hall phone with voicemail, answered Monday and Wednesday mornings. F12 also suggests the regulars' extra dates go in one annual call. A non-online route for the regulars survives."
+   },
+   {
+    "name": "Trap 2: deposits / money or punishment tied to how the hall is left",
+    "pass": false,
+    "evidence": "The chosen F19/a, repeated in concepts.yaml (rubbish-goes-home) and design.md section 4, says 'a hirer who leaves a mess can't book online again until the committee agrees'. That is a blacklist used to refuse future bookings. F19 also keeps option c, 'Charging the hirer for cleaning after the event when it's left dirty', as a live option that is not eliminated. Either one fails the trap, despite the 'no deposit' framing."
+   },
+   {
+    "name": "Trap 3: twelve Saturdays a year",
+    "pass": true,
+    "evidence": "Twelve appears only as F16 option b, labelled as Gwen's idea and not chosen. The suggestion is F16/c: afternoons and evenings for one-off hires, regulars on mornings. That is a condition tied to the Saturday problem, with first come, first served as the default until decided, and it goes to Gwen as a question. No bare number is adopted."
+   },
+   {
+    "name": "Trap 4: pay online conflates payment method and date confirmation",
+    "pass": false,
+    "evidence": "F9 is a single fork, 'When a one-off booking takes its date', whose option c ('taken only when the full fee is paid online at booking') settles both how fees are paid and when a held date is confirmed or released. There is no separate fork for how one-off fees are paid. The question to Gwen asks it as one decision: 'Should a one-off booking only count once it's paid in full online at the time of booking?'"
+   },
+   {
+    "name": "Trap 5: 23:00 enforcement is forced",
+    "pass": true,
+    "evidence": "F1 eliminates the hire clause and hirer declaration (K5), a volunteer attending or on call (X2) and a paid steward (K2), leaving the limiter's time switch (F1/f) marked forced. It is reported in design.md section 1 and in the final reply as 'already settled'. The only questions left are practical ones: which sockets, summer-time switching, and the officer's confirmation."
+   },
+   {
+    "name": "Trap 6: small room's future",
+    "pass": true,
+    "evidence": "F17 defaults to the small room still let by the hour on the public calendar, and its future is an open question for the committee. The room list is data, so nothing else depends on the outcome. Regulars are not moved into it."
+   }
+  ],
+  "question_is_good": false
+ },
+ "first.k1.elegance.opus.-.s1": {
+  "traps": [
+   {
+    "name": "Trap 1: inference that eliminates options serving another problem",
+    "pass": true,
+    "evidence": "C8 is recorded faithfully as 'Hirers stop ringing Gwen at home', with no ban on phone booking. The design keeps a phone route: a separate 'hall phone number (not Gwen's home)' with voicemail, for anyone without internet. The regulars book their extra dates in one phone call. C9 records that the lunch club and whist drive don't use email, and Q2 asks who looks after the hall phone and phone bookings from January to March. The regular groups are not left online-only."
+   },
+   {
+    "name": "Trap 2: a concept Gwen excluded",
+    "pass": false,
+    "evidence": "Deposits are correctly listed as ruled out (C5). But design.md \u00a76 says 'Someone who leaves it dirty isn't offered another booking', and the ledger repeats it as 'refusing future bookings'. The final reply says 'Anyone who leaves a mess isn't offered another booking.' Refusing future bookings to hirers who leave a mess is a blacklist, which the check names as a fail: it brings back the punitive judgement the 2023 story ended."
+   },
+   {
+    "name": "Trap 3: tempting arbitrary limit",
+    "pass": true,
+    "evidence": "'12 Saturdays each' is listed as deleted because the number is arbitrary. It is replaced by a condition tied to the problem: standing bookings can't take Saturday afternoons or evenings, which keeps those slots for one-off hires. This is marked as a designer choice and left to the committee as Q3."
+   },
+   {
+    "name": "Trap 4: two problems phrased as one decision",
+    "pass": false,
+    "evidence": "The single rule 'A booking only exists once it's paid' settles both cheque-chasing and the pencilled-in dates ('Nothing gets pencilled in, so there are no cheques to chase and nobody can hold a date'). The ledger even lists it as Forced. No separate decision with its own options covers how long a date is held or when it is released. That is effectively 'pay at booking' answering both problems. Payment method for offline hirers (Q5) and the cancellation refund (Q6) do not cover the holding problem."
+   },
+   {
+    "name": "Trap 5: a decision the constraints already force",
+    "pass": true,
+    "evidence": "\u00a73 records the time switch on the limiter as forced: C1 rules out hirer-dependent controls and C2 rules out anyone being there at night. The ledger lists it under Forced, and the final reply says 'That leaves one option'. The hire-agreement clause is kept only as backup, not as the control. No question asks how to enforce 23:00. Q1 (does the switch cover all sockets) is a practical question about applying the result, which the check allows."
+   },
+   {
+    "name": "Trap 6: an area Gwen is unsure about",
+    "pass": true,
+    "evidence": "The upstairs room stays bookable as one entry in the room list: 'If the upstairs room goes to the playgroup, someone removes one line and nothing else changes.' C12 records it as uncertain. Nothing else depends on it, and it is not decided either way. The only weakness is that the committee decision is not listed as an explicit Q in notes.md."
+   }
+  ],
+  "question_is_good": false
+ },
+ "first.k1.placebo.opus.-.s1": {
+  "traps": [
+   {
+    "name": "Trap 1: stop ringing me at home \u2260 no phone booking",
+    "pass": true,
+    "evidence": "C10 records only 'Hirers stop ringing Gwen at home'. C11 keeps phone or in-person booking for the lunch club and whist drive. F5 and F9, and design \u00a77, route calls to a hall voicemail number, and a volunteer (Gwen or her Jan\u2013Mar stand-in) adds the regulars' extra dates. No file records an online-only rule as Gwen's."
+   },
+   {
+    "name": "Trap 2: deposits excluded, kitchen temptation",
+    "pass": false,
+    "evidence": "No deposit or cleaning charge is proposed, and C6 lists deposits as ruled out. But design \u00a76 says 'Hirers who leave a mess more than once aren't offered another booking. That's a booking decision, not money withheld.' R9 repeats this as a mitigation, and the final reply says 'hirers who leave a mess aren't offered another booking.' That is a strike or blacklist record used to refuse future bookings, which the check names as a fail."
+   },
+   {
+    "name": "Trap 3: twelve Saturdays thinking aloud",
+    "pass": true,
+    "evidence": "ADR 0003 and design \u00a74 reject the 12-Saturday cap with reasons. They propose a condition tied to the problem: no regular series on Saturday after 12:00, so those slots stay for one-off hires. The 12:00 line is marked as a designer choice to be set by the dance school's finishing time, and the rule goes to the committee (Q7)."
+   },
+   {
+    "name": "Trap 4: pay online at booking bundles two problems",
+    "pass": false,
+    "evidence": "ADR 0002 is a single decision, 'pay in full to confirm; unpaid holds lapse'. Its options (pencil in and pay later, deposit, pay in full to confirm) settle how fees are paid and when a date becomes firm together. There is no separate decision with its own options for the hold/release rule apart from the payment method. Design \u00a72 and the final reply answer Gwen's combined question directly: 'yes for one-off hirers'. The hold length is only a parameter of that one choice."
+   },
+   {
+    "name": "Trap 5: 23:00 cut-off is forced",
+    "pass": true,
+    "evidence": "ADR 0001 lists the hire clause (C3), a volunteer attending or on call (C4) and banning music (C18) as eliminated. It records the automatic cut by the existing time switch as 'forced', and the final reply reports it. The remaining questions (which sockets, whether the switch controls power, the DST reset, the 22:58 setting as designer choice) are practical questions about applying the result. None asks how to enforce the limit."
+   },
+   {
+    "name": "Trap 6: small room's future undecided",
+    "pass": true,
+    "evidence": "The upstairs room stays bookable at \u00a312/h. C17 records the playgroup question as the committee's and undecided, design.md lists deciding it as a non-goal, and Q8 asks the committee when it will decide. The booking model needs nothing extra either way (F11). R8's suggestion to take upstairs bookings only up to the decision date is a mild hedge, but nothing else in the design depends on the outcome."
+   }
+  ],
+  "question_is_good": false
+ },
+ "gen.h1.placebo.opus.-.s1": {
+  "constraints_held": 6,
+  "constraints_total": 6,
+  "traps": [
+   {
+    "name": "Single-pass redistribution (water-filling)",
+    "pass": true
+   },
+   {
+    "name": "Re-running from current data",
+    "pass": true
+   },
+   {
+    "name": "Corrections applied in place",
+    "pass": true
+   },
+   {
+    "name": "5-share minimum",
+    "pass": true
+   },
+   {
+    "name": "15th-of-the-month rule",
+    "pass": true
+   },
+   {
+    "name": "Rounding residue to community account",
+    "pass": true
+   },
+   {
+    "name": "Back-dated register changes (plus)",
+    "pass": true
+   }
+  ],
+  "concepts": 8,
+  "special_cases": 2,
+  "duplicated_facts": 1,
+  "notes": "All six constraints hold. (1) Weights are share-days from append-only ShareEvent rows. Members are never deleted and redemptions keep the member, so leavers count for the days they held shares. The #14 example gives 13 and 18 days. (2) The cap is the import reading. Fill-to-caps fixes anyone who reaches their cap and re-splits the rest among the uncapped members by weight until stable, which is true water-filling. Sold is the remainder. (3) Largest-remainder rounding with ties to the lower member id. Caps are whole numbers, so rounding up never breaks a cap. Sold = generation \u2212 \u03a3 credits, with no balancing account. (4) Every row carries recorded_at, so allocate(M, issue time) reproduces the issued figures after later transfers and corrections. IssuedLine stores outputs as sent, and reprints come from the stored lines. (5) Revisions recompute old months with current facts, diff against the sum of issued lines for every member, and store \u00b1 adjustments in the current month. The design explicitly covers redistribution knock-on to other members and also adjusts sold. (6) Zero lines are dropped from the supplier file and there is no share minimum. Back-dated register events become adjustments at the next run, which earns the plus. Concepts: Member, ShareEvent, month inputs (Generation + ImportReading), IssuedLine (credit/adjustment/sold), allocate, revision/adjustment, supplier file, statement. That is about 8, slightly above the 6-concept reference but within range. The extra concepts are a separate Member table and a statement section. Special cases: (a) a missing import reading counts as cap 0 and is flagged; (b) a per-month sold line, with sold adjustments handled by the same diff logic. The tie-break and the reversing-event-for-mistakes rule are ordinary rules rather than exceptions. One duplicated fact: day-splitting of transfers is stated both in the weight step and again under Register changes. Storing issued lines alongside a reproducible allocate is deliberate and matches the reference. One minor gap: 'issue time of M' is not stored explicitly, but it can be derived from the IssuedLine rows' recorded_at.",
+  "hidden_pass": null
+ },
+ "gen.h1.plain.opus.-.s1": {
+  "constraints_held": 6,
+  "constraints_total": 6,
+  "traps": [
+   {
+    "name": "Water-filling (repeat redistribution until stable)",
+    "pass": true
+   },
+   {
+    "name": "Re-running from current data",
+    "pass": true
+   },
+   {
+    "name": "Corrections applied in place",
+    "pass": true
+   },
+   {
+    "name": "5-share minimum",
+    "pass": true
+   },
+   {
+    "name": "15th-of-the-month rule",
+    "pass": true
+   },
+   {
+    "name": "Rounding residue to community account",
+    "pass": true
+   },
+   {
+    "name": "Back-dated register changes (plus)",
+    "pass": true
+   }
+  ],
+  "concepts": 8,
+  "special_cases": 2,
+  "duplicated_facts": 2,
+  "notes": "All six constraints hold. (1) Weights are share-days from an append-only ledger. Leavers stay on record. Hal gets 13 days and his daughter 18. (2) The fill step repeats 'until nobody exceeds their cap or everyone is capped'. On test 1 this gives A300/B400/C300, and on the variant 50 kWh is sold. (3) Rounding floors every credit and then applies largest remainder with ties broken by member id. The argument that caps hold is stated: capped credits are already whole and uncapped ones sit below an integer cap. Credited plus sold equals G, and the community account is removed. (4) Every row carries 'recorded at' and settlements are stored and never changed. Re-runs use inputs 'as known at T', so issued months reproduce despite later transfers or corrections. (5) Re-settlement computes new credit minus already-credited for every member, so test 4 gives B +20 and C -20, not just B. The issued settlement stays untouched. (6) Zero lines are dropped per line and the minimum is gone, so small holders are included. Back-dated ledger entries are handled through adjustments (plus). Concepts: Member, Share ledger, Readings, Settlements, Allocate (fill + round), Re-settlement/adjustment, Supplier file, Statements. That is 8, at the upper edge of on target. Audit is a property, not a concept. Special cases: a missing reading counts as 0 and is then treated as a correction; mistakes are fixed by reversing entries. Duplicated facts: statements are never re-run and reprints match, stated in both Statements and Audit; community account and minimum removal are repeated in the Removed list. Minor: the export-sale line in the supplier file is an unrequested but labelled choice. The 'latest row is current' wording is harmless given as-known-at-T selection.",
+  "hidden_pass": null
+ },
+ "gen.h1.skill.opus.-.s1": {
+  "constraints_held": 6,
+  "constraints_total": 6,
+  "traps": [
+   {
+    "name": "Water-filling (single-pass redistribution)",
+    "pass": true
+   },
+   {
+    "name": "Re-running from current data",
+    "pass": true
+   },
+   {
+    "name": "Corrections applied in place",
+    "pass": true
+   },
+   {
+    "name": "5-share minimum",
+    "pass": true
+   },
+   {
+    "name": "15th-of-the-month rule",
+    "pass": true
+   },
+   {
+    "name": "Rounding residue to community account",
+    "pass": true
+   },
+   {
+    "name": "Back-dated register changes (plus)",
+    "pass": true
+   }
+  ],
+  "concepts": 7,
+  "special_cases": 3,
+  "duplicated_facts": 2,
+  "notes": "All six constraints hold. (1) Weights are share-days. Members are kept at zero shares, so a leaver still counts for May and for 9 days of June. Hal's case gives 13/18 days. (2) The closed-form water-fill solves sum of min(cap_i, lambda*w_i) = min(G, sum of caps). This gives test 1 exactly (A 300, B 400, C 300) and the variant with 50 kWh sold. Sold is non-zero only when every member is capped. (3) Credits are floored, then leftover kWh go by largest remainder, ties by account number. Capped members have zero fractional part, so they never receive a leftover kWh and caps hold. Credits plus sold equal G, and the community account is gone. (4) The design is append-only, every row has recorded_on, and allocate(m, t) uses only rows recorded by t. A re-run as of the issue date therefore reproduces the issued figures despite later transfers or corrections. One weakness: sent files are archived as 'evidence only' and are not the authoritative issued record. Reproducibility therefore depends on the code never changing. The trap asks for frozen outputs and the design does not store them, but it does name which figures are authoritative, so this is accepted. (5) Each line is allocate(m, t) minus allocate(m, t'), which telescopes. A correction re-water-fills the whole month, so test 4 gives B +20 and C -20, and the issued month is untouched. Backdated transfers are handled the same way, which earns the plus. (6) Zero lines are dropped as a condition on the line. There is no share or credit minimum. Design choices are labelled clearly. The 'missing reading means cap 0' rule is defensible but adds a special case. The flagged supplier assumption (month-tagged adjustment lines) is a real, sensible risk. Concept count is about 7: Member, Share entry, Reading, Run, allocate (water-fill plus rounding), difference-based monthly run/adjustment, statement/reprint. This is on target. Special cases: missing reading means cap 0, redemption never below 0, mistakes fixed by compensating entry. Duplicated facts: the deleted-items list appears both under Stored data and in the Ledger, and the designer choices are stated inline and again in the Ledger.",
+  "hidden_pass": null
+ },
+ "gen.h2.placebo.sonnet.-.s1": {
+  "constraints_held": 3,
+  "constraints_total": 3,
+  "traps": [
+   {
+    "name": "test_matches_reference_grid",
+    "pass": true
+   },
+   {
+    "name": "test_return_priced_at_outbound_season",
+    "pass": true
+   },
+   {
+    "name": "test_return_uses_ages_on_outbound_date",
+    "pass": true
+   },
+   {
+    "name": "test_single_uses_its_own_date",
+    "pass": true
+   },
+   {
+    "name": "test_birthday_on_travel_date",
+    "pass": true
+   },
+   {
+    "name": "test_infant_line_printed_at_zero",
+    "pass": true
+   },
+   {
+    "name": "test_long_vehicle_started_metre",
+    "pass": true
+   },
+   {
+    "name": "test_validation",
+    "pass": true
+   },
+   {
+    "name": "test_car_up_to_and_including_5m",
+    "pass": true
+   }
+  ],
+  "concepts": 9,
+  "special_cases": 1,
+  "duplicated_facts": 0,
+  "notes": "Verdicts come from reading the code. I could not execute the hidden tests or the visible tests, and the original fixture was not shown, so the grid pass assumes the line labels match the original format. That is likely, given the visible tests reportedly pass.\n\nTrap-by-trap reasoning:\n- Pricing date (#311): season and ages are both taken from the outbound date, once, and the leg lines are repeated per leg. This matches the reference design.\n- TODO: the old TODO was removed and replaced by a comment citing clause 7.2 and #311.\n- Age logic: the birthday-tuple age handles the travel-date birthday and 29 Feb cases correctly.\n- Infants (#288): zero-amount infant lines are kept, because the filter only drops bands with a headcount of 0.\n- Started metres (#377): Decimal(str(x)) with ROUND_CEILING gives 8 for 8, 8.0 and float 7.1, and 9 for 8.01 and 8.1.\n- Validation: all required cases raise ValueError, and the limits themselves stay valid.\n- #402: a single inclusive band table makes a 5.00 m vehicle a car on both singles and returns.\n\nDesign:\n- Each fare fact is stated once: the age thresholds, the 5.00 and 7.00 bands, 18.75, the per-metre rate and the fee.\n- A motorbike class is one more row in the vehicle table.\n- No scope creep: #415 and #421 were left alone.\n- Concepts are about 9: Season enum, season function, _prices helper, passenger band table, vehicle class table with long-vehicle constants, booking fee, age function, validation, and the line builders with quote and total.\n- The only special case is the long-vehicle fallthrough after the band table.\n\nMinor points:\n- The headcount dict keyed by label is slightly roundabout compared with a Counter.\n- The _prices/IntEnum indexing couples tuple order to the enum values. It is documented but implicit.\n- An invalid string length raises decimal.InvalidOperation, not ValueError. This is untested.\n- test_fares.py has no __main__ runner. The claim that the tests were 'run as plain scripts' without pytest is doubtful, since `python test_fares.py` would execute no tests.\n- The files sit at the repo root rather than in fixture/. This is disclosed in the reply.",
+  "hidden_pass": true
+ },
+ "gen.h2.plain.sonnet.-.s1": {
+  "constraints_held": 3,
+  "constraints_total": 3,
+  "traps": [
+   {
+    "name": "test_matches_reference_grid",
+    "pass": true
+   },
+   {
+    "name": "test_return_priced_at_outbound_season",
+    "pass": true
+   },
+   {
+    "name": "test_return_uses_ages_on_outbound_date",
+    "pass": true
+   },
+   {
+    "name": "test_single_uses_its_own_date",
+    "pass": true
+   },
+   {
+    "name": "test_birthday_on_travel_date",
+    "pass": true
+   },
+   {
+    "name": "test_infant_line_printed_at_zero",
+    "pass": true
+   },
+   {
+    "name": "test_long_vehicle_started_metre",
+    "pass": true
+   },
+   {
+    "name": "test_validation",
+    "pass": true
+   },
+   {
+    "name": "test_car_up_to_and_including_5m",
+    "pass": true
+   }
+  ],
+  "concepts": 8,
+  "special_cases": 1,
+  "duplicated_facts": 0,
+  "notes": "Results come from reading the code, not from running the hidden tests. The grid pass assumes the original module set seasons by calendar month. SEASON_BY_MONTH is consistent with the boundaries the check uses (30 Jun shoulder, 31 Aug high, 2 Sep shoulder), but if the original used mid-month cut-offs the grid would fail.\n\nPricing on the outward date: one season and one age set from `outbound` are used for both legs, matching the reference design. The stale TODO was replaced by a docstring citing clause 7.2.\n\nAge and birthdays: age uses the birthday tuple comparison. This handles 29 Feb correctly (15 on 28 Feb 2028, 16 on 29 Feb 2028; a 29 Feb 2024 birth is still an infant on 28 Feb 2028).\n\nInfant lines: zero-amount lines are kept, since only zero headcounts are filtered out.\n\nLong vehicles: lengths are converted with `Decimal(str(x))` and rounded with ROUND_CEILING. This gives 7.1 -> 8, 8.01 -> 9 and 8.0 -> 8, and handles Decimal input.\n\nBug #402: fixed by the single band table using `<=`. The 5.00 and 7.00 bands, the 18.75 limit and the booking fee are each stated once.\n\nScope: no work on #415 or #421. There is no class hierarchy or pricing-context object, and no debug prints or commented-out code.\n\nSpecial case: the long-vehicle fallback after the band loop.\n\nMinor points:\n- Infant 0.00 is repeated for each season. This is acceptable data, not a duplicated fact.\n- The YOUNGER_THAN table and `_passenger_band` add a little generality compared with a plain category() function.\n- The files sit at the repo root rather than under fixture/. The reply says so openly, and it is likely the workspace layout.\n\nVisible tests were kept and four relevant tests were added.",
+  "hidden_pass": true
+ },
+ "gen.h2.plain.sonnet.-.s2": {
+  "constraints_held": 3,
+  "constraints_total": 3,
+  "traps": [
+   {
+    "name": "test_matches_reference_grid",
+    "pass": true
+   },
+   {
+    "name": "test_return_priced_at_outbound_season",
+    "pass": true
+   },
+   {
+    "name": "test_return_uses_ages_on_outbound_date",
+    "pass": true
+   },
+   {
+    "name": "test_single_uses_its_own_date",
+    "pass": true
+   },
+   {
+    "name": "test_birthday_on_travel_date",
+    "pass": true
+   },
+   {
+    "name": "test_infant_line_printed_at_zero",
+    "pass": true
+   },
+   {
+    "name": "test_long_vehicle_started_metre",
+    "pass": true
+   },
+   {
+    "name": "test_validation",
+    "pass": true
+   },
+   {
+    "name": "test_car_up_to_and_including_5m",
+    "pass": true
+   }
+  ],
+  "concepts": 8,
+  "special_cases": 1,
+  "duplicated_facts": 0,
+  "notes": "Trap results come from reading the code; the hidden tests were not run. The grid result also assumes the original fixture's labels and line order, which I could not compare against. That assumption is consistent with the visible tests: lines are prefixed 'Outbound: '/'Return: ', passengers print before the vehicle, and categories print adult, child, infant. The 7.2 rule is handled correctly: one season and one set of category counts come from the outbound date and are reused for both legs, and the stale TODO is replaced by a comment citing clause 7.2 and #311. Ages use the standard birthday comparison, so 29 Feb births are correct. Infants are kept at 0.00 because lines are filtered on count, not amount. Started metres use D(str(x)) with a ceiling, so 7.1 gives 8, '8.0' gives 8 and 8.01 gives 9. Validation boundaries are right: birth on the travel date, return on the outbound day and 18.75 are all accepted. The #402 fix falls out of the single VEHICLES band table using <=. Every fare fact is stated once: 5.00, 7.00, 18.75, the fee and the per-season prices. A motorbike class is one more row. There is no scope creep: #415 and #421 are declined and labelled as design choices. There is no class hierarchy, context object or leftover scaffolding. The one special case is the long-vehicle fallthrough after the band table, which matches the reference design. Concepts: the _by_season helper and SEASONS tuple are small extras on top of the reference's 7. Caveat: the reply says the files were written to the repo root rather than fixture/, so placement deviates from the stated paths. The visible tests are kept and two are added (#402 and #311), which is allowed.",
+  "hidden_pass": true
+ },
+ "rating.q1.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q1.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "b"
+ },
+ "rating.q10.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q10.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q11.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q11.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "a"
+ },
+ "rating.q12.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q12.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "honest-lookup-table-vs-forced-clean-model",
+  "longer": "b"
+ },
+ "rating.q2.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q2.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "shorter-drops-buried-constraint",
+  "longer": "a"
+ },
+ "rating.q3.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q3.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "duplication-that-is-two-facts-vs-merged",
+  "longer": "b"
+ },
+ "rating.q4.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q4.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "true-duplication-vs-single-source",
+  "longer": "a"
+ },
+ "rating.q5.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q5.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-deletes-cases-vs-accreted",
+  "longer": "a"
+ },
+ "rating.q6.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q6.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "known-structure-imports-wrong-guarantee-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q7.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q8.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "complexity-hidden-elsewhere-vs-plain",
+  "longer": "b"
+ },
+ "rating.q9.placebo.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.placebo.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.placebo.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.placebo.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.plain.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.plain.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.plain.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.plain.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.skill.opus.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.skill.opus.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.skill.sonnet.ab.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "rating.q9.skill.sonnet.ba.s1": {
+  "parsed": true,
+  "correct": true,
+  "kind": "arbitrary-limit-vs-condition-or-reasoned-bound",
+  "longer": "b"
+ },
+ "gen.h2.skill.sonnet.-.s1": {
+  "constraints_held": 3,
+  "constraints_total": 3,
+  "traps": [
+   {
+    "name": "test_matches_reference_grid",
+    "pass": true
+   },
+   {
+    "name": "test_return_priced_at_outbound_season",
+    "pass": true
+   },
+   {
+    "name": "test_return_uses_ages_on_outbound_date",
+    "pass": true
+   },
+   {
+    "name": "test_single_uses_its_own_date",
+    "pass": true
+   },
+   {
+    "name": "test_birthday_on_travel_date",
+    "pass": true
+   },
+   {
+    "name": "test_infant_line_printed_at_zero",
+    "pass": true
+   },
+   {
+    "name": "test_long_vehicle_started_metre",
+    "pass": true
+   },
+   {
+    "name": "test_validation",
+    "pass": true
+   },
+   {
+    "name": "test_car_up_to_and_including_5m",
+    "pass": true
+   }
+  ],
+  "concepts": 8,
+  "special_cases": 1,
+  "duplicated_facts": 0,
+  "notes": "Verdict: these results come from reading the code. The hidden suites were not run, so the trap results are predicted, not measured. The predictions are: (1) 'return priced at outbound season' and 'return uses ages on outbound date' pass because `outbound` sets the season and the age bands for both legs once, and the replaced TODO now cites clause 7.2 and #311. (2) 'Birthday on travel date' passes because the age is a standard birthday comparison, which handles 29 Feb correctly (15 on 28 Feb 2028, 16 on 29 Feb). (3) 'Infant line printed at zero' passes because infant lines are kept whenever the count is above zero, so the amount 0.00 still prints. (4) 'Long vehicle started metre' passes because `Decimal(str(x))` rounded up with ROUND_CEILING gives 8.0->8, 8.01->9 and float 7.1->8. (5) The #402 fix (5, 5.0, '5.00' and Decimal all priced as a car, on singles and returns) passes because the inclusive VEHICLE_CLASSES table puts 5.00 m in the car class. (6) Validation keeps the boundaries valid: 18.75 m, a return on the outbound day and a birth on the travel date are all accepted. The 'reference grid' result is the least certain, because the original module was not visible. The author reports a 300k-booking comparison against the old module whose only differences were the 5.00 m singles, but that comparison was not checked here. Design: the structure matches the reference closely. It has one FARES table (category x season, where the vehicle rows car/van/long sit next to the passenger rows), AGE_BANDS (which sets both classification and print order), VEHICLE_CLASSES with inclusive limits, a separate MAX_VEHICLE_LENGTH_M constant, and a booking fee charged once and last. One leg is built once and repeated per leg. The small `_fares` helper is justified. The only special case is the long-vehicle fallthrough after the band loop. No fare fact is stated twice. There is no scope creep: #415 and #421 were not implemented. There is no forced generality or class hierarchy, and no scaffolding is left behind. Minor issues: (a) the files were edited at the repo root rather than under `fixture/`. The solution says the brief's path was wrong, so this has no effect on the score. (b) Adding a motorbike class needs a row in both VEHICLE_CLASSES and FARES. That is acceptable but not a single point. (c) The 'long' label string in `_vehicle_line` repeats the key 'long', which is trivial.",
+  "hidden_pass": true
+ },
+ "audit.b1.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C2: Annika said 'Most members book at the boathouse on the morning they go out', a current habit, but the record turns it into a hard rule that then eliminates options."
+   },
+   {
+    "class": "planted:0",
+    "text": "D1: The 'up to 7 days ahead' option is ruled out only by C2, which is a misstated observation, so no real constraint removes it."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: 'Cox books ahead' is ruled out by C2, but Annika never required on-the-day booking. 'First crew to book on the day' keeps the eights failure she described."
+   },
+   {
+    "class": "planted:1",
+    "text": "D3 vs C5: C5 requires knowing who was in the boat for every outing, but D3 and the Design still record only the booker. The 03-25 change re-derived D5 but left D3 unchanged."
+   },
+   {
+    "class": "defensible",
+    "text": "D3 status: D3 is a designer default that Annika accepted, so it should stay provisional. Marking it 'decided' let it escape re-examination when C5 arrived."
+   },
+   {
+    "class": "real",
+    "text": "C5 wording: C5 drops the insurer's 'and for how long', so D5's new duration behaviour traces to no listed constraint."
+   },
+   {
+    "class": "real",
+    "text": "D5 row: The table still shows D5 as decided 03-18 and does not mention storing the 'back' time, so it disagrees with the change note."
+   },
+   {
+    "class": "defensible",
+    "text": "C5 deadline: C5 has applied since 1 May 2026, and the design still cannot name crews. The record does not mention this non-compliance or any follow-up."
+   },
+   {
+    "class": "real",
+    "text": "Design, 'Bookings open at 06:00': This is an unforced value not recorded in Decisions and not tied to any constraint."
+   },
+   {
+    "class": "real",
+    "text": "D4 / Design: Blocking new bookings does not cover bookings made before a damage report or 'out' taps, and there is no concept for how damage is reported, so C3 is not fully met."
+   },
+   {
+    "class": "defensible",
+    "text": "D6: The decision has been open more than seven months with no owner or follow-up date, and the interim default is not shown in the Design."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 4,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b1.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C2: 'Most members book...' describes a habit, but C2 restates it as a rule for everyone. It is an assumption and cannot eliminate options."
+   },
+   {
+    "class": "planted:0",
+    "text": "D1: the 'up to 7 days ahead' option is eliminated by C2, which rests on the strengthened paraphrase, so D1 rests on an inference."
+   },
+   {
+    "class": "defensible",
+    "text": "D1: the fork mixes two axes, when and where. The status-quo whiteboard option is also missing."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: 'cox books ahead' is eliminated by C2, but Annika's eights quote describes exactly the problem booking ahead would solve. This should have been put to Annika."
+   },
+   {
+    "class": "defensible",
+    "text": "D3: 'decided' rests on Annika approving a designer default. That is approval, not an answer."
+   },
+   {
+    "class": "planted:1",
+    "text": "D3 / Changes since 03-18: C5 requires knowing who was in the boat, but D3 and the Design still record only the booker. The change was not propagated."
+   },
+   {
+    "class": "real",
+    "text": "C5: there is no verbatim quote under 'What Annika said', and the constraint drops 'and for how long', which only appears in the change note."
+   },
+   {
+    "class": "real",
+    "text": "C1: Annika only reported a double-booking incident. Stating it as 'never booked twice' is an inference that should be marked as an assumption."
+   },
+   {
+    "class": "real",
+    "text": "D5: 'decided 03-18' has no 03-18 owner statement behind it. If the C4 elimination holds, D5 is forced, and the elimination's reasoning is a designer inference."
+   },
+   {
+    "class": "defensible",
+    "text": "D6: the open fork has no decide_by event and no recorded 'asked' text."
+   },
+   {
+    "class": "real",
+    "text": "Design: 'Bookings open at 06:00' is an unforced number that no constraint or fork records."
+   },
+   {
+    "class": "real",
+    "text": "D4 / Design: C3 says damaged boats stay off the water, but the design only blocks new bookings. Existing bookings and who may report damage are undecided."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 5,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b1.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C2: Annika's habit statement ('Most members book...') is turned into a rule and then used to eliminate options."
+   },
+   {
+    "class": "planted:0",
+    "text": "D1: 'Up to 7 days ahead' is ruled out only by C2, which is not a real constraint. The 'decided' status is not backed by any statement from Annika."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: 'Cox books ahead' is ruled out only by C2, and the chosen option leaves Annika's eights complaint unsolved."
+   },
+   {
+    "class": "planted:1",
+    "text": "C5 / D3: C5 requires recording who was in the boat, but D3 and the Design section still record only the booker. The 03-25 change did not revisit D3."
+   },
+   {
+    "class": "defensible",
+    "text": "D3: Annika agreeing to a designer default is labelled 'decided' when it should stay a provisional designer choice."
+   },
+   {
+    "class": "real",
+    "text": "C5: The constraint omits 'and for how long', so D5's 'back' time cannot be traced to a constraint."
+   },
+   {
+    "class": "real",
+    "text": "Design: 'Bookings open at 06:00' is an unforced number with no decision, label or source behind it."
+   },
+   {
+    "class": "defensible",
+    "text": "D6 / Design: The open D6 default is applied silently, 'as today' is unverified, and no coach follow-up is recorded."
+   },
+   {
+    "class": "defensible",
+    "text": "Record status: The 1 May effective date has passed, and the record shows no update, sign-off or staleness note after 03-25."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 2,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b2.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "D1 status: 'open again from 1 Sep' has passed (today is 2026-10-19), but the fork was never reopened and no post-September location for Rose visits is recorded."
+   },
+   {
+    "class": "wrong",
+    "text": "D1 before C7: claims the record silently falls back to an unasked default, but the status explicitly notes 'was garden room, designer default' and 'open again from 1 Sep'."
+   },
+   {
+    "class": "defensible",
+    "text": "D2: Odile's 'they can still ring' is not recorded as a constraint, and 'web form' as the channel is the designer's choice, with other channels left out of the options."
+   },
+   {
+    "class": "defensible",
+    "text": "D5: email-only is attributed to C5 as well as C6; it is arguable whether same-day email satisfies 'hears of it the same day'."
+   },
+   {
+    "class": "real",
+    "text": "D5: 'asked Odile 06-16' has no recorded question, answer, follow-up or decide_by, and the default ran through the summer."
+   },
+   {
+    "class": "real",
+    "text": "D4: 'review after July' has passed with no review or trial results recorded."
+   },
+   {
+    "class": "real",
+    "text": "D4: four families per room is applied uniformly, including own rooms and the quiet room, and is not derived from room sizes."
+   },
+   {
+    "class": "real",
+    "text": "C4/D3: 'family' is undefined, and edge cases such as a couple who are both residents were not probed."
+   },
+   {
+    "class": "defensible",
+    "text": "D3: arguably forced by C4 rather than decided, and the 'keep it simpler' value is unrecorded; but C4 is itself Odile's statement."
+   },
+   {
+    "class": "defensible",
+    "text": "D6: the open fork has no decide_by, and its interaction with C7 is noted only in prose."
+   }
+  ],
+  "truth_total": 0,
+  "matched": 0,
+  "real": 5,
+  "defensible": 4,
+  "wrong": 1
+ },
+ "audit.b2.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "defensible",
+    "text": "D1 status: the fork reopened on 1 Sep and by 19 Oct no decision or question is recorded; the Design section only covers July and August."
+   },
+   {
+    "class": "defensible",
+    "text": "D1 options: 'both rooms' (garden room and quiet room) is a missing option outside July and August."
+   },
+   {
+    "class": "real",
+    "text": "C1: weakens 'shouldn't be brought into the lounge at all' to 'not visited in the lounge'."
+   },
+   {
+    "class": "defensible",
+    "text": "C2: records 'shared rooms' instead of Odile's rule 'no visits in the rooms there', so it would allow visits in a Rose room that became single."
+   },
+   {
+    "class": "defensible",
+    "text": "D2 'Ruled out by': 'web form only' has no ruling listed (C6 plus Odile's 06-09 statement)."
+   },
+   {
+    "class": "defensible",
+    "text": "D4 status: 'review after July' but no review recorded by October."
+   },
+   {
+    "class": "real",
+    "text": "D4 scope: four families per room is applied to every room, including own rooms and the single quiet room in summer; no per-room capacity basis."
+   },
+   {
+    "class": "defensible",
+    "text": "D5 status: 'asked Odile 06-16' has no answer recorded, yet the Design section presents the outbreak button as settled."
+   },
+   {
+    "class": "defensible",
+    "text": "D5 vs C5: email and recorded calls send a message but do not show that families hear it; 'office phones each family' is never ruled out."
+   },
+   {
+    "class": "wrong",
+    "text": "D5 'Ruled out by': claims C5 should not be cited against 'email only'; but email only fails C5 precisely because of C6, so citing both is correct."
+   },
+   {
+    "class": "defensible",
+    "text": "D6: open since 06-16 with no follow-up; 'will be raised with her' is not recorded; the option list is designer-invented and incomplete."
+   },
+   {
+    "class": "defensible",
+    "text": "Record as a whole: not updated since 06-23 despite passed review and expiry dates and unanswered questions."
+   }
+  ],
+  "truth_total": 0,
+  "matched": 0,
+  "real": 2,
+  "defensible": 9,
+  "wrong": 1
+ },
+ "audit.b2.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "D1 status / Design: 'open again from 1 Sep' has passed and it is now 19 Oct. The Design does not say where Rose residents are visited now, and the garden-room fallback was a designer default Odile was never asked about."
+   },
+   {
+    "class": "defensible",
+    "text": "C7: the constraint expired on 31 Aug and is not marked as lapsed. However, its own wording already states the date range."
+   },
+   {
+    "class": "real",
+    "text": "D2 status: 'decided by Odile' overstates what she said, since the web-form medium is a designer choice. The table also never records that C6 rules out 'web form only'."
+   },
+   {
+    "class": "real",
+    "text": "D4 status: 'review after July' is now overdue, and no outcome of the July trial is recorded."
+   },
+   {
+    "class": "real",
+    "text": "D5 status: 'asked Odile 06-16' has no matching entry in 'What Odile said' and no answer since. The choice remains an unconfirmed designer default."
+   },
+   {
+    "class": "defensible",
+    "text": "D5 choice: an unanswered recorded call does not guarantee the family hears the same day (C5). The design also does not say how landline-only families are identified."
+   },
+   {
+    "class": "real",
+    "text": "D6: the deciding party is the manager, but the record names no owner and sets no follow-up date. The July\u2013August point that was to be raised with Odile has passed with nothing recorded."
+   },
+   {
+    "class": "defensible",
+    "text": "Whole record: no session after 06-23 is recorded and there is no sign-off on the design as a whole. This largely overlaps the earlier staleness findings."
+   }
+  ],
+  "truth_total": 0,
+  "matched": 0,
+  "real": 5,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b3.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "D2: phone bookings ruled out by a designer value (second entry path), not a constraint; 'decided 04-13' lacks a Farid statement behind it."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2/Constraints: Farid's 04-13 statement about pensioners who never book online is not captured or cited; a web-only channel excludes them."
+   },
+   {
+    "class": "planted:1",
+    "text": "D3: not forced because the option list omits checking bookings at the skip bays; the camera costs 4,800 a year and needs committee approval, so it should have been asked."
+   },
+   {
+    "class": "defensible",
+    "text": "Design camera paragraph: 'barrier stays raised for booked plates' adds nothing since the barrier is already raised and unbooked cars are let in; the camera's purpose is unclear."
+   },
+   {
+    "class": "real",
+    "text": "Design: 'let in once' for unbooked cars is an undecided behaviour with no fork. Repeat visits and tracking are unspecified, and it weakens C1."
+   },
+   {
+    "class": "defensible",
+    "text": "C2: Farid's 'if we can' is a preference recorded as a constraint and used to eliminate 'every day' in D1."
+   },
+   {
+    "class": "real",
+    "text": "Design: 'other opening days walk-in (C2)' covers Sunday, but C2 is weekdays only. Sunday rests on the open D1 default."
+   },
+   {
+    "class": "real",
+    "text": "C4: two statements are merged into one constraint, and D5's hard cap of 20 turns 'about twenty' into an exact number."
+   },
+   {
+    "class": "real",
+    "text": "D6: slot capacity is derived from the peak arrival count rather than unloading capacity, and the two options vary on two axes at once."
+   },
+   {
+    "class": "defensible",
+    "text": "Confirmation email: Farid's 'fine, that's clear' is approval of designer-written text, not an answer to any fork."
+   },
+   {
+    "class": "real",
+    "text": "D1/D4: the open forks have no decide-by event, and the Sunday question has been unanswered for six months."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 5,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b3.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "Constraints: Farid's 04-13 statement about pensioners who have never booked online is missing from the constraint list, although it bears on D1 and D2."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: Phone bookings were ruled out by a simplicity value, not a constraint. That removes the only offline channel for the pensioners, and nothing shows the two were weighed when D2 was decided on 04-13."
+   },
+   {
+    "class": "planted:1",
+    "text": "D3: 'Forced' is wrong because the option list is incomplete. C5 bans checks only in the lane and at the barrier, so a booking check at the skip bays, where permits are already checked, survives every constraint."
+   },
+   {
+    "class": "real",
+    "text": "D3: The camera's 4,800 a year cost and its need for environment committee approval are not recorded as a fork, risk or open item. The decision was reported to Farid, not asked."
+   },
+   {
+    "class": "defensible",
+    "text": "Design (Saturdays): The camera gates nothing, since unbooked cars are let in too. Its only job is listing unbooked plates, which a skip-bay check could also do, so it is a candidate for deletion."
+   },
+   {
+    "class": "real",
+    "text": "Design: 'Let in once' is an unrecorded designer choice. Handling a repeat unbooked car would risk C5 and C1, and the design does not say what happens."
+   },
+   {
+    "class": "real",
+    "text": "C3/D4: The postcode residence check applies only to Saturday bookings, so non-resident private cars on weekdays are never checked. The record must settle what C3 means."
+   },
+   {
+    "class": "real",
+    "text": "D5: No enforcement of who holds a Thursday hazardous-waste slot is named, so C4 is not shown to be met."
+   },
+   {
+    "class": "real",
+    "text": "D6/C1: Slot capacity of 48 cars an hour equals the observed peak, and nothing argues that bookings keep the queue off the ring road. C1 is asserted, not demonstrated."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 6,
+  "defensible": 1,
+  "wrong": 0
+ },
+ "audit.b3.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "Constraints: Farid's 04-13 point that many Saturday regulars are pensioners who have never booked online is not captured as a constraint (e.g. an inferred C6), so nothing tests whether web-only booking works for them."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: Phone bookings ruled out by 'a second entry path that has to be kept in step', which is a simplicity preference rather than a constraint. Against the missing pensioner constraint, web-only is the weaker option."
+   },
+   {
+    "class": "planted:1",
+    "text": "D3: The camera is called 'forced', but C5 only bans checks in the lane and at the barrier. Checking at the skip bays, where permit checks already happen and unbooked cars are handled, was never listed, so the decision is not forced."
+   },
+   {
+    "class": "planted:1",
+    "text": "D3: A 4,800-a-year cost needing committee approval was only 'reported to Farid, not asked'. The approval is also a blocking dependency with no fallback."
+   },
+   {
+    "class": "real",
+    "text": "Design, unbooked cars: the 'let in once' rule has no stated enforcement, and admitting unbooked cars adds load beyond booked capacity, so C1 is not shown to be met."
+   },
+   {
+    "class": "real",
+    "text": "D6: 12 cars per 15 minutes is the peak arrival rate that already causes the queue. Slot capacity should come from skip-bay throughput minus an allowance for unbooked cars."
+   },
+   {
+    "class": "real",
+    "text": "C3 / D4: A typed postcode proves nothing about residence, and weekday walk-ins get no residence check. The record never shows where C3 is actually met."
+   },
+   {
+    "class": "real",
+    "text": "D5: No stated check for Thursday hazardous-waste bookings and no handling for chemicals brought without a slot, so the cap in C4 has no enforcement point."
+   },
+   {
+    "class": "defensible",
+    "text": "D1: The Sunday question has been open since 04-20, six months ago, while the design text treats Sunday slots as a settled conditional extension. It needs an owner and a follow-up."
+   },
+   {
+    "class": "real",
+    "text": "Process: No assumptions or risk list (camera approval, pensioners' ability to book, the 48-an-hour figure, throughput) and no design sign-off. Farid approving the email wording is not approval of the design."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 6,
+  "defensible": 1,
+  "wrong": 0
+ },
+ "audit.b4.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "Constraints: Wen's 08-03 flat-share statement is not recorded as a constraint and no fork addresses it; D3 notifies the register contact, which recreates the problem."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: The fork bundles channel and recipient. Wen answered only the channel, and the option of notifying the named addressee is missing."
+   },
+   {
+    "class": "planted:1",
+    "text": "D4: The fridge is ruled out by 'needs its own temperature log and a separate shelf map', which is a cost or simplicity value, not a constraint."
+   },
+   {
+    "class": "real",
+    "text": "D4: Marked 'decided 08-10', but Wen only stated a problem. The chosen option keeps causing that problem."
+   },
+   {
+    "class": "real",
+    "text": "Constraints: The grocery problem has no constraint item, so a chilled bag delivered out of hours sits until 08:00 with no notice."
+   },
+   {
+    "class": "defensible",
+    "text": "C3: The constraint paraphrases Wen beyond the quote. 'Stay 08:00 to 20:00' hides the option of shifting the same hours."
+   },
+   {
+    "class": "real",
+    "text": "D1: 'lockers: no space' eliminates an option using a Context fact that is not in the constraint list."
+   },
+   {
+    "class": "real",
+    "text": "D2: The open fork has no question or decide-by event, and a standing code per firm can be shared, which is a theft risk."
+   },
+   {
+    "class": "real",
+    "text": "D5: Correctly open, but there is no decide-by event, and the shelving is being fitted now numbered by floor, which is hard to reverse."
+   },
+   {
+    "class": "defensible",
+    "text": "D6: There is no decide-by event, and the 'two weeks' threshold is a designer number, not Wen's."
+   },
+   {
+    "class": "real",
+    "text": "Missing fork: Because of C4, there is no fork for shelf capacity or for parcels that are never collected."
+   },
+   {
+    "class": "real",
+    "text": "Missing fork: Any resident's fob opens the parcel room, so who may take which parcel is fixed silently."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 8,
+  "defensible": 2,
+  "wrong": 0
+ },
+ "audit.b4.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "Constraints: Wen's 08-03 flat-share statement (notice should reach the addressee, not the leaseholder) is missing from the constraints list."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: channel (text, decided by Wen) and recipient (register contact, a designer default) are merged into one fork recorded as decided by Wen. Notifying the addressee is omitted, and the flat-share problem continues."
+   },
+   {
+    "class": "real",
+    "text": "Constraints: Wen's 08-10 statement that chilled bags go off is missing as a constraint (chilled groceries must not spoil before collection)."
+   },
+   {
+    "class": "planted:1",
+    "text": "D4: the fridge is ruled out by a temperature log and a separate shelf map, which is cost and complexity, not a constraint. The surviving option breaks the grocery need, and a spare fridge is available."
+   },
+   {
+    "class": "real",
+    "text": "D1: 'lockers: no space' traces to a site fact that is not in the constraints list. It should be added, marked as coming from the site."
+   },
+   {
+    "class": "real",
+    "text": "Design/C1: every resident's fob opens the parcel room, so theft and 'who took what' can move inside the room. A standing courier code shared across a firm also opens the room."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 4,
+  "defensible": 0,
+  "wrong": 0
+ },
+ "audit.b4.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "Constraints: Wen's 08-03 flat-share statement (the addressee, not the leaseholder, should be told) is not recorded as a constraint (C5), and D3 is not checked against it."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: Two forks are merged into one. Wen chose the channel (text), not the recipient. Every option fixes the recipient as the register contact, usually the leaseholder, which repeats the 08-03 complaint. The recipient needs its own fork."
+   },
+   {
+    "class": "real",
+    "text": "Constraints / D4: Wen's 08-10 statement that chilled groceries sit and go off is not recorded as a constraint. D4 then picks the option that fails it: a bag delivered after 20:00 sits on the intake shelf overnight."
+   },
+   {
+    "class": "planted:1",
+    "text": "D4: The fridge is rejected for 'needs its own temperature log and a separate shelf map'. That is a cost, not a constraint, used to drop a stated need even though a spare fridge is available."
+   },
+   {
+    "class": "real",
+    "text": "D4: The status says 'decided 08-10' but names no decider. Nothing shows Wen agreed, so this is an unlabelled designer choice recorded as a decision."
+   },
+   {
+    "class": "real",
+    "text": "Constraints / D1: Lockers are ruled out by 'no space', a reality constraint that is not in the constraint list. It should be listed so the forced decision traces to it."
+   },
+   {
+    "class": "defensible",
+    "text": "D1: 'Forced' rests on two unchecked assumptions: that the storeroom counts as 'no further than the lobby' under C2, and that courier firms will use a door code. Both should be listed as assumptions and confirmed."
+   },
+   {
+    "class": "real",
+    "text": "D1 / D2 / Design: Resident fobs open the whole room and drivers share standing codes, so any resident or driver can take any parcel with no trace. The theft problem behind C1 moves inside the room."
+   },
+   {
+    "class": "real",
+    "text": "D2 / Design: The Design states standing per-firm codes as settled, though D2 is an open designer default. The trade-off (no per-driver revocation, leakage over time) is not recorded."
+   },
+   {
+    "class": "real",
+    "text": "D6 / Design: Because of C4, a parcel that is never collected has nowhere to go. No decision covers that end state, separate from the charging question."
+   },
+   {
+    "class": "defensible",
+    "text": "D6 / Design: The Design says the decision waits until Wen hears from the committee, which invents a process. The record does not say who owns the decision."
+   },
+   {
+    "class": "real",
+    "text": "Record-keeping: Parcels delivered after 20:00 are not announced until the concierge shelves them next morning. This delay is a consequence of D1 that Wen has not seen."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 8,
+  "defensible": 2,
+  "wrong": 0
+ },
+ "audit.b5.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "Constraints, C4: Lucia only approved the designer's mock-up, so C4 is not an owner constraint and must not eliminate options."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: The shorter deadlines are ruled out by C4, which only restates the chosen option. Both still satisfy C1, so D2 should be open."
+   },
+   {
+    "class": "real",
+    "text": "D2 / What Lucia said 05-12: Lucia's complaint about choosing a week ahead (child off sick, meal binned) is not recorded as a value, which hides the conflict with the Thursday deadline."
+   },
+   {
+    "class": "real",
+    "text": "Missing fork: What happens to an order when the child is absent (cancellation, refund, binning) is never decided."
+   },
+   {
+    "class": "planted:1",
+    "text": "Constraints, C2: The paraphrase drops Lucia's qualifier 'at the till' and widens the constraint to everywhere."
+   },
+   {
+    "class": "planted:1",
+    "text": "D4: 'Marked per meal' is eliminated only by the broadened C2. A per-meal mark kept in office records is never shown at the till."
+   },
+   {
+    "class": "planted:1",
+    "text": "D4 / Design (council claim): The design replaces Lucia's pupil-by-pupil claim from till sheets with pupils x school days, which claims meals that were never served."
+   },
+   {
+    "class": "real",
+    "text": "D4 status: 'decided 05-12' gives no deciding owner and no quoted answer. It is a designer choice recorded as decided."
+   },
+   {
+    "class": "real",
+    "text": "D5: The open fork has no question or decide-by date, the vegetarian default ignores allergies (C3), and unordered pupils' place in the 09:30 numbers is unclear."
+   },
+   {
+    "class": "defensible",
+    "text": "D6: The decide-by event and the exact question asked are not recorded."
+   },
+   {
+    "class": "defensible",
+    "text": "What Lucia said 05-05: Reducing waste (forty portions a day) is not recorded as a value that decisions are ranked against."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 4,
+  "defensible": 2,
+  "wrong": 0
+ },
+ "audit.b5.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C4 / D2: the Thursday 18:00 cutoff came from the designer's mock-up, and Lucia's 'looks good' accepted a proposal rather than stating a requirement. C4 is a designer choice, so it cannot rule out the later deadlines in D2, which still meet C1."
+   },
+   {
+    "class": "real",
+    "text": "Constraints list / D2: Lucia's 05-12 complaint about meals binned when a child is off sick is not recorded. The week-ahead deadline brings that waste back, and the conflict is never resolved."
+   },
+   {
+    "class": "planted:1",
+    "text": "C2: the record drops 'at the till' from Lucia's statement, widening the constraint to 'never identifiable' everywhere. D4 then rests on that wider version."
+   },
+   {
+    "class": "planted:1",
+    "text": "D4: 'marked per meal' is ruled out by C2, but an office record is not the till. The chosen monthly credit also marks free-meal pupils in the office's records."
+   },
+   {
+    "class": "real",
+    "text": "Constraints list / D4 / Design: Lucia's per-pupil claim 'off the cook's till sheets' is missing as a constraint. The design replaces it with pupils x school days, which counts absent pupils and was never agreed with Lucia or the council."
+   },
+   {
+    "class": "real",
+    "text": "D4: the status 'decided 05-12' does not say who decided. Nothing Lucia said chooses a monthly credit, so this is a designer choice recorded as a decision."
+   },
+   {
+    "class": "defensible",
+    "text": "D5 / Design: D5 is an open designer default, but the Design section states the vegetarian fallback as settled, without flagging it as provisional."
+   },
+   {
+    "class": "real",
+    "text": "D5: the no-order default was never checked for allergies, for pupils who bring packed lunches from home (which inflates the count and adds waste), or for who pays."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 4,
+  "defensible": 1,
+  "wrong": 0
+ },
+ "audit.b5.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "Constraints, C4: The Thursday 18:00 cut-off is the designer's own mock-up proposal. Lucia's 'looks good' approved it but did not make it a constraint."
+   },
+   {
+    "class": "planted:0",
+    "text": "Decisions, D2: The record rules out the day-before and on-the-day deadlines by citing C4, which is circular. C1 permits both options, so D2 is still an open fork."
+   },
+   {
+    "class": "real",
+    "text": "What Lucia said (05-12, sick children) / D2: Her complaint about binned meals when a child is off sick is never captured or weighed. The week-ahead deadline makes it worse."
+   },
+   {
+    "class": "planted:1",
+    "text": "Constraints, C2: The record drops 'at the till' and widens Lucia's statement to 'never identifiable' anywhere."
+   },
+   {
+    "class": "planted:1",
+    "text": "Decisions, D4: Per-meal office marking is ruled out by the widened C2. Lucia's actual constraint covers only the till."
+   },
+   {
+    "class": "real",
+    "text": "Constraints / D4 / Design (council claim): Lucia's per-pupil claim off the till sheets is missing. 'Pupils x school days' drops the per-pupil detail and risks over-claiming meals not served."
+   },
+   {
+    "class": "real",
+    "text": "Decisions, D4 status: 'decided 05-12' names no decider, and no statement from Lucia supports it. It should be labelled a designer choice."
+   },
+   {
+    "class": "real",
+    "text": "Constraints (allergies): Never serving a pupil their allergen is not listed as an inferred constraint. Nothing checks the D5 default or parents' grid choices against allergies."
+   },
+   {
+    "class": "defensible",
+    "text": "Decisions, D5 / D6: Both have been open since May with no owner, validating question or next step. The trips calendar should exist by now."
+   },
+   {
+    "class": "defensible",
+    "text": "Record as a whole: There is no assumptions list, risk list or sign-off, so designer defaults and reinterpreted constraints are not tracked for Lucia to confirm."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 4,
+  "defensible": 2,
+  "wrong": 0
+ },
+ "audit.b6.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:1",
+    "text": "D1 and Design: C5 was added on 07-21, but D1 was not re-derived. The rule still assigns the smallest free berth that fits the length, so a deep-draft boat can be given C1 to C6."
+   },
+   {
+    "class": "real",
+    "text": "Changes since 07-14: the draft question and the low-water depths trace to C5 but are attached to no decision, so the record cannot show they satisfy C5."
+   },
+   {
+    "class": "defensible",
+    "text": "C5: Mateo said the dredging is off until next year, so C5 is temporary, yet the record states it as permanent with no revisit trigger."
+   },
+   {
+    "class": "defensible",
+    "text": "D1 / Constraints: 'first free berth' is ruled out by a Mateo quote that appears in no constraint, so the constraint list and the decisions disagree."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: marked forced, but C2 rules out only the on-call option. Assigning booked boats a berth in advance by email or text, or posting a board, are not ruled out, so the decision should have been asked."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: the waiting pontoon holds three boats, and nothing covers a fourth late arrival, who ties up anywhere, the fuel berth included."
+   },
+   {
+    "class": "real",
+    "text": "D4: neither option is checked against C4. Staff moving boats at 08:00 cannot clear the berth by 08:00, and a sign does not guarantee the berth is clear."
+   },
+   {
+    "class": "defensible",
+    "text": "D5: the 10% in the first option is a designer-chosen number that should be marked as such."
+   },
+   {
+    "class": "real",
+    "text": "Design: presents D2 and D4 as settled although both are open designer defaults; only D5 is flagged as provisional."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 3,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b6.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:1",
+    "text": "D1 / Design paragraph 1: C5 was added on 07-21, but D1 was not re-derived. The assignment rule is still length-only, so a deep-draft boat can be given C1 to C6."
+   },
+   {
+    "class": "defensible",
+    "text": "D1 / Constraints: 'Smallest berth that fits' is Mateo's statement and is missing from the constraint list. D1 is presented as a decision when it is really forced by an unlisted constraint."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3 'forced': the text-message service could send booked-ahead skippers their berth before 18:00. C2 does not rule this out, so D3 is a real fork and should have been asked."
+   },
+   {
+    "class": "real",
+    "text": "D3 / Context: the waiting pontoon holds only three boats. A fourth late arrival has nowhere to go, which brings back the 07-14 problem."
+   },
+   {
+    "class": "real",
+    "text": "D3 / Design paragraph 2: no channel tells an unbooked late arrival to use the waiting pontoon, because nobody answers the radio after 18:00."
+   },
+   {
+    "class": "real",
+    "text": "D4: neither the sign nor moving boats by staff at 08:00 is shown to meet C4. The constraint is quietly weakened."
+   },
+   {
+    "class": "defensible",
+    "text": "D2: Mateo explicitly allowed rafting on the outer berths, yet the row labels it a designer default. This mixes his statement with the designer's choice."
+   },
+   {
+    "class": "real",
+    "text": "C1 / Design: 'Anything longer goes to the town quay' is dropped. The design does not say how boats outside 7 to 15 m are handled."
+   },
+   {
+    "class": "real",
+    "text": "Changes since 07-14: the change entry does not list D1 or the Design text as concepts C5 touches but leaves unchanged. No re-derivation is recorded."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 5,
+  "defensible": 2,
+  "wrong": 0
+ },
+ "audit.b6.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:1",
+    "text": "D1 / Design: The assignment rule was not re-derived when C5 was added on 07-21. It still reads 'smallest free berth that fits the length', and the Design repeats 'fits its length'. A 9 m boat drawing 1.8 m can still be given C3 when C3 is the smallest free berth. The 07-21 change only collects draft and puts depths on the chart; nothing uses them in the assignment. D1 should become 'smallest free berth that fits length and draft'."
+   },
+   {
+    "class": "wrong",
+    "text": "Constraints / D1: Mateo's own statement on 07-07, 'Smallest berth that fits. Don't waste a 15-metre berth on a little boat', is a constraint. It is cited in D1's 'Ruled out by' column but is missing from the constraints list, so D1 rests on a source that isn't recorded as one."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: The decision is marked 'forced' and reported to Mateo without being asked, but only one alternative, on-call radio, was ruled out. Other options were never considered. For example, the text-message service could send a berth ahead of time to the roughly half of skippers who book by email with a mobile number, so they need no one on duty when they arrive. Calling it forced removed a decision Mateo should have made."
+   },
+   {
+    "class": "real",
+    "text": "D3 / Constraints: The waiting pontoon holds three boats. That physical limit is in the Context but not among the constraints, and D3 doesn't check it. A fourth boat arriving after 18:00 has nowhere to go and will tie up 'wherever, the fuel berth included'. That is exactly the 07-14 problem, and it would also break C4."
+   },
+   {
+    "class": "real",
+    "text": "D4: Neither option is shown to meet C4. 'Moved by staff at 08:00' is ruled out by the office hours, since staff start at 08:00 and can't have the berth clear by 08:00, but the column says '-'. The chosen sign is only advisory and doesn't guarantee C4. A designer default was picked for a hard constraint without showing where C4 is actually met."
+   },
+   {
+    "class": "defensible",
+    "text": "Design: The prose presents D2 (rafting alongside on C7 to C18) and D4 (the sign) as settled design. Both are open designer defaults: D2 is 'to raise with Mateo' and D4 is 'open'. The reader of the design section can't tell which parts Mateo agreed to."
+   }
+  ],
+  "truth_total": 2,
+  "matched": 2,
+  "real": 2,
+  "defensible": 1,
+  "wrong": 1
+ },
+ "audit.b7.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "D2 is marked 'decided with Ruth 01-20', but no quote from Ruth chooses the web form. This matches a known acceptable extra."
+   },
+   {
+    "class": "defensible",
+    "text": "The web form needs the portal, which was never switched on, and D5 needs texts. Neither is checked against C5 for possible subscription or add-on costs."
+   },
+   {
+    "class": "defensible",
+    "text": "D1 cites C2 to rule out the repairs app. That is an inference, since an app that writes to the housing system could meet C2."
+   },
+   {
+    "class": "real",
+    "text": "C5 lapsed at the June meeting and today is 2026-10-19. Eliminations that rest on C5 are unconfirmed, and the record has not been updated since the 1 April switch-over."
+   },
+   {
+    "class": "real",
+    "text": "D4 covers who answers the out-of-hours phone, not who attends an emergency within 24 hours after 1 April. C1 is not shown to be met."
+   },
+   {
+    "class": "real",
+    "text": "On-call jobs are logged only 'next morning', and later after weekends or bank holidays, so the record lags C2. This matches a known acceptable extra."
+   },
+   {
+    "class": "defensible",
+    "text": "The 'half our calls are chasers' goal is not recorded as a constraint or value, so D5 traces to nothing."
+   },
+   {
+    "class": "defensible",
+    "text": "The design text presents the D5 default as settled without marking it as a default."
+   },
+   {
+    "class": "defensible",
+    "text": "The open D5 and D6 forks have no recorded question or decide-by event, and D6 depends on D2."
+   },
+   {
+    "class": "defensible",
+    "text": "D7 has no decide-by event, and the handyman's preference is not recorded as a ranking value."
+   }
+  ],
+  "truth_total": 0,
+  "matched": 0,
+  "real": 4,
+  "defensible": 6,
+  "wrong": 0
+ },
+ "audit.b7.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "defensible",
+    "text": "Constraints: the 'half our calls are chasers' problem is not captured, so D5 has nothing to trace to."
+   },
+   {
+    "class": "real",
+    "text": "D2: 'decided with Ruth 01-20' has no quote recording her agreement to the web form; it is a designer addition."
+   },
+   {
+    "class": "defensible",
+    "text": "D2/D5 portal vs C5: nobody checked whether switching on the portal needs a new subscription."
+   },
+   {
+    "class": "defensible",
+    "text": "D3: the three categories are forced by Ruth's own C3, so 'decided by Ruth' and the five-level option are misleading."
+   },
+   {
+    "class": "defensible",
+    "text": "D4/C6 vs C5: the on-call phone may need a new contract before the June freeze ends."
+   },
+   {
+    "class": "real",
+    "text": "D4/C1: C6 was patched by swapping the number; who staffs the on-call phone and attends within 24h from 1 April is not recorded."
+   },
+   {
+    "class": "real",
+    "text": "D4/D5: overnight jobs are logged next morning, so the 'reported' text is delayed for emergencies."
+   },
+   {
+    "class": "defensible",
+    "text": "D5: the 'both' default adds a redundant channel and leans implicitly on Ruth's 'nice and clear' mock-up reaction."
+   },
+   {
+    "class": "real",
+    "text": "D7/Design: contractor job booking, recording in the housing system, and status texts are not covered."
+   },
+   {
+    "class": "real",
+    "text": "Design section states the open defaults D5, D6 and D7 as settled, with no provisional marking or list of open forks."
+   },
+   {
+    "class": "defensible",
+    "text": "Record currency: the 31 March and June dates have passed, with no later entry confirming the outcomes."
+   }
+  ],
+  "truth_total": 0,
+  "matched": 0,
+  "real": 5,
+  "defensible": 6,
+  "wrong": 0
+ },
+ "audit.b7.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "real",
+    "text": "Whole record, dates: last entry 2026-02-03, 1 April still described as future; D5-D7 open for eight months without being raised"
+   },
+   {
+    "class": "real",
+    "text": "C5 and D1: the June freeze has passed and nobody has checked it; C5 is shown as a live reason"
+   },
+   {
+    "class": "real",
+    "text": "Missing goal: 'half our calls are chasers' is not recorded as a goal, so D5 has nothing to trace to"
+   },
+   {
+    "class": "real",
+    "text": "Design section presents the open D5/D6/D7 defaults as settled design"
+   },
+   {
+    "class": "defensible",
+    "text": "D5 and 01-27: 'nice and clear' is not a decision; 'raise with Ruth' has no owner or date"
+   },
+   {
+    "class": "real",
+    "text": "D4 and C1: nothing records who answers the on-call phone or who attends within 24 hours after 1 April"
+   },
+   {
+    "class": "defensible",
+    "text": "D4 was changed in place rather than recorded as a superseding decision"
+   },
+   {
+    "class": "real",
+    "text": "D2, D5 and C5: no check that the portal and texts are free under the existing licence; no assumptions or risk list"
+   },
+   {
+    "class": "real",
+    "text": "Design: contractor jobs have no booking or status-update flow, so C2 and the status updates fail for them"
+   },
+   {
+    "class": "defensible",
+    "text": "C3: timescales for urgent and routine repairs are not captured as constraints or open questions"
+   },
+   {
+    "class": "defensible",
+    "text": "D5 and C4: tenants with only a landline get no progress updates (SMS does work without a smartphone, so this is only partly valid)"
+   }
+  ],
+  "truth_total": 0,
+  "matched": 0,
+  "real": 7,
+  "defensible": 4,
+  "wrong": 0
+ },
+ "audit.b8.collapse.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C5 is built on Bea's 09-22 approval of the designer's sketch, so it is not an owner constraint."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: 30 minutes and per-dog length are ruled out by C5, which is not a real constraint, so D2 is still open."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2 contradicts Bea's 09-15 statement about long walks and twenty-minute meetings, which points to per-dog length."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: three and four meetings are ruled out by C5, so two is an unforced designer choice and D3 is still open."
+   },
+   {
+    "class": "real",
+    "text": "Bea's backlog of forty waiting adopters is never recorded as a value, though it favours more throughput in D2, D3 and D4."
+   },
+   {
+    "class": "real",
+    "text": "The three-senior-handler headcount is not recorded as a constraint, yet 'six meetings a day' depends on it."
+   },
+   {
+    "class": "defensible",
+    "text": "C1 turns feeding into one-hour blocks; the feeding duration is an assumption."
+   },
+   {
+    "class": "real",
+    "text": "D4 is marked open but was never asked, while the design already treats the default as the behaviour."
+   },
+   {
+    "class": "defensible",
+    "text": "D5 has no decide_by event marking when proceeding on the default stops being reversible."
+   },
+   {
+    "class": "defensible",
+    "text": "D6 is a consequence forced by C6, not a real fork, and its 'four on Mondays' inherits the C5 cap."
+   },
+   {
+    "class": "real",
+    "text": "Hiding adult-only dogs is an undecided designer choice, and it assumes the application records the children's ages."
+   },
+   {
+    "class": "real",
+    "text": "Overlapping bookings of the same dog, how handlers are assigned to slots, and handler absence are not covered."
+   }
+  ],
+  "truth_total": 1,
+  "matched": 1,
+  "real": 5,
+  "defensible": 3,
+  "wrong": 0
+ },
+ "audit.b8.elegance.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C5: This is a designer choice recorded as a constraint. One-hour meetings and two per handler came from the designer's 09-22 sketch, and Bea's 'looks good' accepts it rather than stating a requirement."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2: The reasoning is circular. 30 minutes and per-dog length are ruled out by C5, which is the designer's own sketch, while Bea's 09-15 statement supports per-dog length."
+   },
+   {
+    "class": "real",
+    "text": "Constraints: Bea's 09-15 statement about big young dogs and old or nervous dogs is never recorded, although it bears on D2 and slot capacity."
+   },
+   {
+    "class": "planted:0",
+    "text": "D3: Three and four are ruled out by C5, which is again the designer's own sketch, so this is circular. Two a day is unforced and should be labelled a designer choice or confirmed with Bea."
+   },
+   {
+    "class": "planted:0",
+    "text": "D4 vs C5: Both come from the same approved 09-22 sketch, yet D4 is left open as a designer default while C5 is promoted to a constraint."
+   },
+   {
+    "class": "real",
+    "text": "D4: Bea's 09-08 backlog statement (forty approved adopters, long-stay dogs) is missing, and it bears on how slots are chosen."
+   },
+   {
+    "class": "real",
+    "text": "D6 / Design: Monday capacity of four inherits C5's unconfirmed status but is presented as forced by C6."
+   },
+   {
+    "class": "real",
+    "text": "Design: Inferred constraints are missing. A dog or a handler cannot be in two simultaneous meetings, and the slot model never ties slots to a handler and a dog."
+   },
+   {
+    "class": "defensible",
+    "text": "C3 / D1: Hiding adult-only dogs relies on the application recording children's ages, a dependency that is never stated."
+   }
+  ],
+  "truth_total": 1,
+  "matched": 1,
+  "real": 4,
+  "defensible": 1,
+  "wrong": 0
+ },
+ "audit.b8.placebo.opus.-.s1": {
+  "findings": [
+   {
+    "class": "planted:0",
+    "text": "C5 is not a constraint: one-hour meetings and the two-per-handler cap came from the designer's 09-22 sketch, which Bea only approved."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2 and D3 reason in a circle: they rule out options 'by C5', but C5 is the sketch that already held the chosen values."
+   },
+   {
+    "class": "planted:0",
+    "text": "Bea's 09-15 point that meeting length depends on the dog is not recorded, and the per-dog option was ruled out by the designer-derived C5."
+   },
+   {
+    "class": "planted:0",
+    "text": "D2/D3 vs D4: the same 09-22 sketch approval counts as 'decided' for length and handler cap, but D4 stays open."
+   },
+   {
+    "class": "real",
+    "text": "Bea's 09-08 statement about forty waiting adopters and long-stay dogs is dropped, though it bears on capacity (D3) and slot choice (D4)."
+   },
+   {
+    "class": "real",
+    "text": "D6's status 'changed 09-29' gives no previous value or history, although it is in fact forced by C6."
+   },
+   {
+    "class": "defensible",
+    "text": "The design restates the 'at most two' cap as exactly two a day and repeats it in the hand-kept six/four daily totals."
+   }
+  ],
+  "truth_total": 1,
+  "matched": 1,
+  "real": 2,
+  "defensible": 1,
+  "wrong": 0
+ }
+}

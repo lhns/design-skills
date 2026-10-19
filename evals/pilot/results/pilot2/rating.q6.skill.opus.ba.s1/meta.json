@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q6.skill.opus.ba.s1",
+ "track": "rating",
+ "item": "q6",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 28102,
+ "total_cost_usd": 0.049014199999999994,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5663,
+ "final_text": "# Pacing outgoing text alerts: Candidate A (Design 2) is the better design\n\nCandidate B looks more flexible, but its flexibility is exactly what the gateway agreement forbids.\n\n## Constraints\n- **C1 (4.2):** at most one submit in any one-second interval. This is a sliding-window limit, not an average.\n- **C2 (4.3):** more than 20 rejections in a day means a 24-hour suspension, lifted only by hand. A burst that breaks C1 is therefore a service outage, not a slowdown.\n- **C3 (owner):** every message goes out and nobody is skipped. Speed comes second.\n- **C4 (developer):** there is one worker and one gateway client. Retries go through `pace()`.\n\n## Trying to break each design\n\n**Candidate B (token bucket, Design 1)** breaks on the first flood warning.\n- The bucket starts full at `BURST = 10`. After any quiet spell it refills to 10.\n- So the first 10 `pace()` calls return immediately and 10 submits go out within milliseconds.\n- That gives 9 rejections (429) per burst.\n- A second quiet spell followed by a burst in the same day exceeds 20, and the sender ID is suspended for 24 hours. That breaks C2 and C3: residents in the valley get nothing.\n- A token bucket enforces a long-run *average*. C1 is a per-interval *ceiling*, so the only burst size the agreement allows is 1.\n- With `BURST = 1` it degenerates into Candidate A, with an extra concept (fractional tokens) and no margin.\n- `BURST = 10` is an unforced number. No constraint names it, and the one constraint that does speak forbids it.\n- The \"faster first ones\" wish doesn't rescue it. Rejected messages aren't faster; they are retries that also count toward suspension.\n\n**Candidate A (minimum interval, Design 2)** holds up.\n- Consecutive submits start at least 1.05 s apart, so no one-second window can contain two. C1 holds.\n- A failed network submit that did reach the gateway is still spaced correctly, because the retry passes through `pace()`. C4 holds.\n- The `0.05` margin is one named bound with a stated reason: clock and network jitter between our send time and the gateway's receive time. That is how a forced bound should look.\n- `last` is set when `pace()` returns, before the submit. The real gap between submits is therefore at least 1.05 s, never less.\n- The design has one concept (the time of the last submit) and one branch (the first call). Nothing in it is unforced.\n\n## A note on C3's half hour\nNeither design can meet a strict half-hour target, and none could:\n- 2,000 messages at the legal maximum of 1 per second take about 33 minutes.\n- At 1.05 s per message, Candidate A takes about 35 minutes.\n\nThis is a property of the gateway contract, not of the pacer. If the owner needs 2,000 messages in under 30 minutes, the options are a second registered sender ID or a negotiated rate. Squeezing the margin, or adding a burst, would only risk suspension. The owner's actual priority, \"all of them go out and nobody is skipped\", is met by A.\n\n## Ledger\n- **Forced:** the burst size is 1, because C1 is a per-interval ceiling. That makes the minimum-interval pacer the forced design.\n- **Designer choice:** the 0.05 s margin. It is reasoned but provisional, and could be tuned against observed jitter.\n- **Deleted:** the bucket capacity, fractional tokens and refill logic. No constraint needs them.\n\n**Deciding reason:** Candidate B's burst of 10 breaks the gateway's one-message-per-second ceiling and leads to a 24-hour suspension, while Candidate A keeps every constraint with a single concept.\n\nWINNER: 2"
+}

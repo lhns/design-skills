@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q9.placebo.opus.ba.s1",
+ "track": "rating",
+ "item": "q9",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 13463,
+ "total_cost_usd": 0.041004,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5512,
+ "final_text": "**Design 1 (Candidate B) is better.** It keys the decision on the printed invoice year, which matches how suppliers actually number invoices. Candidate A's time window on the received date misses exactly the kind of duplicate that cost the theatre money last year.\n\n**Why Candidate A fails**\n\nA 60-day window on `received_on` can't satisfy both of Theo's constraints at once.\n\n- **Quarterly statements break it.** The scenery-hire firm and the printers send a statement a couple of weeks after each quarter ends, with copies of that quarter's invoices stapled behind. Suppose an original arrives on 5 January and its copy arrives with the Q1 statement around 14 April. That is about 99 days apart, outside the window, so the copy goes straight into the payment run. That is the scenery-hire scenario again.\n- **Widening the window doesn't fix it.** A window of 100+ days would catch the statement copies. But then a January 0001 would clash with last year's late-autumn 0001 again, bringing back the false alarms the old system had.\n- **The window tracks the wrong thing.** The reason a number can repeat is the supplier's numbering year. The gap between arrivals is only a rough stand-in for that, and it breaks down in the cases above.\n\n**Why Candidate B works**\n\n- **Statement copies are caught.** A stapled copy carries the same printed date as the original, so it is the same year and gets held, however many months later it arrives. Q4 copies that arrive in January still have December dates, so they match the December originals.\n- **January restarts don't raise false alarms.** INV-0001 dated 2026 doesn't match INV-0001 dated 2025.\n- **Missing dates fail safe.** If the post room can't read the date, `same_invoice_year` returns `True`, so the invoice is held. Ingrid has spelled out the trade-off: a hold costs minutes, a miss costs the payment. The occasional January false alarm on an unreadable fax is the right price.\n- **It ignores amount,** as Ingrid asked. Both candidates do this.\n- **It's clear.** The rule has a name (`same_invoice_year`), and its docstring states the domain assumption and the missing-date policy.\n\n**Minor notes on B (not blocking)**\n\n- `normalise` turns a number with no digits into `\"0\"`, so all digitless numbers from one supplier would match each other. That errs toward holding, which is acceptable, but a test should cover it.\n- It's worth adding tests for: a Q1 statement copy arriving in April, a Q4 copy arriving in January, a January 0001 against last year's 0001, and a missing date on either side.\n\nWINNER: 1"
+}

@@ -1,0 +1,28 @@
+**Constraints**
+- C1: Full refund if withdrawn at least 10 days before the first session; the deadline day itself counts. Nothing otherwise.
+- C2: The board changes the cutoff (twice in four years).
+- C3: Gwen edits the template as plain text, with no Python, and may move placeholders around.
+- C4: The email is the learner's copy of the terms (trading standards), so the email and the refund logic must never disagree. The complaints log shows this failing: 23 refunds.
+- C5: Dates are whole days.
+
+**Derivation**
+C4 plus C2 means the cutoff must be stated once, and both the refund rule and the email text must derive from it. Candidate B states the cutoff twice: `FULL_REFUND_DAYS = 10` in code and "ten days" hard-coded in the template. When the board changes the number, a developer must remember to edit the template, or Gwen must remember to edit the code constant. That is the spring failure reproduced, where the email said "one week" while the rule said ten days. B also puts a policy fact in a file owned by a different person from the code constant, so nobody owns keeping them in sync.
+
+Candidate A keeps the cutoff as one constant. It derives the deadline date from that constant and injects the date as a placeholder. Gwen can move `$refund_deadline` around freely (C3), and the refund rule and the email both read from `full_refund_deadline`. Change the constant and both follow.
+
+**Breaking each design**
+- B: the board sets 14 days, a developer updates the constant, and the email still says "ten days". That repeats the 23-refund incident. It fails C4.
+- A: the board changes the cutoff, and only the constant changes. The email shows the new date and the refund agrees. A also keeps Gwen's freedom, since the placeholder is just text.
+- Boundary (C1, C5): A uses `today <= first_session - 10 days`, so the deadline day gets the full refund. B uses `(first_session - today).days >= 10`, which is equivalent for plain dates. Both are correct here. A's email states the exact date, which is also less ambiguous for the learner than "at least ten days before", so it matches the rule the desk actually applies.
+
+A has one more placeholder, `refund_deadline`, but that is forced by C4: the email must state the terms the code applies, and it can only do that by deriving them from the same fact. A's `timedelta` also makes the unit explicit.
+
+**Ledger**
+- Constraints: C1 to C5 as above.
+- Forced: a single source for the cutoff, and the email derived from it.
+- Designer choices: none beyond the form of the date (`%A %d %B`), which is cosmetic.
+- Deletions: A removes the duplicated fact (cutoff in code and in template text) that B keeps.
+
+Deciding reason: A states the cutoff once and derives the email from it, so the email cannot drift from the refund rule, while B repeats the fact in two places, exactly the failure that cost 23 refunds.
+
+WINNER: 1

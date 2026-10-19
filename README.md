@@ -7,7 +7,13 @@ Claude Code skills for designing systems and code. Each skill is a separate fold
 | [`elegance`](skills/elegance/SKILL.md) | Steers designs and code toward a few independent concepts, each forced by a constraint, and changes how models compare and rate designs | — |
 | [`design-by-collapse`](skills/design-by-collapse/SKILL.md) | Runs a design with a stakeholder over several sessions: keeps the owner's constraints apart from the designer's choices, maps the solution space as forks, asks focused questions, and keeps the design movable when constraints change. Includes a consistency check (`scripts/check.py`, Python 3 + PyYAML) | `elegance` |
 
-**Status: both v0, untested.** A skill counts only if it measurably beats the alternatives on outcomes. Each eval plan was committed before any run:
+**Status: v0. Two pilot waves, no measurable difference vs the placebo yet.** A skill counts only if it measurably beats the alternatives on outcomes. Results so far (`evals/pilot/results/`):
+- **Pilot 1 and pilot 2** (pilot 2 on commit `d25e6f5`): both skills, single-shot tracks. Rating pairs, audits and first sessions were at ceiling in every condition, including no skill, for Opus and Sonnet. Design and code tasks showed no difference at 1–2 samples. No harm measured.
+- **Cost:** elegance adds about 35–40% tokens on design tasks; design-by-collapse costs 2.6–7.6× tokens on a first session.
+- **Untested:** the effects the skills claim over time (no accretion across rounds, plasticity, no re-asking) need multi-session or iterative tests, which haven't run yet.
+- **Changed since pilot 2:** the "simple" term (irreducibility, emergence) and the composition preference in reviewing.
+
+Each eval plan was committed before any run:
 - [`evals/elegance/PLAN.md`](evals/elegance/PLAN.md)
 - [`evals/design-by-collapse/PLAN.md`](evals/design-by-collapse/PLAN.md)
 

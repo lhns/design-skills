@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q9.skill.sonnet.ab.s1",
+ "track": "rating",
+ "item": "q9",
+ "condition": "skill",
+ "model": "sonnet",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 16970,
+ "total_cost_usd": 0.0254671,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5843,
+ "final_text": "**Candidate B is the better design.**\n\n**Constraints**\n- C1 (Ingrid): a missed duplicate costs the payment, while a false hold costs a few minutes. So when unsure, hold.\n- C2 (Ingrid): numbers must be compared after normalisation, and amount must not be used.\n- C3 (Theo): some suppliers restart numbering every January, so last year's invoices must not trigger false holds.\n- C4 (Theo): the printed date is sometimes empty, and an empty date must not hide a duplicate.\n- C5 (Theo): quarterly statements arrive about two weeks after quarter end. They carry copies of every invoice from that quarter, and the post room can't tell a copy from an original. A copy can therefore arrive roughly 3\u00bd months after its original.\n\n**Breaking A**\n- A fails C5. An invoice received on 5 January has its copy arrive with the statement in mid-April, about 100 days later. That is outside the 60-day window, so the copy isn't held and the invoice is paid twice. This is exactly the scenery-hire and printers case, and it is the failure that cost the theatre money last year.\n- A's 60-day figure is an unforced number. Raising it to cover C5 would recreate the January false alarms (C3), so no value of the window satisfies both. The window measures the wrong thing: arrival gap, not which invoice it is.\n- A also gives false holds at the year boundary. A December invoice 0045 and a January invoice 0045 from a restarting supplier are under 60 days apart.\n- A ignores the printed date, so it doesn't use C4 at all.\n\n**Breaking B**\n- A copy keeps its printed date, so the copy and the original share the same year, however late the copy arrives. C5 is met.\n- A January 0045 and the previous year's 0045 have different printed years, so there is no false alarm. C3 is met.\n- If either date is empty, B returns True and holds. C4 and C1 are met. The cost is a few extra holds for restarting suppliers when the date is missing, which Ingrid has said is the right trade.\n- The remaining gap is a number that really is reused within a calendar year. That contradicts the stated behaviour of these suppliers, and B's docstring records it as an assumption.\n\n**Concepts**\n- B's concepts are normalise, same supplier, and same printed year (with unknown treated as a match). Each traces to a constraint.\n- A's window is a single concept, but it fails C5 and still leaves C3 failing at the year boundary. A shorter design that drops a constraint is false elegance.\n\n**Deciding reason:** B keys on the invoice's own identity (the printed year) rather than on when it arrived, so it holds late statement copies and still ignores last year's restarted numbers, while A cannot do both with any window.\n\n**Ledger**\n- Constraints: C1\u2013C5 above.\n- Designer choices: the \"same calendar year\" rule rests on the claim that numbers are never reused within a printed year. It comes from Theo's description and should be confirmed with finance.\n- Deletions: the arbitrary 60-day constant.\n\nWINNER: 2"
+}

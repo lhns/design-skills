@@ -1,0 +1,100 @@
+# Loyalty points on returns
+
+An independent bookshop runs a loyalty scheme at its tills and on its web shop. Points are credited when an order is paid and can be spent like money later (100 points = 1.00 off). We are rewriting the points module. Below is what we collected before starting; candidate implementations of the core follow.
+
+**From the scheme's terms (printed on the back of the card):**
+
+> You earn 1 point for every whole euro you spend in one purchase, and 2 points per whole euro on Double Points Days. Points are added to your card as soon as you pay. If you return items, we take back the points you earned on them, so that your balance ends up as if you had not bought them. Points cannot be exchanged for cash.
+
+**From the shop manager, answering our questions:**
+
+> Double Points Days are the first Saturday of every month. The rate that counts is the one on the day you bought, obviously, not the day you bring it back.
+>
+> Returns are almost always one or two books out of a bigger order. People buy three, read the first chapter of one, and bring it back. We refund the exact price of the returned books, so an order can get several refunds over a few weeks. Gift cards and vouchers are handled elsewhere and never reach this module.
+>
+> Balances can go below zero if someone spends their points and then returns the book. That's fine, it just sits there until the next purchase.
+
+**From the developer who kept the old system running:**
+
+> All amounts are Decimal with two places. The till already stops a refund larger than what is left on the order, but check it here too. Orders are never edited after payment; corrections are refunds.
+
+The module needs `purchase(order)`, which credits points, and `refund(order, amount)`, which records a refund on that order and takes the points back.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+from dataclasses import dataclass
+from decimal import Decimal
+
+
+@dataclass
+class Order:
+    customer: str
+    paid: Decimal                 # amount paid for the whole order
+    rate: int                     # points per whole euro on the purchase day (1, or 2 on Double Points Days)
+    refunded: Decimal = Decimal("0.00")
+
+
+class Points:
+    def __init__(self):
+        self.balances = {}        # customer -> points, may go below zero
+
+    def purchase(self, order):
+        earned = int(order.paid) * order.rate
+        self.balances[order.customer] = self.balances.get(order.customer, 0) + earned
+
+    def refund(self, order, amount):
+        """Record a refund on the order and take back the points earned on the refunded amount."""
+        if amount <= 0 or order.refunded + amount > order.paid:
+            raise ValueError("refund must be positive and at most what is left on the order")
+        order.refunded += amount
+        self.balances[order.customer] -= int(amount) * order.rate
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+from dataclasses import dataclass
+from decimal import Decimal
+
+
+@dataclass
+class Order:
+    customer: str
+    paid: Decimal                 # amount paid for the whole order
+    rate: int                     # points per whole euro on the purchase day (1, or 2 on Double Points Days)
+    refunded: Decimal = Decimal("0.00")
+
+
+def points_for(amount, rate):
+    """Points a purchase of `amount` earns: whole euros times the day's rate."""
+    return int(amount) * rate
+
+
+class Points:
+    def __init__(self):
+        self.balances = {}        # customer -> points, may go below zero
+
+    def purchase(self, order):
+        self._add(order.customer, points_for(order.paid, order.rate))
+
+    def refund(self, order, amount):
+        """Record a refund on the order and take back the points for the refunded part."""
+        if amount <= 0 or order.refunded + amount > order.paid:
+            raise ValueError("refund must be positive and at most what is left on the order")
+        kept_before = order.paid - order.refunded
+        order.refunded += amount
+        kept_after = order.paid - order.refunded
+        self._add(order.customer, points_for(kept_after, order.rate) - points_for(kept_before, order.rate))
+
+    def _add(self, customer, points):
+        self.balances[customer] = self.balances.get(customer, 0) + points
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

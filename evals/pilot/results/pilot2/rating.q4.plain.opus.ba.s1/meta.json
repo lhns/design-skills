@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q4.plain.opus.ba.s1",
+ "track": "rating",
+ "item": "q4",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 15646,
+ "total_cost_usd": 0.03726,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3184,
+ "final_text": "# Design 2 (Candidate A) is the better design\n\nThe deciding factor is the incident in the complaints log. When the board moved the cutoff, the code changed but the email text didn't, and the centre had to honour the email. That cost twenty-three refunds.\n\n**Design 1 repeats that failure.** The cutoff exists in two places:\n- the constant `FULL_REFUND_DAYS = 10` in Python\n- the words \"at least ten days\" in Gwen's template\n\nNothing links them. When the board next changes the terms, a developer will update the constant. Gwen's template will keep saying \"ten days\" until someone remembers to edit it. The comment says the office team owns that file, so the developer may not even think to look. Under the trading standards advice, the email wins, so the centre pays.\n\n**Design 2 makes the rule the single source of truth.**\n- `full_refund_deadline()` computes the deadline once.\n- `refund_on_withdrawal()` uses it to decide the refund.\n- `confirmation_email()` uses it to fill the template.\n\nChanging `FULL_REFUND_BEFORE` therefore changes the decision and the learner's copy of the terms together. Gwen still controls the wording. She gets one placeholder, `$refund_deadline`, which she can move anywhere in the text, as she said she was happy to do, and she never touches Python.\n\n**Smaller advantages of Design 2:**\n- **It states a date, not a count.** \"On or before Monday 12 January\" is clearer than \"at least ten days before\". The desk doesn't need to argue about whether day 10 counts or how to count days.\n- **It names the deadline.** The docstring says the deadline is the last day that still qualifies. This matches Odile's rule that withdrawing on the deadline day itself gets a full refund. The `<=` comparison makes that explicit.\n- **Both designs give the same result.** `today <= first_session - 10 days` is equivalent to `(first_session - today).days >= 10`. Design 2 doesn't make the logic worse.\n\n**Remaining gap in Design 2:** `Template.substitute` ignores unused keyword arguments. If Gwen deleted `$refund_deadline` and typed \"ten days\" back in, nothing would warn anyone. A small test or load-time check that the template contains the placeholder would close this gap. Even without it, Design 2 makes the correct approach the easy one, while Design 1 depends on two people remembering to edit two files.\n\nWINNER: 2"
+}

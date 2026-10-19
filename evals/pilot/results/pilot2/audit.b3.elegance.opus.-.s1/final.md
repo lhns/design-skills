@@ -1,0 +1,27 @@
+PROBLEM: Constraints: Farid's 04-13 statement that many Saturday regulars are pensioners who have never booked online is a constraint from the user, and it is missing from the list. It bears directly on D1 and D2, because a web-only booking channel on Saturdays shuts these people out.
+
+PROBLEM: D2: The phone option was ruled out because it "adds a second entry path that has to be kept in step". That is a simplicity value, not a constraint, so it can only rank options, not eliminate them. With the dropped pensioner constraint restored, phone bookings, or some offline channel, may be forced. The decision was also marked "decided" on 04-13, the same day Farid raised the pensioners, with no sign the two were weighed against each other.
+
+PROBLEM: D3: "Forced" is wrong because the option list is incomplete. C5 forbids checks only in the lane and at the barrier. Staff at the skip bays already stop every car to check van and trailer permits, so they could check the booking plate or reference there at no cost. That option survives every constraint, so this is a fork, not a forced decision.
+
+PROBLEM: D3: The camera has unrecorded dependencies. It costs 4,800 a year and needs approval from the environment committee. Neither appears as a fork, a risk or an open item. Because the decision was "reported to Farid, not asked", a cost and approval decision was taken without the user.
+
+PROBLEM: Design (Saturdays): The camera gates nothing. Booked plates pass and unbooked cars are let in too. Its only job is to list unbooked plates, which the skip-bay check would also do, so the concept fails step 9 ("which constraint breaks without it?").
+
+PROBLEM: Design (Saturdays): "An unbooked car is let in once" is a designer choice, and it is not recorded in the Decisions table. It also has an unstated second case. A repeat unbooked car would presumably be stopped at the barrier, which breaks C5 and blocks the single-track lane, so C1 is at risk too. The design must say what happens, and that outcome must keep C5.
+
+PROBLEM: C3 and D4: Farid said "Residents only. Trade waste goes to the depot." The design meets C3 only with the existing trade-permit check. Its new residence check (a postcode) applies only to Saturday bookers, so non-resident private cars on walk-in weekdays are never checked. Either C3 is really "no trade waste" and D4 is unforced, so delete it, or C3 is "residents only" and it is unmet on weekdays. The record needs to settle which C3 means.
+
+PROBLEM: D5 and Design (Thursdays): The 20-slot cap has no enforcement. The camera runs on Saturdays only, and no check of who holds a hazardous-waste slot is named. Without one, C4 is not shown to be met.
+
+PROBLEM: D6 and C1: Nothing shows that bookings keep the queue off the ring road. The slot capacity is 48 cars an hour, which equals the observed peak at the barrier. The record never argues that spreading arrivals at that rate stops the queue, so C1 is asserted rather than demonstrated.
+
+Ledger:
+- **Constraints missing:** one (the pensioners who don't book online, 04-13).
+- **Mislabelled "forced":** D3.
+- **Options ruled out by taste rather than a constraint:** D2.
+- **Unrecorded designer choices:** the "let in once" rule, and the camera's cost and approval dependency.
+- **Constraints not shown to be met:** C1, C3 (on weekdays), C4.
+- **Candidate deletion:** the camera, if staff check bookings at the skip bays.
+
+Deciding reason: the design dropped a constraint Farid stated (pensioners), and it calls a costly, unapproved camera "forced" when a free check at the skip bays satisfies the same constraints.

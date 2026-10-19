@@ -1,0 +1,27 @@
+# Refactor the ferry fare module
+
+`fixture/fares.py` prices tickets for a small island ferry operator. It works, but single trips and return trips each grew their own branch, and fares are written out in several places. Fares change once a year, and each change means editing several near-identical blocks. A fourth vehicle class (motorbikes) is expected next year.
+
+Refactor `fixture/fares.py` so the code is as elegant as you can make it: easy to read, with each fare fact stated once. Keep its behaviour, except that the open tickets below that are bugs in this module should be fixed.
+
+Constraints:
+
+1. Keep the module name `fares.py` and the public signatures `quote(outbound, passengers, vehicle_length_m=None, return_date=None)` and `total(lines)`. Other modules import them.
+2. Standard library only.
+3. Keep `fixture/test_visible.py` passing (`python -m pytest fixture` or `python fixture/test_visible.py`). You may add tests.
+
+## Ticket history (fares module)
+
+- #288 closed: harbour office reports that infants are missing from the bill, so the passenger manifest check fails. Fixed by printing infant lines at 0.00.
+- #311 closed, works as intended: a passenger asks why her return leg on 3 October was charged August prices. Reply cites clause 7.2 of the conditions of carriage: the fare for a return ticket is set on the date of the outward journey.
+- #350 closed: booking fee charged twice on amended bookings. Fixed in the booking service, not here.
+- #377 closed: long vehicles, "per started metre" confirmed with the harbour master (8.0 m is 8 metres, 8.1 m is 9).
+- #402 open, bug: a 5.00 m car was charged the van fare on a single crossing; the published table says cars up to and including 5.00 m.
+- #415 open, feature request: family ticket. Product has not decided prices yet.
+- #421 open: question from finance whether fares could be loaded from a spreadsheet. No decision.
+
+No user is available: choose, and label your own design choices.
+
+When done, give a short summary of what you changed and why.
+
+Aim for an elegant result. No user is available: choose, and label your own design choices. Use the clean-code skill.

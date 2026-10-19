@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q9.plain.sonnet.ab.s1",
+ "track": "rating",
+ "item": "q9",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 12447,
+ "total_cost_usd": 0.020659999999999998,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3297,
+ "final_text": "**Design 2 (Candidate B) is better.**\n\nThe deciding asymmetry is Ingrid's: a held invoice costs a few minutes, while a missed duplicate costs the payment. The check should therefore lean toward holding when unsure.\n\n**Candidate A fails on the statement case.**\n- It compares the dates the invoices reached the theatre, with a 60-day window.\n- The scenery-hire firm and the printers send a quarterly statement about two weeks after quarter end, with a copy of every invoice from that quarter behind it.\n- An invoice received in early January and its copy arriving in mid-April are roughly 100 days apart, so A misses it.\n- The post room can't tell copies from originals, so these copies get entered as new invoices. Because they fall outside the window, A releases them into the payment run, and these are exactly the double payments the rewrite is meant to stop. The scenery-hire double payment is the same kind of case.\n- Any late re-send or a supplier chasing payment after more than 60 days is missed in the same way.\n- The window is a proxy for \"same numbering cycle\". It is both too short for real duplicates and arbitrary for the January restart problem.\n\n**Candidate B uses the right signal.**\n- The printed invoice date is the same on an original and its copy, however long the copy takes to arrive. Statement copies and late re-sends are therefore caught.\n- Requiring the same invoice year separates last January's 0045 from this January's 0045 for the printers and the lighting-hire firm. This removes the false alarms Theo described without a time window.\n- When either date is missing, it can't rule a match out, so the invoice is held. This is the right default given the cost asymmetry. The result is a few extra minutes of checking on faxed or photocopied invoices.\n- It leaves amount out of the match, as Ingrid advised, and normalises numbers so \"INV-0045\", \"inv-0045 \" and \"45\" all match.\n\n**B's remaining weaknesses are minor and fail safe.**\n- Stripping non-digits can merge distinct prefixes, which causes only extra holds.\n- A mistyped year could cause a miss, which is rare.\n- A copy of a December invoice that arrives in January still carries the old year, so it is still matched.\n\nA misses real duplicates in a scenario the brief describes explicitly. B's flaws only cost a few minutes of checking.\n\nWINNER: 2"
+}

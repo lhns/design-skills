@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b2.collapse.opus.-.s1",
+ "track": "audit",
+ "item": "b2",
+ "condition": "collapse",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 35610,
+ "total_cost_usd": 0.08420599999999999,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-by-collapse"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 10088,
+ "final_text": "Reviewed against the elegance and design-by-collapse rules. Today is 2026-10-19, and the record was last updated 2026-06-23.\n\nPROBLEM: D1 status: It says \"open again from 1 Sep\", but it is now October and the fork was never reopened. C7 has expired. The garden room is live again for Rose residents, and the Design section still describes only July and August. It doesn't say where Rose residents are visited from September.\n\nPROBLEM: D1 before C7: The garden room was the choice as a designer default, and garden room versus quiet room was never asked as a fork. When C7 lapses, the record silently falls back to an unasked default and doesn't list it as an open question.\n\nPROBLEM: D2 \"decided by Odile 06-09\": The statement that decides it (\"They can still ring; the office can live with that\") is not recorded as a constraint. C6 records only the fact that some families have only a landline. Also, \"web form\" is the designer's choice of channel; Odile only said \"without ringing the office\". The option list leaves out other channels (app, SMS, email), and nothing eliminates them. So part of a designer choice is labelled as an owner decision.\n\nPROBLEM: D5 \"Ruled out by\": Email-only is attributed to C5, but C5 (hear of it the same day) doesn't eliminate email, which can arrive the same day. Only C6 eliminates it.\n\nPROBLEM: D5 \"asked Odile 06-16\": The exact question text isn't recorded. No answer or follow-up appears, and nothing marks it as unanswered or gives a decide_by. Meanwhile July and August ran on an untested default for outbreak notices, which are hard to get wrong safely.\n\nPROBLEM: D4: Odile's \"looks good, let's try it in July\" is approval of a mock-up, not an answer. The record correctly keeps D4 open. But \"review after July\" has passed with no review recorded. It's October and the trial results aren't captured.\n\nPROBLEM: D4 / Design: \"Four families per room\" is applied to every room, including residents' own rooms in Ash and Elm, where four simultaneous families is implausible. It also applies to the quiet room, which during C7 carried every Rose visit. Room size and capacity were never probed, and the uniform number is unforced.\n\nPROBLEM: C4 / D3: \"Family\" is undefined, and no scenarios were probed. For example, a family with two residents in the home (such as a couple) would be refused a second visit that day. A visit that spans two residents is another untested case. Each undecided behaviour should have become a fork.\n\nPROBLEM: D3 status: It says \"decided by Odile\", but \"no limit\" is eliminated by C4, so it is forced. Also, Odile's \"keep it simpler than the old phone list\" is a value, and it isn't recorded anywhere.\n\nPROBLEM: D6: The open fork has no decide_by. Its options also interact with C7 (\"garden room only\" would mean no child visits in summer), and that interaction is noted only in prose and not tracked. Now that the garden room is open again, the interaction has changed."
+}

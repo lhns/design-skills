@@ -1,0 +1,4 @@
+better: a
+longer: a
+kind: shorter-drops-buried-constraint
+reason: "The auditor re-runs last year's quarterly reports from the system and checks them against the PDFs that were sent, so a past report must come out the same after later mapping changes; and the trust's April change moves VOL-TRAVEL and VOL-SUBS to 'Programme delivery'. With B, once Rhea edits the dict in April, re-running the previous October-December report in June moves all volunteer spend into 'Programme delivery' and drops the 'Volunteer expenses' row, so it no longer matches the submitted PDF. A adds a dated row instead and maps each expense by its date, so old quarters reproduce exactly. A's valid_from looks like the history Jonas wanted to avoid, and Rhea says old reports are never resubmitted, but the audit re-run needs it."

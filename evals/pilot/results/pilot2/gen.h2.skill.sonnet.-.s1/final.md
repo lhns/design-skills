@@ -1,0 +1,18 @@
+I refactored `fares.py` and fixed #402. All 10 tests pass: the 6 in `test_visible.py` and 4 new ones. The files are at the repo root, not in `fixture/` as the brief said, so I edited them in place.
+
+I also ran the old and new modules on 300,000 random bookings. They produced identical bills or errors, except for 8,567 single-trip bookings with a vehicle of exactly 5.00 m. Those now get the car fare, which is the #402 fix.
+
+**What changed**
+- **One fare table:** every fare is stated once, in `FARES`, as price by season for adult, child, infant, car, van and long. Fares, season months, age bands, vehicle classes, the 18.75 m limit and the booking fee are all constants at the top of the file.
+- **One pricing path:** the single-trip and return-trip branches are merged. Both build the lines for one leg, and a return repeats them under "Return". The quote body is now about 25 lines.
+- **Motorbikes:** next year this is one row in `VEHICLE_CLASSES` and one in `FARES`, with no new branches.
+- **#402:** a 5.00 m car on a single crossing now gets the car fare.
+- **#311:** the return leg is still priced on the outward date. I replaced the old TODO with a comment citing clause 7.2.
+- **Kept as before:** infant lines at 0.00 (#288), the booking fee charged once (#350), started metres for long vehicles (#377), the validation errors, and the public signatures.
+- **Not touched:** #415 (family ticket, no prices decided) and #421 (spreadsheet loading, no decision). The fares sit in plain constants, so loading them from a file later would only replace that block.
+
+**Design choices I made, since no one was available to ask**
+- Fares are Python constants, not a config file or a pricing class. Nothing in the tickets requires more than that.
+- `AGE_BANDS` lists adult, child, infant in bill order, each with a minimum age, so one list decides both classification and print order.
+- Long vehicles stay a separate rule because they are priced per started metre. Cars and vans are a flat price per class.
+- I added tests for #402 (5.00 m vs 5.01 m), #377, #311, and the line order and single booking fee on returns.

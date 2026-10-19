@@ -1,0 +1,25 @@
+**Design 2 is better.** Rhea's comments rule out keeping history for resubmission, but they also contain the requirement that makes it necessary.
+
+**The audit requirement.** In June the auditor re-runs two of the previous year's quarterly reports from the system and ticks them off line by line against the PDFs already sent to the trust. That means a past quarter has to reproduce exactly the numbers originally reported, long after it was sent. Rhea's "we never resubmit" answers Jonas's question about resubmission, not about reproduction.
+
+**Design 1 breaks this.**
+- Its mapping is a single mutable dict read at run time.
+- When Rhea moves VOL-TRAVEL and VOL-SUBS into "Programme delivery" on 1 April, every old report re-run afterwards changes.
+- The "Volunteer expenses" row disappears, and its amounts are folded into "Programme delivery".
+- The June re-run of a prior-year quarter would no longer match the PDF, and the auditor would find discrepancies that aren't real errors.
+- The comment's claim of "one answer for where a code belongs" is the flaw: the correct answer depends on when the expense was made.
+
+**Design 2 handles it.**
+- Each mapping row carries a valid-from date, and `line_for` picks the latest row at or before the expense date.
+- Rhea appends rows such as `("VOL-TRAVEL", "Programme delivery", date(2026, 4, 1))` and never edits existing ones.
+- Old quarters keep reproducing their original lines, and new quarters use the new lines.
+- An unmapped code or date raises a `KeyError` with a clear message instead of producing a wrong total.
+
+**Cost.** The extra complexity is small: one tuple field and a six-line lookup. The data is a few thousand expenses a year, so the linear scan is irrelevant. This isn't speculative history. It is required by a stated, recurring audit and by a known upcoming change.
+
+**Caveats (non-blocking).**
+- Expenses are never deleted and corrections are new rows, so past data is stable. That is what makes date-based reproduction reliable.
+- A test should pin a pre-April expense to "Volunteer expenses" and a post-April one to "Programme delivery".
+- Rhea needs to know to append rows, not edit them. The comment says so, and a short note in the ticket would help.
+
+WINNER: 2

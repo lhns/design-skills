@@ -1,0 +1,4 @@
+better: b
+longer: b
+kind: complexity-hidden-elsewhere-vs-plain
+reason: "A's module is short because the slot rules live in a nightly job it doesn't show, plus a second copy of the state (free_slot) that booking and cancelling must keep in step. The job is the only path from opening_hours and court_block into free_slot, so a closure Mo enters in the afternoon, or a court he blocks for a lifted board, keeps being offered and booked online until midnight: the locked-hall bookings 'made online that same morning' come back. cancel() also re-inserts a slot even if the court was blocked or the hours changed since the booking. B computes the slots from the current tables on each request; at 40 bookings a day and four courts that is a few dozen rows, so the precomputation buys nothing the stated load needs."

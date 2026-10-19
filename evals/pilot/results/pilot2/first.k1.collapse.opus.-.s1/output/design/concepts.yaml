@@ -1,0 +1,78 @@
+# Verdicts: forced (traces live K), detail (detail_of fork/chosen option), outside (belongs elsewhere), accretion (delete).
+rounds:
+  - round: 1
+    kernel_items: 25
+    # concepts = forced + detail; exceptions = "except/unless/only if" clauses in design.md; unforced_numbers = numbers citing no K and no fork
+    counts: {concepts: 15, exceptions: 1, unforced_numbers: 0}
+concepts:
+  # --- the core: one calendar of bookings ---
+  - id: booking
+    purpose: "One room (or the hall with its kitchen) for one span of time, for one hirer. The only thing that takes a date."
+    verdict: forced
+    traces: [K1, K7]
+  - id: calendar
+    purpose: The single record of all bookings, with free dates visible to anyone without asking Gwen.
+    verdict: forced
+    traces: [K7]
+  - id: room-list
+    purpose: The lettable spaces as data, so the small room can leave the calendar without redesign.
+    verdict: forced
+    traces: [K1]
+    open: true
+  - id: standing-booking
+    purpose: A booking that repeats (weekly, or on listed dates) for a regular hirer, entered once a year.
+    verdict: forced
+    traces: [K8]
+  - id: price-table
+    purpose: Hourly rate per room and time band.
+    verdict: forced
+    traces: [K13]
+  - id: paid-at-booking
+    purpose: A one-off booking exists only once its full fee is paid online; no pencilled state at all.
+    verdict: detail
+    detail_of: F9/c
+  - id: refund-rule
+    purpose: Cancellation far enough ahead gets the money back; later does not.
+    verdict: detail
+    detail_of: F10/b
+  - id: booking-service
+    purpose: A bought hall-booking service that holds the calendar, takes payment and sends confirmations.
+    verdict: detail
+    detail_of: F15/c
+  - id: hall-phone
+    purpose: The only published phone number, with voicemail, answered Monday and Wednesday mornings.
+    verdict: detail
+    detail_of: F13/c
+  - id: saturday-rule
+    purpose: Saturday afternoons and evenings for one-off hires (recommended; until decided, first come first served).
+    verdict: detail
+    detail_of: F16/c
+  # --- the curfew: a machine, not a person ---
+  - id: curfew-switch
+    purpose: The limiter's time switch cuts the sound-system sockets before 23:00 every night, with nobody present.
+    verdict: forced
+    traces: [K3, K5]
+  - id: locked-cupboard
+    purpose: Keeps the switch out of hirers' reach, so the control does not depend on them.
+    verdict: forced
+    traces: [K5]
+  - id: curfew-record
+    purpose: A written description of the control and a dated log of daytime checks, to show the officer.
+    verdict: forced
+    traces: [K5]
+  # --- kitchen ---
+  - id: rubbish-goes-home
+    purpose: Hirers take all food rubbish away; a checklist on the kitchen door; a mess blocks online rebooking until the committee agrees.
+    verdict: detail
+    detail_of: F19/a
+  - id: monday-look
+    purpose: A daytime look at the kitchen after weekend hires, before the Tuesday lunch club.
+    verdict: detail
+    detail_of: F20/a
+  # --- not ours ---
+  - id: keys
+    purpose: Collection from the shop and return through its letterbox; unchanged.
+    verdict: outside
+  - id: damage-deposit
+    purpose: Money held against damage - not part of the design; the hall scrapped it (K14) and nothing here holds money back for damage.
+    verdict: outside

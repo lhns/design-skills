@@ -1,0 +1,13 @@
+PROBLEM: C5: This is not a constraint. "One-hour meetings, at most two a day per handler" came from the designer's own 09-22 sketch. Bea's "looks good, I like that it isn't complicated" accepted a proposal; she did not state a requirement. Accepting a proposal leaves it a designer choice, so C5 should be listed as designer choices, not as a constraint.
+
+PROBLEM: D2, D3: The reasoning is circular. These decisions rule out options "by C5", but C5 is the sketch that already contained the chosen values. No constraint eliminates 30 minutes, per-dog length, or three or four meetings per handler. Both decisions should be marked as designer choices, not "decided 09-22 / ruled out by C5".
+
+PROBLEM: Constraints / D2: A statement by Bea is missing, and the design contradicts it. On 09-15 she said big young dogs need a long walk while old and nervous dogs are done after twenty minutes. That is her own requirement that meeting length depends on the dog, and it is not recorded as a constraint. The "set per dog on its profile" option, which fits it, was eliminated by C5, which is a designer choice. Her stated constraint was overridden by a designer default.
+
+PROBLEM: D2 vs D4: The same approval is treated two different ways. The 09-22 sketch counts as decided for meeting length and handler cap, but the same sketch's "adopter picks any free slot" is "open, to raise with Bea". Either the approval settled all three (it did not, see above) or none. All three should be open designer choices.
+
+PROBLEM: What Bea said, 09-08 "forty approved adopters waiting, some dogs here since spring": This statement is not turned into a constraint, inferred constraint or explicit non-goal. It bears directly on capacity (D3) and on D4, since staff offering slots for specific dogs would let long-stay dogs be prioritised. Instead it is silently dropped.
+
+PROBLEM: D6: This decision is forced by C6, but its status says "changed 09-29" and gives no previous value or date. The record does not say what it superseded, which was three handlers' meetings on Mondays before October. Its status should read "forced", with the old value kept as history rather than overwritten.
+
+PROBLEM: Design, "Each senior handler takes two meetings a day": This restates C5's "at most two" as exactly two. That turns a cap into a fixed quota. It is also stated a second time, in the "six / four meetings a day" figure, which has to be kept in sync by hand.

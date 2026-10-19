@@ -1,0 +1,18 @@
+**Design 1 is the better design.**
+
+The terms say a return must leave the balance "as if you had not bought them". Points are earned per whole euro in one purchase, so the target after any series of refunds is `points_for(paid - total_refunded)`. That means the points taken back depend on the order's running total, not on the size of each refund taken alone.
+
+**Design 1** takes back `points_for(kept_before) - points_for(kept_after)`. These differences telescope across any number of refunds, so the cumulative deduction always equals `points_for(paid) - points_for(paid - total_refunded)`. The balance therefore ends exactly as if the refunded amount had never been bought. This holds however the refunds are split, which matters because the manager says an order can get several refunds over a few weeks.
+
+**Design 2** takes back `int(amount) * rate` for each refund, which floors each refund separately. That breaks the rule in both directions:
+- Order of 10.00 at rate 1, two refunds of 0.50. Design 2 takes back 0 points, but the customer now holds a 9.00 purchase and should have 9 points, so 1 should be taken back. The customer keeps a point they should lose.
+- Order of 10.00, refunds of 5.50 and 4.50 (full refund). Design 2 takes back 5 + 4 = 9, but the customer should be back to 0, so 10 should be taken back. One point is left over after a full refund.
+- Order of 5.00, refunds of 2.50 twice. Design 2 takes back 4, but a full refund should take back 5.
+
+Design 2 also raises `KeyError` on `self.balances[order.customer]` if the customer has no entry. This is a minor point, since a refund normally follows a purchase.
+
+Both designs share some good properties. They use the rate stored on the order, which is the purchase-day rate. They validate the refund amount a second time, as the developer asked. They allow negative balances. Design 1 also extracts `points_for` and a `_add` helper, so the earning rule lives in one place and is shared by `purchase` and `refund`. Design 2 repeats the rule inline.
+
+Design 1 is correct under repeated partial refunds and has less duplicated logic. Design 2 drifts from the correct balance whenever refunds aren't whole euros.
+
+WINNER: 1

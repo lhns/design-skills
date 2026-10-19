@@ -1,0 +1,23 @@
+**Candidate B is the better design.** The deciding issue is the 2027-28 school year, which is not yet confirmed.
+
+**The failure that matters**
+
+Today is 19 October 2026, and the booking page asks for the next twelve months, up to about October 2027. That window runs into the 2027-28 school year. The council has only *proposed* those dates; consultation closes 30 November and final dates come out in December. Many parents book the whole year in one go this month.
+
+- **Candidate A** runs its rule for 2027-28 and offers the dates it predicts, such as an October half-term of 25–29 Oct 2027. Parents will book and pay for those days now. If the council moves that week, as it did with February 2026-27, the club holds bookings for term-time days. On those days the hall isn't available and the play workers are back at school. Nadia was clear that the club is "never in term time." A's guess presents an unconfirmed prediction as fact, and nothing warns that it is a guess.
+- **Candidate B** returns nothing for 2027-28 until someone adds the confirmed table. Parents can't book October 2027 yet. That is the correct answer, because nobody knows those dates yet.
+
+**Why A's rule-based approach doesn't pay for itself**
+
+- The source of truth is a published table, not a rule. A's `COUNCIL_CHANGES` already admits the rule fails: 2 of the 6 holidays in 2026-27 needed overrides.
+- Maintenance is no lighter. To keep A correct, someone still has to compare every new council table against the rule's output and add overrides. That is more work and more error-prone than typing the six rows into B.
+- B is auditable. Nadia or a volunteer can check it line by line against the council page. Checking A means re-deriving Easter offsets and "Monday on or before 27 Oct" logic.
+- Both candidates agree on the confirmed years, so A's extra complexity buys nothing on known dates. It only adds guesses on unknown ones.
+
+**Improvements I'd suggest to B**
+
+1. Record the last confirmed date, e.g. `CONFIRMED_UNTIL = date(2027, 8, 31)`. The booking page can then tell parents "dates from September 2027 not yet confirmed by the council" instead of just showing no days. Otherwise parents may read the gap as "closed."
+2. Add a check, or a calendar reminder for December, so the 2027-28 table gets entered once the council publishes it.
+3. Optionally, keep the table in a data file that a non-developer can edit.
+
+WINNER: 2

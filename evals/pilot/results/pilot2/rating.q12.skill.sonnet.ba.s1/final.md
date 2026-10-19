@@ -1,0 +1,39 @@
+**Design 2 (Candidate A) is better.**
+
+**Constraints**
+- C1 (Ruth, stated): the website and ticket machine must show exactly the times on the leaflet, season cards and gate boards. A mismatch already caused a queue once.
+- C2 (Ruth, stated): those times were set in 2019 and have not changed since.
+- C3 (policy): opens at 10:00, and last entry is one hour before closing.
+- C4 (inferred): the function must keep working in years beyond 2026–2027.
+
+The 2011 policy is the rule the trustees used to set the times. It isn't what the visitor sees. The painted boards are the published facts, and C1 ties the function to those.
+
+**Design 1 (Candidate B)**
+- It recomputes the times from an approximate sunset formula. It matches Ruth's list for 2026 and 2027, but that is a coincidence of the approximation, not a guarantee.
+- The formula depends on day-of-year of the 15th, which shifts in leap years, and on the DST dates, which shift each year. Any month whose value sits near a half-hour rounding boundary can flip in some other year, and the website and ticket machine would then disagree with the boards. That breaks C1 and C4.
+- Checking two years shows only that the function agrees on those two years.
+- It adds several concepts that no constraint forces: `last_sunday`, the sunset model with its magic constants (1071, 105, 81, 365), and the DST logic. Each is a new place to be wrong.
+- It states the same fact twice, once on the boards and once in an approximation of the rule behind them.
+
+**Design 2 (Candidate A)**
+- It is one table of twelve values, which is exactly the published set of times. It is correct for every year by construction, and it can't drift from the boards.
+- C3 is derived in one line, not stored.
+- It has no branches, no seasonal math and no numeric constants that nothing forces.
+- A trustee decision to change the times means editing the table and repainting the boards together. That is the right coupling: change the data, not the algorithm.
+
+**Breaking it**
+- Design 1 breaks on a year where the approximation lands on the other side of a rounding boundary, or where the leap-year shift moves the 15th's day-of-year. The result is a website that disagrees with the gate boards.
+- I found no input that breaks Design 2 under C1–C4. If the trustees later adopt a sunset-based rule again, the table gets regenerated at that point, and the boards would be repainted anyway.
+
+**Why the table isn't "just hard-coding"**
+Hard-coding would be false elegance only if the table dropped a constraint. Here the table is the constraint. The derivation is what adds risk with no benefit.
+
+**Ledger**
+- Constraints: C1 and C2 (Ruth's statements), C3 (policy), C4 (inferred).
+- Forced decisions: a month-to-closing table, with opening and last entry derived from it.
+- Designer choices: none beyond the layout.
+- Deletions: the sunset model, the DST helper, the mid-month sampling and the magic constants. All of these are in Design 1 and none is forced by a constraint.
+
+Deciding reason: the published times are the contract with visitors, and only Design 2 reproduces them exactly in every year without relying on an approximation that happens to agree.
+
+WINNER: 2

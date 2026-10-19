@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q9.plain.sonnet.ba.s1",
+ "track": "rating",
+ "item": "q9",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 10956,
+ "total_cost_usd": 0.0199,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3221,
+ "final_text": "**Design 1 (Candidate B) is the better design.** Its year-based rule fits how invoices actually arrive, and Design 2's received-date window both misses real duplicates and still raises false alarms.\n\n**Design 2's window fails in both directions.**\n- **It misses real duplicates.** Scenery hire and the printers send a quarterly statement a couple of weeks after quarter end, with a copy of every invoice from that quarter stapled behind it. An invoice received early in a quarter can be about 3.5 months old by the time its copy arrives, which is well beyond 60 days. The post room can't always tell a copy from an original, so the copy would pass the check and be paid again. That is the scenery-hire double payment the theatre has already suffered, and Ingrid says a missed duplicate costs the payment.\n- **It still produces January false alarms.** A supplier that restarts at 0001 and sends INV-0045 in late November, then a different INV-0045 in January, falls inside 60 days. The window only partly fixes the problem Theo described.\n- **It depends on an arbitrary constant.** Any window is a trade-off between the two failures above, and the statement lag means no value works.\n\n**Design 1 matches how the data behaves.**\n- **It keys on the printed invoice date's year.** A copy carries the same printed date as its original, however late it arrives, so statement copies are caught. A restarted numbering sequence has a different year, so those false alarms disappear.\n- **It fails safe when the date is missing.** If the post room can't read the date on a fax or photocopy, `same_invoice_year` returns `True` and the invoice is held. A few minutes of review is a far cheaper error than a missed duplicate.\n- **It ignores amount.** This follows Ingrid's point that copies can differ by a few cents.\n- **It normalises invoice numbers** the same way Design 2 does.\n\n**Remaining weaknesses in Design 1:**\n- A mistyped year would hide a match.\n- Stripping all non-digits could conflate numbers like \"A-45\" and \"B-45\". That is acceptable given the cost asymmetry.\n- It doesn't exclude the invoice itself or statements, but that is outside what's being compared.\n\nOverall, Design 1 handles both the January restarts and the statement copies, while Design 2 misses the latter.\n\nWINNER: 1"
+}

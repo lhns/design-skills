@@ -1,0 +1,32 @@
+Thank you, Gwen. The jumble was very useful. I've written up a first draft of the design in `design/`. Nothing in it is decided yet: every rule is marked *proposed* until you or the committee agree to it.
+
+## The draft in brief
+
+- **One online calendar for every room.** It refuses any booking that overlaps one already there, which stops two parties landing on one Saturday. Anyone can see which dates are free, but not who has booked them. Regular hirers are simply a repeating booking. If the playgroup takes the upstairs room, they're just a long repeating booking too, so nothing new is needed for that.
+- **Money.** To your question about making everyone pay online: yes for one-off hirers, but not for your regulars, because the lunch club and whist drive can't pay online.
+  - A one-off date is held for 7 days, and the booking is confirmed when the money arrives. If no money comes, the hold ends by itself and the date shows as free again.
+  - If someone cancels, they get a full refund if the date is let to someone else.
+  - Regulars pay once a term in advance.
+  - Nobody has to chase cheques. That refund rule is a committee decision, because it is close to the deposit row.
+- **Saturdays.** I'm suggesting a different rule from a 12-Saturday cap: no regular booking after 12:00 on a Saturday. A cap would end the dance school's mornings and still wouldn't free the afternoons families want. This rule leaves the dance school alone, and Pilates would be offered a weekday slot instead.
+- **23:00 music limit.** The officer won't accept anything that relies on the hirer, and nobody goes to the hall at night. That leaves the time switch the electrician already fitted. It would turn off the power to the music sockets every night. I've suggested setting it two minutes early, at 22:58, in case its clock drifts. There would also be a short written record of monthly daytime checks, which you can show the officer.
+- **Kitchen.** Since there are no deposits and nobody visits at night, the plan is that hirers take all their rubbish home. There would be a Monday-morning look before Tuesday's lunch club, and hirers who leave a mess aren't offered another booking.
+- **Phone.** Calls go to a hall number with a voicemail message, answered on Monday and Wednesday mornings. Your home number comes off everything public, and the lunch club and whist drive can still book extra dates by ringing it.
+- **Keys** stay exactly as they are.
+
+## Something urgent about the time switch
+
+The clocks go back this Sunday, 25 October, and forward on 28 March 2027, while you're at your sister's. If the switch doesn't change for summer time by itself, then after the March change it would turn the power off at midnight instead of 23:00. That would breach the licence. Someone needs to be named to re-set it on 28 March.
+
+## Files
+
+- `design/README.md`: an index and a log of each session.
+- `design/requirements.md`: everything from your notes that the design has to meet.
+- `design/design.md`: the draft itself.
+- `design/assumptions.md` and `design/risks.md`: what I'm taking on trust, and what could go wrong.
+- `design/questions.md`: the questions still open, most important first.
+- `design/adr/`: one short record for each of the three main decisions (music cut-off, paying to confirm, Saturdays).
+
+---
+
+**My question for you:** At a Saturday party, which sockets in the main hall could a disco actually plug into? Is it only the stage sockets on the sound limiter, or could a DJ run a lead to other wall sockets? If it could, the time switch only controls the music while the DJ chooses to use the stage sockets, which means the limit relies on the hirer again. The electrician would then need to put those other sockets on the switch too. If you don't know, the electrician could tell us.

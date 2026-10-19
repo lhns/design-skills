@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q11.plain.opus.ba.s1",
+ "track": "rating",
+ "item": "q11",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 15214,
+ "total_cost_usd": 0.045568,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3909,
+ "final_text": "# Holiday club opening days: Candidate B (Design 1) is the better design\n\n**What the decision turns on: dates nobody knows yet.** Both candidates agree on every date in 2025-26 and 2026-27, so they differ only where the booking window goes past the confirmed tables. The page asks for twelve months ahead. From October 2026 that reaches October 2027, which is in the 2027-28 school year. Those dates are only proposed, are out for consultation, and could change before December.\n\n**Candidate A (Design 2) invents those dates and presents them as fact.**\n- It works 2027-28 out from a \"usual pattern\" that has already broken twice in two years (the February half-term and the summer start).\n- For any date past the tables, it confidently returns days that may turn out to be term time.\n- That is the failure Nadia can't absorb. Her play workers are teaching assistants who aren't free in term time, and the hall belongs to the school. A parent who books such a day has a booking the club cannot staff.\n- Every council change has to be spotted and added as an override. Forgetting one fails silently, because the formula still produces plausible dates.\n- The Easter algorithm and the weekday helpers add complexity in exchange for guesses.\n\n**Candidate B (Design 1) only states what the council has confirmed.**\n- Its error runs the safe way. Past the end of the table, it shows no club days, so nobody can book a day that might not happen.\n- When the council publishes in December, someone copies the table in. The comment tells them to do this, and the change is easy to check line by line against the council's page.\n- The data matches its source one-to-one. There is no hidden logic that can disagree with what the council published.\n\n**Weakness in B, and the fix.** B treats \"not yet published\" the same as \"closed\", without saying so. It would be better to:\n- record the last confirmed date and signal that anything after it is unknown, so the page can show \"dates not yet confirmed\" instead of a blank, and\n- set a December reminder to add 2027-28.\n\nBoth are small changes to B's design. A's weakness is built into its approach.\n\nWINNER: 1"
+}

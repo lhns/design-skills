@@ -1,0 +1,15 @@
+**Candidate A (Design 1) is the better design.**
+
+**The constraint that matters.** Section 4.2 allows at most one message in any one-second interval, and 4.3 suspends the sender ID for 24 hours after more than 20 rejections in a day, with only the operator's support desk able to lift it. A suspension during a flood warning would mean people in the valley don't get the alert, which is the one outcome the owner says must not happen.
+
+**Candidate B breaks the contract.** The token bucket starts full with BURST = 10. On a flood warning, `pace()` lets the first 10 messages through back to back, and the gateway accepts only one of them per second. The other 9 get 429s. The bucket then refills at 1 token per second, but a burst of 10 immediately after idle is already a violation. Each burst after an idle period (for example, a few scattered messages a day, or the next flood alert) can add up to 9 rejections. Two such bursts exceed the 20-rejection limit and trigger the 24-hour suspension. Token buckets suit limits stated as an average rate with burst allowance. Here the limit is a hard per-second spacing, so the burst allowance is a bug. Even with the bucket drained, the rule "at most one per one-second interval" isn't guaranteed, because the refill arithmetic permits submits closer than 1 s when fractional tokens accumulate, and there's no clock margin.
+
+**Candidate A enforces the real rule.** It guarantees at least 1.05 s between consecutive `pace()` returns, using the monotonic clock. That gives a safety margin against clock granularity and network jitter between when the worker calls and when the gateway timestamps arrival. Retried messages also go through `pace()`, so they are spaced too. Because the worker is single-threaded and nothing else talks to the gateway, the one pacer sees all traffic.
+
+**Throughput is fine.** At 1.05 s per message, 2,000 messages take about 2,100 s, roughly 35 minutes. The owner says half an hour is acceptable and that completeness matters more than speed, so this is close to the stated tolerance. For 1,500 messages it's about 26 minutes. If the 2,000 case needs to be under 30 minutes, the margin could be tightened (to about 1.01 to 1.02 s, giving roughly 34 minutes at 2,000 only if the margin is under 0.9 s, which isn't possible given the 1 s floor). So 2,000 messages cannot finish in 30 minutes under any compliant design: the hard floor is 2,000 s, about 33 minutes. That is a limit of the gateway, not of A, and B's only way to "beat" it is by getting rejected.
+
+**Minor notes on A.** It records `last` after the sleep, which is the right moment. The margin is a constant that could be tuned, and a failed submit still consumed a slot, which is conservative and safe.
+
+Candidate A trades a few seconds of speed for never risking the suspension, which is the correct trade here.
+
+WINNER: 1

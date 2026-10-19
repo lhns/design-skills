@@ -1,0 +1,76 @@
+# Nested staff groups and permissions
+
+A city's parks department runs a small internal system for staff permissions: who can book the minibus, use the tool store, see timesheets, and so on. People belong to groups, groups can contain other groups, and each permission is granted to some groups. The membership code is being rewritten; two candidates are below.
+
+**From the system's ticket history:**
+
+> **#118** Permissions page hung after a change to the Facilities groups. Someone had put Admin inside Facilities and Facilities inside Admin. Fixed in the membership lookup; the loop itself was removed by hand.
+>
+> **#131** Request: show on the permissions page why someone has a permission (which group). Parked.
+
+**From the IT officer who maintains it:**
+
+> Permissions are mostly granted high up so they cover whole teams: Timesheets is granted to the Parks group, the tool store to Grounds, the minibus to each crew. People are added to the lowest group that fits. The seasonal staff each crew takes on from April sit in a "Seasonal" group inside that crew.
+>
+> The org chart only changes a few times a year and I make the group changes myself. There are about 60 groups and 400 people; nothing is slow.
+
+**From an HR email forwarded to IT last week:**
+
+> Following consultation, from 1 November Grounds will be organised as two area teams, North and South. Crews 1-4 move to North and crews 5-8 to South, with their seasonal staff. Please set up the systems to match.
+
+`group.name` is its name; `group.people` is a set of people; `group.subgroups` is a list of groups; `permission.groups` is the list of groups it is granted to.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+def members(group):
+    """Everyone in `group`, directly or through nested groups. A group loop (#118) is harmless."""
+    people, seen, todo = set(), set(), [group]
+    while todo:
+        g = todo.pop()
+        if g in seen:
+            continue
+        seen.add(g)
+        people |= g.people
+        todo.extend(g.subgroups)
+    return people
+
+
+def has_permission(person, permission):
+    return any(person in members(g) for g in permission.groups)
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+import logging
+
+log = logging.getLogger(__name__)
+
+# Nesting deeper than this is treated as a group loop (#118). The deepest chain we
+# have is Parks > Grounds > Crew > Seasonal.
+MAX_DEPTH = 3
+
+
+def members(group, depth=0):
+    """Everyone in `group`, directly or through nested groups."""
+    if depth > MAX_DEPTH:
+        log.warning("groups nested deeper than %d under %s; skipping", MAX_DEPTH, group.name)
+        return set()
+    people = set(group.people)
+    for sub in group.subgroups:
+        people |= members(sub, depth + 1)
+    return people
+
+
+def has_permission(person, permission):
+    return any(person in members(g) for g in permission.groups)
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

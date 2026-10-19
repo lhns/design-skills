@@ -1,0 +1,19 @@
+{
+ "run_id": "audit.b7.elegance.opus.-.s1",
+ "track": "audit",
+ "item": "b7",
+ "condition": "elegance",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 31725,
+ "total_cost_usd": 0.07662060000000001,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 7363,
+ "final_text": "**PROBLEM: Constraints:** The problem that started the project is never recorded. Ruth's first statement (01-13) was \"Half our calls are chasers\", and no constraint captures it. Without it, D5 has nothing to trace to, and nothing can show whether the design meets its main goal.\n\n**PROBLEM: D2:** The record says the web form was \"decided with Ruth 01-20\", but her only recorded statement that day is that phone reporting must stay (C4). C4 makes phone reporting forced. The web form is an addition no constraint names, so it is a designer choice, and Ruth's agreement to it isn't recorded.\n\n**PROBLEM: D2 / D5 (portal) vs C5:** The tenant portal \"was never switched on\". The design depends on it for the web form and the status page, but nobody has checked whether switching it on needs a new licence or subscription. If it does, C5 rules it out before June.\n\n**PROBLEM: D3:** \"Decided by Ruth\" and the five-level option are misleading. C3 is Ruth's own constraint, so the three categories are forced, not decided. The five-level option was never a real option.\n\n**PROBLEM: D4 / C6 vs C5:** The co-op's own on-call phone starts on 1 April, before the June subscription freeze ends. If it needs a new mobile contract or answering service, it conflicts with C5. That conflict isn't examined.\n\n**PROBLEM: D4 / C1:** C6 was handled by swapping the phone number on the answerphone, not by re-deriving what it affects. The contractor's line came with someone who attended. From 1 April the record doesn't say who staffs the on-call phone or who attends within 24 hours. As recorded, C1 is not shown to be met.\n\n**PROBLEM: D4 / D5:** Out-of-hours jobs are logged \"next morning\". So a tenant who reports overnight gets no \"reported\" text until then, and the step-by-step updates don't hold for the cases that matter most. The record doesn't acknowledge this.\n\n**PROBLEM: D5:** Choosing \"both\" by default adds a second channel that states the same facts as the texts, and no constraint forces it. Ruth's \"nice and clear\" (01-27) was a reaction to a mock-up. It is not a constraint and not a decision, and the \"both\" choice leans on it without saying so.\n\n**PROBLEM: D7 / Design:** Only the handyman's appointments are covered. For contractor jobs, the record doesn't say who books them, how they get into the housing system (C2), or how the \"booked\" and \"done\" texts are triggered.\n\n**PROBLEM: Design section:** D5, D6 and D7 are open designer defaults, but the Design section states them as settled. They aren't marked as provisional, and there's no list of open forks to take back to Ruth.\n\n**PROBLEM: Record currency:** Today is 2026-10-19, so the 31 March switch-over in D4 and the June freeze in C5 have both passed. The record has no entry after 02-03 confirming that the on-call phone went live, or what the June board meeting decided about subscriptions. Constraints and decisions that depend on those dates are unverified.\n\nDeciding reason: the most serious problem is that C6 was patched rather than re-derived, so the record no longer shows C1 being met after 1 April."
+}

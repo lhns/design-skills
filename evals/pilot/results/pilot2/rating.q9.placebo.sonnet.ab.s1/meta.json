@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q9.placebo.sonnet.ab.s1",
+ "track": "rating",
+ "item": "q9",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 15522,
+ "total_cost_usd": 0.021274,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5591,
+ "final_text": "**Candidate B is the better design.**\n\n**Candidate A** uses the date the invoice reached us, with a 60-day window. That fails on the case Theo describes. Scenery-hire and the printers send a quarterly statement about two weeks after quarter-end, with a copy of every invoice from that quarter stapled behind it. The post room scans these and can't always tell a copy from an original. A copy of an invoice from early in the quarter therefore arrives roughly 90\u2013105 days after the original, well outside A's window. A would let it through into the payment run, and that is the double payment that already happened once. A also treats a date of arrival as a proxy for \"same invoice\", and arrival time says nothing about that. The window is a tuning knob that trades false alarms against misses, and no value works here. Anything wide enough to catch statement copies (about 110 days) starts clashing with the January restarts again.\n\n**Candidate B** uses the printed invoice date, but only its year, to separate a restarted numbering sequence from a real repeat. That targets exactly what Theo described: numbers restart each January, so the same number in a different calendar year is a different invoice. A copy stapled to a statement carries the same printed date as the original, so it stays in the same year and is caught however late it arrives. This works regardless of delay, which is why B handles the statement case and A cannot.\n\nB also handles the missing date correctly. When either date is empty it can't rule a match out, so it holds the invoice. That follows Ingrid's cost asymmetry: a hold costs a few minutes, and a missed duplicate costs the payment. The cost is some extra false alarms for the restarting suppliers when dates are blank, which is the right side to err on.\n\nBoth candidates share the same normalisation and both ignore amount, as Ingrid advised. B's remaining weaknesses are small:\n- It assumes a supplier never reuses a number within a year.\n- A mistyped printed year could cause a miss.\n- It does not use the received date at all.\n\nEach of these is far less serious than A's systematic miss on statement copies. B is also clearer, since its rule is a named function whose docstring states the business reason.\n\nWINNER: 2"
+}

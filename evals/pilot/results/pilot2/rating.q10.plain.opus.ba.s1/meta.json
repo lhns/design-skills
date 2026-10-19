@@ -1,0 +1,17 @@
+{
+ "run_id": "rating.q10.plain.opus.ba.s1",
+ "track": "rating",
+ "item": "q10",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "sample": 1,
+ "duration_ms": 9813,
+ "total_cost_usd": 0.029036,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2519,
+ "final_text": "**Design 2 (Candidate A) is better.**\n\n**Design 1 breaks on 1 November.** It detects loops with a depth limit, `MAX_DEPTH = 3`, which is sized to today's deepest chain:\n\n- Parks (depth 0) > Grounds (1) > Crew (2) > Seasonal (3). This works today.\n\nThe HR reorganisation adds a level:\n\n- Parks (0) > Grounds (1) > North/South (2) > Crew (3) > Seasonal (4). Depth 4 exceeds 3, so `members` returns an empty set for Seasonal.\n\nThe result is that every seasonal worker silently loses permissions granted at Parks level, such as Timesheets. If the IT officer reasonably grants the tool store to Grounds, seasonal staff lose that too. The only sign is a log warning, which nobody watches on a system where \"nothing is slow.\" The limit also confuses two different things: deep nesting, which is legitimate, and cycles, which are not. When the cap is hit, the code gives a wrong answer instead of failing loudly. It also doesn't truly detect loops. A cycle is simply walked repeatedly until the depth runs out.\n\n**Design 2 handles this correctly.** It keeps a `seen` set, so it:\n\n- handles a cycle (#118) properly by visiting each group once, at any depth;\n- needs no magic number that must be kept in step with the org chart;\n- copes with the new North/South layer, or any future layers, without changes;\n- costs almost nothing at 60 groups and 400 people.\n\nNeither design addresses #131 (showing which group grants a permission). Both have the same `has_permission`, so this doesn't separate them. Design 2's traversal would be easier to extend to record the path, but that is a secondary point.\n\nWINNER: 2"
+}

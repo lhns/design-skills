@@ -1,0 +1,26 @@
+The design is written to `answer.md` (597 words, under the 600 limit).
+
+**Core idea:** nothing is overwritten. Share changes and meter readings are only ever added, each with the date it was recorded. A month's credits are then a pure calculation from "what we knew on date *t*". Two things follow from that:
+- **Re-runs and reprints match what was sent:** recomputing as of the original run date gives the same answer. This fixes the auditor's mismatches and ticket #29.
+- **Corrections are a subtraction:** each monthly file holds, for every month, the allocation as of now minus the allocation as of the previous run. For the new month that is the full credit; for an earlier month it is the plus-or-minus adjustment. A late import reading or a backdated share transfer is settled at the next run without any extra mechanism.
+
+**How a month is worked out:**
+- Each member's share is weighted by the days they held their shares that month (rule 4.2).
+- No member gets more than their import, and the excess is shared out among the others in the same proportions until no one who can still use it is left (rule 4.3).
+- Credits are whole kWh: round down, then hand the leftover kWh to the largest fractions, which never pushes anyone over their limit (rule 4.4).
+- Any energy no member can use is sold. Credits plus sold always equal the generation.
+
+**Removed:**
+- **Community account:** breaks 4.4, and the auditor objected to it.
+- **5-share minimum:** breaks 4.2. Only lines that come out at zero kWh are now left off the file.
+- **15th-of-the-month rule:** breaks 4.2. Share-days replace it, so in Hal's case (#14) he keeps 13 days of credit on the transferred shares and his daughter gets 18.
+- **CSV folder and overwritten readings:** these are why old months couldn't be reproduced.
+
+**My own design choices** (labelled in the file):
+- A share change counts from the start of its effective date.
+- If a member's import reading hasn't arrived by the run, their limit is 0 for now. Their credit is paid as a correction once the reading comes in.
+- Ties in rounding go by account number.
+- Backdated share entries are allowed and settled at the next run.
+- One readings table holds both member import meters and the array's generation meter.
+
+**Check with the supplier:** the design tags each file line with the month it credits. That assumes the supplier checks an adjustment against that month's import. If they apply it to the current month's bill instead, a positive adjustment could be lost to the current month's limit.

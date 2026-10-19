@@ -1,0 +1,19 @@
+{
+ "run_id": "rating.q11.skill.opus.ab.s1",
+ "track": "rating",
+ "item": "q11",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "sample": 1,
+ "duration_ms": 19752,
+ "total_cost_usd": 0.0560822,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 6500,
+ "final_text": "# Holiday club opening days: Candidate B is the better design\n\n**Candidate B is better.** It stores the council's published table as the single source of truth. Candidate A predicts dates that nobody has confirmed.\n\n## Constraints\n\n- **C1:** The club is open on every weekday of the council's school holidays, bank holidays included, and never in term time. The staff and the hall both depend on this.\n- **C2:** The council sets the dates. It publishes them as a table, one school year at a time, after a consultation. The dates can depart from the usual pattern, as in the February 2027 half-term and the Wednesday summer start.\n- **C3:** The booking page asks for the next twelve months, and parents book a whole year at once in October.\n- **Inferred:** A day must not be offered for booking unless the club will actually run on it. A family that books a day in what turns out to be term time has no childcare.\n\n## Breaking each design\n\n**Today is 19 October 2026.** Under C3, the booking page asks for days up to about 19 October 2027. That range includes the 2027-28 October half-term, and the council has not confirmed those dates. They are still out for consultation until 30 November.\n\n**Candidate A** returns the week of Monday 25 October 2027 with full confidence, because its usual pattern says so.\n- If the consultation moves that week, as it moved the February half-term this year, parents will already have booked a term-time week.\n- That breaks C1 and the inferred constraint, in exactly the October booking window that C3 describes.\n- The code has no way to tell a published date from a guessed one.\n\n**Candidate B** returns nothing for 2027-28 until someone adds the published table in December.\n- This fails safe. Some days are offered late, but no day is ever offered wrongly.\n- B could be improved by letting the page say \"dates for 2027-28 not yet confirmed\" instead of showing a blank. That would be an addition at the edge of the system. It needs no change to the core function.\n\n## The concepts in each design\n\n**Candidate A** has these parts:\n- a pattern of six rules\n- an Easter algorithm\n- two \"Monday nearest\" helpers\n- a `COUNCIL_CHANGES` exception table\n- a school-year calculation\n\nThe exception table is the council's table under another name. Every year someone still has to compare the rules with the published dates and patch any differences. So the facts are kept in two places, and the rules add risk without removing any work. None of these concepts is forced by a constraint, because C2 says the dates are published, not derived.\n\n**Candidate B** has two parts:\n- one list of published facts\n- one weekday filter\n\nEach part traces to a constraint: C2 and C1. Adding a year is one transcription from the source the developer already checks against.\n\n## Ledger\n\n- **Forced:** Holidays are data copied from the council's table, because of C2. Unconfirmed years must not produce bookable days, because of C1, C3 and the inferred constraint.\n- **Deleted:** The pattern rules, the Easter calculation, the Monday helpers and the exception table.\n- **Designer choice:** Showing \"not yet confirmed\" for years that are not in the table.\n\n**Deciding reason:** A invents dates for the October 2027 half-term that the council has not yet fixed, and parents booking this month would act on them. B offers only dates the council has published, using fewer concepts.\n\nWINNER: 2"
+}

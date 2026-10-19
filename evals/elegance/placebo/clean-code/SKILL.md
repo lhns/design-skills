@@ -90,3 +90,7 @@ When reviewing, read the description and tests first, then the implementation. A
 
 Give feedback on the code, not the person. Distinguish blocking problems from optional suggestions, explain the reasoning, and prefer questions when you are unsure. As an author, keep changes small, explain your intent, and treat review comments as help rather than criticism.
 
+
+## Putting it together
+
+When writing, get it working, make it clear, then make it simple, and only then consider making it fast. When reviewing, look for the smallest change that would most improve clarity or safety. In both cases, remember the goal: software that is easy to understand, easy to change, and hard to break.

@@ -1,0 +1,76 @@
+# Botanic garden opening hours
+
+A small botanic garden run by a trust shows its opening hours on its website and on the ticket machine at the gate: today's opening time, last entry and closing time. The function behind both is being rewritten. Two candidates are below.
+
+**From the trust's visitor policy (adopted 2011, section 2):**
+
+> The garden opens at 10:00 every day of the year. It closes one hour before sunset, rounded down to the half hour, and no later than 19:00 so that staff shifts end by 19:30. Closing times change on the first of each month. Last entry is one hour before closing.
+
+**From the visitor services manager, Ruth:**
+
+> The trustees set the times from that policy back in 2019 and they've stayed the same ever since. They're on the leaflet, on the season-ticket cards, and painted on the boards at both gates, so whatever the website says has to match those. The one time the old website showed a different closing time from the gate boards, we had a queue of unhappy season-ticket holders at the gate.
+>
+> For reference, the closing times are: January 15:00, February 15:30, March 16:30, April 18:30, May to July 19:00, August 18:30, September 18:00, October 17:00, November and December 15:00.
+
+**From the volunteer developer:**
+
+> `hours_on(day)` returns `(opens, last_entry, closes)` as `datetime.time`. I checked both candidates against Ruth's list for every day of 2026 and 2027 and they match. The garden is at about 52 degrees north; clocks go forward on the last Sunday of March and back on the last Sunday of October.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+from datetime import time
+
+OPENS = time(10, 0)
+
+# Closing time by month, as set by the trustees and printed on the leaflet and gate boards.
+CLOSES = {
+    1: time(15, 0), 2: time(15, 30), 3: time(16, 30), 4: time(18, 30),
+    5: time(19, 0), 6: time(19, 0), 7: time(19, 0), 8: time(18, 30),
+    9: time(18, 0), 10: time(17, 0), 11: time(15, 0), 12: time(15, 0),
+}
+
+
+def hours_on(day):
+    closes = CLOSES[day.month]
+    return OPENS, time(closes.hour - 1, closes.minute), closes
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+import math
+from datetime import date, time, timedelta
+
+OPENS = time(10, 0)
+LATEST_CLOSE = 19 * 60  # minutes; staff shifts end by 19:30 (visitor policy, section 2)
+
+
+def last_sunday(year, month):
+    d = date(year, month + 1, 1) - timedelta(days=1)
+    return d - timedelta(days=(d.weekday() + 1) % 7)
+
+
+def sunset(day):
+    """Approximate sunset at the garden (52 N), local clock time, in minutes after midnight."""
+    n = day.timetuple().tm_yday
+    gmt = 1071 + 105 * math.sin(2 * math.pi * (n - 81) / 365)
+    summer_time = last_sunday(day.year, 3) <= day < last_sunday(day.year, 10)
+    return gmt + (60 if summer_time else 0)
+
+
+def hours_on(day):
+    """Visitor policy, section 2: an hour before sunset, rounded down to the half hour,
+    no later than 19:00, set for the whole month (taken mid-month)."""
+    closes = min(LATEST_CLOSE, (sunset(day.replace(day=15)) - 60) // 30 * 30)
+    h, m = divmod(int(closes), 60)
+    return OPENS, time(h - 1, m), time(h, m)
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

@@ -1,0 +1,4 @@
+better: a
+longer: a
+kind: true-duplication-vs-single-source
+reason: "The ten days in the email and the ten days in the refund code are one fact: trading standards treated the email as the learner's copy of the terms, and the board changes the cutoff (twice in four years). B states it twice, once as FULL_REFUND_DAYS and once as 'ten days' in office-owned prose, so the next board change is a code edit plus a template edit by a different person, which is exactly how the spring term's 'one week' emails and 23 refunds happened. A states it once and renders the deadline date into the template through a placeholder Gwen can move, so she still owns the wording without owning the rule. B's separation of copy from code looks like the cleaner ownership split, but it duplicates a binding fact across that split."

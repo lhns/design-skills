@@ -1,0 +1,20 @@
+{
+ "run_id": "audit.b7.collapse.opus.-.s1",
+ "track": "audit",
+ "item": "b7",
+ "condition": "collapse",
+ "model": "opus",
+ "order": "-",
+ "sample": 1,
+ "duration_ms": 29237,
+ "total_cost_usd": 0.070738,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance",
+  "design-by-collapse"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 9471,
+ "final_text": "PROBLEM: D2 (How tenants report): it is marked \"decided with Ruth 01-20\", but no statement from Ruth chooses a web form. Her only words on reporting (C4) require that phone reporting still works, which both options meet. \"Phone and a web form\" is a designer choice recorded as an owner decision. The fork should be reopened with its default and a question.\n\nPROBLEM: D2 and the design versus C5: the web form needs the tenant portal, which \"was never switched on\". The record never checks whether switching it on, or sending texts for D5, adds a subscription or paid add-on. Both options should be checked against C5 and the result recorded.\n\nPROBLEM: D1 (repairs app ruled out by C2): C2 only requires that every repair is recorded in the housing system. A repairs app that writes to the housing system would meet it, so citing C2 here is an inference, not an elimination. Only C5 rules the app out, and only for now (see the next problem). The choice is forced only until then.\n\nPROBLEM: C5 and D1, with the record's dates: C5 holds only \"until the June meeting\", and today is 2026-10-19. Nothing records what the board decided in June, and no fork carries June as its decide-by date. Every elimination that rests on C5 (the repairs app in D1, and possibly portal or text costs) is now unsupported until Ruth confirms the current position. The record has also not been updated since 2026-02-03, although the 1 April switch-over in D4 has already happened.\n\nPROBLEM: D4 and C1: the decision covers only who answers the phone out of hours. From 1 April the co-op runs the on-call phone, but the record never asks who attends an out-of-hours emergency within 24 hours. That could be the contractor's firm without its line, the handyman, or someone else. C1 is not shown to be met, and this undecided behaviour should be its own fork.\n\nPROBLEM: D4 and C2 (\"job is logged in the housing system next morning\"): a call on Friday night or before a bank holiday is not logged the next morning, because the office is closed. Until it is logged, the repair is outside the system the board audits. When and by whom on-call jobs get logged is undecided and should be a fork, not a sentence in the design.\n\nPROBLEM: \"What Ruth said\", 2026-01-13 (\"Half our calls are chasers\"): this is the stated reason for progress updates, but it is never recorded as a constraint or value. As a result, D5 traces to nothing, and the open D5, D6 and D7 forks cannot be ranked against Ruth's goal.\n\nPROBLEM: D5 and the 2026-01-27 status-page comment: \"nice and clear\" is approval of a mock-up, not an answer. D5 correctly stays open. However, the design text presents \"a text at each step, plus the status page\" as settled, with nothing marking it as a default.\n\nPROBLEM: D5 and D6 (open forks): neither records a question, when it was or will be asked, or the event before which not deciding locks in the default. D5 has been \"to raise with Ruth\" since January. D6's photo option also depends on D2, which is itself not actually decided.\n\nPROBLEM: D7: \"not sure yet\" is handled correctly as an answer, but no decide-by event is recorded. Ruth's \"the handyman likes planning his own week\" is not recorded as a value that ranks the options, although it is the only owner input on this fork."
+}
