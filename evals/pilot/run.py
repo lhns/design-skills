@@ -225,7 +225,7 @@ def run_lean(run_id, r, out):
 
 
 def run_full(run_id, r, out):
-    work = Path.home() / ".skillpilot" / run_id / r["name"]  # not under TEMP: Git Bash shows TEMP as /tmp, which file tools resolve to C:\tmp
+    work = Path.home() / ".skillpilot" / run_id / r["name"]  # not under TEMP: shells may show TEMP under a different path than the file tools use
     rmtree(work)
     work.mkdir(parents=True)
     subprocess.run(["git", "init", "-q"], cwd=work, check=True)

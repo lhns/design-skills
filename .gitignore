@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+out.json
+out.jsonl
+evals/pilot/*.log
