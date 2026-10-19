@@ -39,10 +39,21 @@ SKILL_OF_TRACK = {"rating": "elegance", "gen": "elegance", "audit": "design-by-c
 BUDGET_STOP = 1_900_000
 EST = {"lean": 4_000, "full": 150_000, "judge": 8_000}
 
-PAIRS = ROOT / "evals/elegance/pilot/pairs"
-GEN = ROOT / "evals/elegance/pilot/gen"
-AUDIT = ROOT / "evals/design-by-collapse/pilot/audit"
-FIRST = ROOT / "evals/design-by-collapse/pilot/first"
+PAIRS = GEN = AUDIT = FIRST = None
+ITEMS = None
+
+
+def set_items(items):
+    """Point the item roots at evals/<skill>/<items>/ (wave 1: pilot, wave 2: pilot2)."""
+    global PAIRS, GEN, AUDIT, FIRST, ITEMS
+    ITEMS = items
+    PAIRS = ROOT / f"evals/elegance/{items}/pairs"
+    GEN = ROOT / f"evals/elegance/{items}/gen"
+    AUDIT = ROOT / f"evals/design-by-collapse/{items}/audit"
+    FIRST = ROOT / f"evals/design-by-collapse/{items}/first"
+
+
+set_items("pilot")
 
 
 def read(p):
@@ -53,7 +64,11 @@ def models_for(track, item):
     if track == "rating":
         return ["opus", "sonnet"]
     if track == "gen":
-        return ["sonnet"] if item == "g2" else ["opus"]
+        mp = GEN / item / "meta.yaml"
+        if mp.exists():
+            import yaml
+            return [(yaml.safe_load(read(mp)) or {}).get("model", "opus")]
+        return ["sonnet"] if ITEMS == "pilot" and item == "g2" else ["opus"]
     return ["opus"]
 
 
@@ -97,16 +112,24 @@ def build_prompt(r, lean):
     return text + (" " + sentence if sentence else "")
 
 
-def matrix(tracks):
-    """Runs ordered item by item (all conditions of an item together) so budget skips keep items balanced."""
+def matrix(tracks, conds=None, models=None, items=None, samples=1):
+    """Runs ordered item by item (all conditions of an item together) so budget skips keep items balanced.
+    conds, models, items: optional allow-lists."""
     runs = []
     for track in [t for t in TRACK_ORDER if t in tracks]:
         for item in item_ids(track):
+            if items and item not in items:
+                continue
             for cond in TRACK_CONDS[track]:
+                if conds and cond not in conds:
+                    continue
                 for model in models_for(track, item):
+                    if models and model not in models:
+                        continue
                     for order in (["ab", "ba"] if track == "rating" else ["-"]):
-                        runs.append(dict(name=f"{track}.{item}.{cond}.{model}.{order}", track=track, item=item,
-                                         condition=cond, model=model, order=order))
+                        for s in range(1, samples + 1):
+                            runs.append(dict(name=f"{track}.{item}.{cond}.{model}.{order}.s{s}", track=track,
+                                             item=item, condition=cond, model=model, order=order, sample=s))
     return runs
 
 
@@ -184,7 +207,7 @@ def snapshot(d):
 
 def write_meta(out, r, **kw):
     meta = dict(run_id=r["name"], track=r["track"], item=r["item"], condition=r["condition"], model=r["model"],
-                order=r["order"], **kw)
+                order=r["order"], sample=r["sample"], **kw)
     (out / "meta.json").write_text(json.dumps(meta, indent=1), encoding="utf-8")
 
 
@@ -269,10 +292,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--track", default="rating,gen,audit,first")
+    ap.add_argument("--items", default="pilot", help="item set: evals/*/<items>/ (pilot, pilot2)")
+    ap.add_argument("--conditions", default="", help="comma list filter, e.g. plain,skill (default all)")
+    ap.add_argument("--models", default="", help="comma list filter, e.g. opus (default all)")
+    ap.add_argument("--item-list", default="", help="comma list of item ids, e.g. q1,q3,b2 (default all)")
+    ap.add_argument("--samples", type=int, default=1, help="runs per cell, ids get .s1, .s2 ...")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--concurrency", type=int, default=4)
     a = ap.parse_args()
-    runs = matrix(a.track.split(","))
+    set_items(a.items)
+    csv = lambda x: [v for v in x.split(",") if v]
+    runs = matrix(a.track.split(","), csv(a.conditions), csv(a.models), csv(a.item_list), a.samples)
     if a.dry_run:
         counts, est = {}, {}
         for r in runs:
@@ -287,6 +317,8 @@ def main():
         for sk, t in est.items():
             print(f"estimated tokens {sk}: {t:,} (stop at {BUDGET_STOP:,})")
         return
+    (RESULTS / a.run_id).mkdir(parents=True, exist_ok=True)
+    (RESULTS / a.run_id / "items.txt").write_text(a.items)  # grade.py reads the item set from here
     group_ok, lock, n = {}, threading.Lock(), [0]
 
     def work(r):

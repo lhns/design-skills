@@ -33,12 +33,6 @@ Code is read far more often than it is written. Optimize for the next person who
 - Replace magic numbers and strings with named constants.
 - Prefer clear loops or standard collection operations over clever one-liners. Cleverness is a cost paid by every later reader.
 
-## Comments
-
-- Let the code explain what it does; use comments to explain why: a constraint, a trade-off, a workaround, a non-obvious decision.
-- Delete commented-out code. Version control remembers it.
-- Document public interfaces: what they promise, their inputs, outputs, and failure modes.
-
 ## Core principles
 
 **KISS.** Choose the simplest solution that solves the actual problem. Complexity must earn its place.
@@ -71,14 +65,6 @@ Treat SOLID as a set of heuristics for managing change, not a checklist to satis
 - Clean up resources reliably, using the language's construct for scoped cleanup.
 - Avoid returning null or sentinel values where a clearer type, such as an optional or an empty collection, communicates absence.
 
-## Testability
-
-- Code that is hard to test is usually too tightly coupled. Use testing difficulty as feedback on the design.
-- Inject dependencies such as clocks, network clients, and databases so tests can substitute them.
-- Keep business logic free of input and output so it can be tested quickly without setup.
-- Write tests that describe behavior, not implementation. A good test survives refactoring.
-- Keep tests small, independent, deterministic, and readable. A failing test should point clearly to the cause.
-
 ## Design trade-offs
 
 Every design choice trades something for something else: simplicity against flexibility, performance against clarity, consistency against local convenience. Make the trade-off explicit.
@@ -104,6 +90,3 @@ When reviewing, read the description and tests first, then the implementation. A
 
 Give feedback on the code, not the person. Distinguish blocking problems from optional suggestions, explain the reasoning, and prefer questions when you are unsure. As an author, keep changes small, explain your intent, and treat review comments as help rather than criticism.
 
-## Putting it together
-
-When writing, get it working, make it clear, then make it simple, and only then consider making it fast. When reviewing, look for the smallest change that would most improve clarity or safety. In both cases, remember the goal: software that is easy to understand, easy to change, and hard to break.

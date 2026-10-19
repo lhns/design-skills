@@ -83,7 +83,7 @@ def hidden_tests(m, run_dir):
         for cmd in ([sys.executable, "-m", "pytest", "-q", "test_hidden.py"], [sys.executable, "test_hidden.py"]):
             try:
                 p = subprocess.run(cmd, cwd=d, capture_output=True, text=True, timeout=120,
-                                   env={**R.os.environ, "BILLING_DIR": str(d)})
+                                   env={**R.os.environ, "BILLING_DIR": str(d), "TARGET_DIR": str(d)})
             except subprocess.TimeoutExpired:
                 return False
             if "No module named pytest" not in p.stderr:
@@ -116,34 +116,54 @@ Count concepts, special cases (exception clauses) and facts stated in two places
 
 
 def audit_truth(item):
+    """Returns (planted errors, acceptable extras) for a doc. Shapes: doc -> [errors] (wave 1),
+    doc -> {errors: [...], acceptable_extra: [...]}, or a list of entries with a doc/item/id key."""
     t = load_yaml(R.AUDIT / "truth.yaml")
-    if isinstance(t, list):  # list of {doc: a1, ...} entries
-        t = [e for e in t if str(e.get("doc", e.get("item", e.get("id", "")))).replace(".md", "") == item]
-    elif isinstance(t, dict):
-        t = next((v for k, v in t.items() if str(k).replace(".md", "") == item), [])
-        t = t.get("errors", []) if isinstance(t, dict) else t
-    return t or []
+    if isinstance(t, list):
+        es = [e for e in t if str(e.get("doc", e.get("item", e.get("id", "")))).replace(".md", "") == item]
+        return es, []
+    t = next((v for k, v in (t or {}).items() if str(k).replace(".md", "") == item), [])
+    if isinstance(t, dict):
+        return t.get("errors") or [], t.get("acceptable_extra") or []
+    return t or [], []
+
+
+def audit_class(c):
+    """'planted:3' -> ('planted', 3); anything unrecognised counts as wrong."""
+    m = re.match(r"\s*(planted|real|defensible|wrong)\s*(?::\s*(\d+))?", str(c).lower())
+    return (m.group(1), int(m.group(2)) if m.group(2) else None) if m else ("wrong", None)
 
 
 def grade_audit(m, run_dir, run_id):
-    truth = audit_truth(m["item"])
-    listing = "\n".join(f"{i}: {json.dumps(e) if not isinstance(e, str) else e}" for i, e in enumerate(truth)) or "(none: clean document)"
+    truth, extras = audit_truth(m["item"])
+    show = lambda e: e if isinstance(e, str) else json.dumps(e)
+    listing = "\n".join(f"{i}: {show(e)}" for i, e in enumerate(truth)) or "(none: clean document)"
+    extra_listing = "\n".join(f"- {show(e)}" for e in extras) or "(none)"
     prompt = f"""A reviewer was asked to find planted decision-record errors in this document.
 
 DOCUMENT:
 {R.read(R.AUDIT / (m['item'] + '.md'))}
 
-TRUE ERRORS (index: description):
+PLANTED ERRORS (index: description):
 {listing}
+
+KNOWN ACCEPTABLE EXTRA FINDINGS (genuine, unplanted problems):
+{extra_listing}
 
 REVIEWER OUTPUT:
 {scrub(m['final_text'] or '')}
 
-For each PROBLEM the reviewer listed, say which true error index it identifies (same defect in the same place), or null if it matches none. Reply with JSON only: {{"found": [{{"truth_index": 0, "text": "..."}}]}}. Use an empty list for NO PROBLEMS."""
+Classify every PROBLEM the reviewer listed as exactly one of:
+- "planted:<index>": the same defect in the same place as that planted error;
+- "real": a genuine problem a strict reviewer would rightly raise (includes the known acceptable extras);
+- "defensible": debatable but reasonable;
+- "wrong": incorrect or a misreading of the document.
+Reply with JSON only: {{"findings": [{{"class": "planted:0", "text": "..."}}]}}. Use an empty list for NO PROBLEMS."""
     g = judge(run_id, "audit", prompt)
-    found = g.get("found") or []
-    hit = {f["truth_index"] for f in found if isinstance(f, dict) and isinstance(f.get("truth_index"), int)}
-    g.update(truth_total=len(truth), matched=len(hit), false_alarms=sum(1 for f in found if not isinstance(f, dict) or f.get("truth_index") is None))
+    cl = [audit_class(f.get("class")) for f in g.get("findings") or [] if isinstance(f, dict)]
+    n = lambda k: sum(1 for c, _ in cl if c == k)
+    hit = {i for c, i in cl if c == "planted" and i is not None and i < len(truth)}
+    g.update(truth_total=len(truth), matched=len(hit), real=n("real"), defensible=n("defensible"), wrong=n("wrong"))
     return g
 
 
@@ -210,16 +230,18 @@ def summarize(track, ms, grades):
                          mean([g.get("concepts") for g in gs]), mean([g.get("special_cases") for g in gs]),
                          mean([g.get("duplicated_facts") for g in gs]), pct(sum(hid), len(hid))])
         elif track == "audit":
+            gs = [g for g in gs if "truth_total" in g]
             clean = [g for g in gs if g["truth_total"] == 0]
             rows.append([cond, model, len(gs), pct(sum(g["matched"] for g in gs), sum(g["truth_total"] for g in gs)),
-                         mean([g["false_alarms"] for g in gs]), pct(sum(g["false_alarms"] > 0 for g in clean), len(clean))])
+                         mean([g["real"] for g in gs]), mean([g["defensible"] for g in gs]),
+                         mean([g["wrong"] for g in gs]), pct(sum(g["wrong"] > 0 for g in clean), len(clean))])
         else:
             tp = [trap_rate(g) for g in gs]
             rows.append([cond, model, len(gs), pct(sum(a for a, _ in tp), sum(b for _, b in tp)),
                          pct(sum(bool(g.get("question_is_good")) for g in gs), len(gs))])
     head = {"rating": ["condition", "model", "runs", "accuracy", "unparsable"],
             "gen": ["condition", "model", "n", "constraints held", "traps passed", "concepts", "special cases", "dup facts", "hidden tests"],
-            "audit": ["condition", "model", "n", "detection", "false alarms/doc", "clean docs with alarm"],
+            "audit": ["condition", "model", "n", "detection", "real/doc", "defensible/doc", "wrong/doc", "clean docs with a wrong finding"],
             "first": ["condition", "model", "n", "traps passed", "good question"]}[track]
     out = table(head, rows)
     if track == "rating":
@@ -247,17 +269,39 @@ def cost_table(ms):
     return table(["track", "condition", "runs", "mean cost $", "mean sec", "mean tokens", "skill invoked"], rows)
 
 
+def prune_report(metas, grades):
+    """Baseline correctness per rating pair and audit doc (rating: plain; audit: elegance). All-correct = droppable."""
+    G = lambda m: grades.get(m["run_id"], {})
+    rows = []
+    for (track, item), xs in group([m for m in metas if m["track"] in ("rating", "audit")], lambda m: (m["track"], m["item"])):
+        base = [m for m in xs if m["condition"] == ("plain" if track == "rating" else "elegance") and G(m) and "error" not in G(m)]
+        if not base:
+            continue
+        if track == "rating":
+            ok = [bool(G(m).get("correct")) for m in base]  # unparsable counts as not correct
+            rows.append([track, item, f"{sum(ok)}/{len(ok)} correct", "ACED" if all(ok) else ""])
+        else:
+            ok = [G(m).get("matched") == G(m).get("truth_total") and G(m).get("wrong") == 0 for m in base]
+            rows.append([track, item, f"{sum(ok)}/{len(ok)} perfect", "ACED" if all(ok) else ""])
+    print(table(["track", "item", "baseline", "droppable"], rows))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run-id", required=True)
     ap.add_argument("--tracks", default="rating,gen,audit,first")
     ap.add_argument("--concurrency", type=int, default=4)
+    ap.add_argument("--prune-report", action="store_true", help="list baseline correctness per item from existing grades; no grading")
     a = ap.parse_args()
     root = R.RESULTS / a.run_id
+    if (root / "items.txt").exists():
+        R.set_items((root / "items.txt").read_text().strip())
     metas = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(root.glob("*/meta.json"))]
     metas = [m for m in metas if m["track"] in a.tracks.split(",")]
     gp = root / "grades.json"
     grades = json.loads(gp.read_text()) if gp.exists() else {}
+    if a.prune_report:
+        return prune_report(metas, grades)
     lock, ok = threading.Lock(), {}
 
     def do(m):
