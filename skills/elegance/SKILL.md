@@ -20,7 +20,7 @@ Scale the method to the decision. For a small change, the constraints fit in one
 2. **Derive what they force.** If one option survives, it's forced: state it. If several survive, you have a fork:
    - give the options, what each forces, and your recommendation;
    - put the fork whose answer settles the most first;
-   - if nobody can answer now, take your recommendation, label it a designer choice, and list the fork.
+   - if nobody can answer now, don't stop: take your recommendation, label it a designer choice, and list the fork.
 3. **Only constraints eliminate options.** Simplicity, familiarity and taste only rank what remains. A design made simpler by dropping or weakening a constraint is false elegance, the worst result here. If a constraint makes the design ugly, keep the constraint and say so.
 4. **One problem per fork.** Decide each problem at its own fork. Before you delete or shrink a concept, list every problem it solves, including ones no listed constraint names. Then check each problem on its own: a concept can become unnecessary for one problem while still carrying another.
 5. **Find the shared concept** that most constraints are cases of, and express variation as independent axes of it, not as new kinds. If exception clauses pile up in your first design, you're polishing a local optimum: sketch two or three candidates that differ in core representation and rank them by these tests. If no concept fits without exceptions, the domain is irregular: use a table and name the constraint that makes it so. Two cases are not a pattern.
@@ -28,20 +28,20 @@ Scale the method to the decision. For a small change, the constraints fit in one
 7. **Keep the core ignorant of optional concepts.** Put them at the edge (caller, wrapper, config). No extension point with a single user, and no new service just for this.
 8. **Make limits conditions:** "stop when an attempt makes no progress", not "retry 3 times". Where reality forces a bound but not its value, such as a timeout or a memory cap, keep one named value and state its reason.
 9. **Subtract before adding.** Ask of every concept which constraint breaks without it; if none does, delete it. Compare counts (concepts, exception clauses such as "except", "only if" or "unless", special-case branches, facts stated in two places, unforced numbers) between alternatives, or before and after a change. Counts only go down, unless a named constraint forces a rise.
-10. **Re-derive instead of patching.** An old design, or a rough working version built to find the shape, is a source of candidate constraints: collect its special cases, confirm them, derive the design without looking at it, then diff and keep what is forced. When one constraint changes, re-derive only the concepts it touches.
+10. **Re-derive instead of patching.** When the clean shape isn't visible yet, building a rough working version first is legitimate. An old design or such a rough version is a source of candidate constraints: collect its special cases, confirm them, derive the design without looking at it, then diff and keep what is forced. When one constraint changes, re-derive only the concepts it touches.
 
 When there's a fork, a designer choice or a deletion to show, end with a short ledger: constraints, forced decisions, designer choices, deletions.
 
 ## In code
-Code is the design at small scale, under the same law. Branches and duplicates are the two signs of a representation that doesn't fit: a special case it can't absorb, and a fact it makes you state twice. Change the representation so both disappear: a sentinel node, an empty collection instead of null, a table instead of a chain of ifs. Merge only what is the same fact; similar code that changes for different reasons is not duplication.
+Code is the design at small scale, under the same law: types, states, functions, parameters and branches are concepts. Branches and duplicates are the two signs of a representation that doesn't fit: a special case it can't absorb, and a fact it makes you state twice. Change the representation so both disappear: a sentinel node, an empty collection instead of null, a table instead of a chain of ifs. Merge only what is the same fact; similar code that changes for different reasons is not duplication.
 
 Low complexity is a sign of elegance when every constraint still holds and you count across the whole system: a case moved into a caller, config, regex or dependency still counts. Line counts and complexity scores are diagnostics; golfing lowers them without deleting a case.
 
 ## Reviewing and comparing
 1. **Try to break it.** For each design and each constraint, name a concrete input or event that would break it, or show that none can. A design that fails a constraint loses to one that keeps it, however short it is.
 2. **Check how options were removed.** For each option a proposal rejects, was it ruled out by a constraint, or only by a value such as simplicity?
-3. **Check each concept** with step 9's question, and check every number against step 8.
-4. **Weigh what's left:** fewer independent concepts, fewer exceptions, an invariant that holds, and a small blast radius (if one constraint changes, how many concepts change?). A longer design wins when its extra parts trace to constraints the shorter one drops or handles with exceptions.
+3. **Check each concept** with the questions of steps 6, 8 and 9: which constraint breaks without it, a new kind or a reuse, an added exception clause, a condition or an arbitrary number.
+4. **Weigh what's left:** fewer independent concepts, fewer exceptions, an invariant that holds, and a small blast radius (if one constraint changes, how many concepts change?). Lines and table rows are not concepts. A longer design wins when its extra parts trace to constraints the shorter one drops or handles with exceptions.
 
 State the deciding reason in one sentence.
 

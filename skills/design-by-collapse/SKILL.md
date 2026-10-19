@@ -22,7 +22,7 @@ All records live in `design/`. `design.md` is the deliverable: the current desig
 | `vision.md` | The owner's words, verbatim and dated: `\| V7 \| C \| "quote" (2026-03-02) \|`. Classes: C constraint, V value, X exclusion, O open, R accepted recommendation. |
 | `kernel.yaml` | Constraints (K), exclusions (X), values (W), each citing vision ids in `from`, or a checkable `source` for facts of reality (an API limit, a law, a measurement). Ids never change; a change supersedes (`status: superseded`, `superseded_by`). An item answering a fork carries `answers: F<n>`. |
 | `forks.yaml` | One problem per fork, every option listed. Eliminated options stay, with `eliminated_by` (K or X only) and `why`; `preferred_by` (W) only ranks. `chosen` is your suggestion; `assumes` lists what it rests on. Open forks carry `question`, `default`, `decide_by` (the event before which not deciding locks in an option) and `asked` (date and exact text). |
-| `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (delete). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
+| `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (traces to nothing; delete). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
 
 A **round** is one owner turn. After every change, run `python <this skill's dir>/scripts/check.py design` and fix what it reports. If it can't run, check by hand: each fork's live options, each elimination's source, each detail's attachment.
 
@@ -42,7 +42,7 @@ A **round** is one owner turn. After every change, run `python <this skill's dir
 
 ## Asking the owner
 - **One question per round,** about the fork whose answer changes the live options of the most other forks. Report forced forks; don't ask about them or ask to confirm them. Never repeat a question found in an `asked` field.
-- **Plain and self-contained:** say what it decides and why it matters now, in the fork format; define every term the owner hasn't used. For big forks, give one worked example per option with real values, and how established systems solve it.
+- **Plain and self-contained:** say what it decides and why it matters now, in the fork format, recommendation first; define every term the owner hasn't used. For big forks, give one worked example per option with real values, and how established systems solve it.
 - **"Not sure yet" is an answer.** The fork stays open on its default. Don't ask again before its `decide_by` event, or until its options change.
 - **Approval is not an answer.** The owner approving a document you wrote states nothing. An R item never eliminates. If an elimination would hinge on one, ask the specific question that settles it; that counts as a new question, not a repeat.
 - **Conflicts go to the owner.** When owner items contradict each other, raise a conflict for the owner; never resolve it yourself.
