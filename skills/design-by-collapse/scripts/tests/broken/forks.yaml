@@ -1,0 +1,84 @@
+forks:
+  # planted: rule 1 (F1/a eliminated by a value)
+  - id: F1
+    problem: Eliminated by a value.
+    chosen: b
+    options:
+      - {id: a, text: Option a., eliminated_by: [W1], why: Values must not eliminate.}
+      - {id: b, text: Option b.}
+  # planted: rule 1 (F2/a eliminated by an unknown id)
+  - id: F2
+    problem: Eliminated by an unknown id.
+    chosen: b
+    options:
+      - {id: a, text: Option a., eliminated_by: [K50], why: Unknown constraint.}
+      - {id: b, text: Option b.}
+  # planted: rule 1 (F3/a eliminated by a superseded id)
+  - id: F3
+    problem: Eliminated by a superseded id.
+    chosen: b
+    options:
+      - {id: a, text: Option a., eliminated_by: [K3], why: Constraint no longer live.}
+      - {id: b, text: Option b.}
+  # planted: rule 1 (F4/a has no why)
+  - id: F4
+    problem: Elimination without a reason.
+    chosen: b
+    options:
+      - {id: a, text: Option a., eliminated_by: [K1]}
+      - {id: b, text: Option b.}
+  # planted: rule 1 (F5/b preferred_by a non-W id)
+  - id: F5
+    problem: Preference from a constraint id.
+    chosen: b
+    options:
+      - {id: a, text: Option a., eliminated_by: [K1], why: Breaks immutability.}
+      - {id: b, text: Option b., preferred_by: [K1]}
+  # planted: rule 2 (F6 has no live option: conflict)
+  - id: F6
+    problem: Every option eliminated.
+    options:
+      - {id: a, text: Option a., eliminated_by: [K1], why: Breaks immutability.}
+      - {id: b, text: Option b., eliminated_by: [K2], why: Too slow.}
+  # planted: rule 2 (F7 forced to b but chosen names a missing option)
+  - id: F7
+    problem: Forced fork with the wrong choice.
+    chosen: z
+    options:
+      - {id: a, text: Option a., eliminated_by: [K1], why: Breaks immutability.}
+      - {id: b, text: Option b.}
+  # planted: rule 2 (F8 is open without question, default, decide_by)
+  - id: F8
+    problem: Open fork missing its fields.
+    chosen: a
+    options:
+      - {id: a, text: Option a.}
+      - {id: b, text: Option b.}
+  # planted: rule 2 (F9 default names an eliminated option)
+  - id: F9
+    problem: Default is not live.
+    chosen: a
+    question: "Which one should we pick?"
+    default: c
+    decide_by: "event next review"
+    options:
+      - {id: a, text: Option a.}
+      - {id: b, text: Option b.}
+      - {id: c, text: Option c., eliminated_by: [K1], why: Breaks immutability.}
+  # planted: rule 3 (F10 chosen names an eliminated option)
+  - id: F10
+    problem: Choice no longer allowed.
+    chosen: a
+    options:
+      - {id: a, text: Option a., eliminated_by: [K1], why: Breaks immutability.}
+      - {id: b, text: Option b.}
+  # target of the planted rule 7 answer from K8; also a valid open fork
+  - id: F11
+    problem: Still open although the owner answered.
+    chosen: a
+    question: "Which one do you want?"
+    default: a
+    decide_by: "event next review"
+    options:
+      - {id: a, text: Option a.}
+      - {id: b, text: Option b.}

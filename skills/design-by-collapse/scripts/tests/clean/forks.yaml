@@ -1,0 +1,34 @@
+forks:
+  - id: F1
+    problem: How entries are stored.
+    chosen: b
+    options:
+      - id: a
+        text: Mutable rows updated in place.
+        eliminated_by: [K1]
+        why: In-place updates break immutability.
+      - id: b
+        text: Append-only log.
+  - id: F2
+    problem: How entries are found.
+    chosen: a
+    question: "Is full-text search needed at launch?"
+    default: a
+    decide_by: "event first user interview"
+    assumes: ["Fewer than a million entries"]
+    options:
+      - id: a
+        text: Full-text index.
+      - id: b
+        text: Sequential scan.
+        preferred_by: [W1]
+  - id: F3
+    problem: How readers get entries.
+    chosen: b
+    options:
+      - id: a
+        text: Fetch from the server on each read.
+        eliminated_by: [X1]
+        why: Needs a network at read time.
+      - id: b
+        text: Local cache synced ahead of time.

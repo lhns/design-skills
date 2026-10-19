@@ -1,0 +1,52 @@
+items:
+  - id: K1
+    statement: Stored entries are immutable.
+    from: [V1]
+  - id: K2
+    statement: Any entry is retrievable by id within two seconds.
+    from: [V2]
+  - id: X1
+    statement: Reading never requires a network connection.
+    from: [V3]
+  - id: W1
+    statement: Prefer the option with fewer components.
+    from: [V4]
+  - id: K3
+    statement: Old limit, replaced by K2.
+    from: [V2]
+    status: superseded
+    superseded_by: K2
+  # planted: rule 5 (K4 cites a vision id that does not exist)
+  - id: K4
+    statement: Entries carry an author.
+    from: [V99]
+  # planted: rule 5 (duplicate id K2)
+  - id: K2
+    statement: Second statement under an existing id.
+    from: [V2]
+  # planted: rule 5 (invalid id format Q9)
+  - id: Q9
+    statement: Id does not match the pattern.
+    from: [V1]
+  # planted: rule 5 (K6 superseded_by an unknown id)
+  - id: K6
+    statement: Replaced by something missing.
+    from: [V1]
+    status: superseded
+    superseded_by: K99
+  # planted: rule 5 (K7 superseded_by K3, which is not live)
+  - id: K7
+    statement: Replaced by something itself replaced.
+    from: [V1]
+    status: superseded
+    superseded_by: K3
+  # planted: rule 7 (K8 answers F11, which still has two live options)
+  - id: K8
+    statement: Owner chose the first option of F11.
+    from: [V2]
+    answers: F11
+  # planted: rule 7 (K9 answers a fork that does not exist)
+  - id: K9
+    statement: Owner answered a fork that is gone.
+    from: [V2]
+    answers: F99

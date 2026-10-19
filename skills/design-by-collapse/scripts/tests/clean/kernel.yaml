@@ -1,0 +1,17 @@
+items:
+  - id: K1
+    statement: Stored entries are immutable.
+    from: [V1]
+  - id: K2
+    statement: Any entry is retrievable by id within two seconds.
+    from: [V2]
+  - id: K3
+    statement: The storage provider rejects objects larger than 5 GB.
+    source: storage provider limits page, checked 2026-01-10
+  - id: X1
+    statement: Reading never requires a network connection.
+    from: [V3]
+    answers: F3
+  - id: W1
+    statement: Prefer the option with fewer components.
+    from: [V4]

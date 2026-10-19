@@ -88,7 +88,7 @@ Token and time overhead is reported. If the skill doesn't beat the placebo, the 
 
 ## Layout
 ```
-evals/
+evals/elegance/
   PLAN.md         this file
   placebo.md      installed as skills/clean-code/SKILL.md in placebo runs
   gen/<task>/     task.md, constraints, fixture/, hidden checks, reference.md (judge only)

@@ -1,0 +1,30 @@
+rounds:
+  - round: 1
+    kernel_items: 4
+    counts: {concepts: 4, rules: 2, states: 3}
+  - round: 2
+    kernel_items: 5
+    counts: {concepts: 5, rules: 2, states: 3}
+    justified: {concepts: [K2]}
+concepts:
+  - id: archive-entry
+    purpose: The stored document and its metadata.
+    verdict: forced
+    traces: [K1]
+  - id: retrieval
+    purpose: Lookup of an entry by id.
+    verdict: forced
+    traces: [K2]
+  - id: entry-log
+    purpose: Append-only sequence of entries.
+    verdict: detail
+    detail_of: F1/b
+  - id: search-index
+    purpose: Full-text lookup structure.
+    verdict: detail
+    detail_of: F2/a
+    open: true
+  - id: local-cache
+    purpose: Reader-side copy of entries.
+    verdict: detail
+    detail_of: F3/b

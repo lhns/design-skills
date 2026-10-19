@@ -1,0 +1,47 @@
+rounds:
+  - round: 1
+    kernel_items: 3
+    counts: {concepts: 3, rules: 3, states: 2}
+  # planted: rule 6 (concepts rose 3->7 with no justification)
+  - round: 2
+    kernel_items: 3
+    counts: {concepts: 7, rules: 3, states: 2}
+  # planted: rule 6 (rules rose 3->4, justified by an unknown K id)
+  # planted: rule 6 (warning: kernel_items 3 differs from the live count)
+  - round: 3
+    kernel_items: 3
+    counts: {concepts: 7, rules: 4, states: 2}
+    justified: {rules: [K99]}
+concepts:
+  # planted: rule 4 (forced without traces)
+  - id: no-trace
+    purpose: Forced but unexplained.
+    verdict: forced
+  # planted: rule 4 (forced trace is not live)
+  - id: dead-trace
+    purpose: Traces to a superseded item.
+    verdict: forced
+    traces: [K3]
+  # planted: rule 4 (detail without detail_of: floating)
+  - id: floating-one
+    purpose: Detail of nothing.
+    verdict: detail
+  # planted: rule 4 (detail_of names a missing fork)
+  - id: missing-fork
+    purpose: Detail of a fork that is gone.
+    verdict: detail
+    detail_of: F99/a
+  # planted: rule 4 (detail_of an eliminated option: stranded)
+  - id: stranded-elim
+    purpose: Detail of an eliminated option.
+    verdict: detail
+    detail_of: F1/a
+  # planted: rule 4 (detail_of a live option that is not the chosen one: stranded)
+  - id: stranded-unchosen
+    purpose: Detail of an option that is not chosen.
+    verdict: detail
+    detail_of: F11/b
+  - id: fine-concept
+    purpose: A valid forced concept.
+    verdict: forced
+    traces: [K1]
