@@ -15,7 +15,7 @@ These rules override the elegance skill:
 - **Inferences are not constraints.** What elegance calls an "inferred" constraint is an **assumption** here. It goes in the fork's `assumes:` list and may rank options, but it eliminates nothing until the owner states it. Never write a conclusion into a constraint. For example, "users sign in with company accounts" must not become "so we need no password reset".
 
 ## Records
-All records live in `design/`. `design.md` is the deliverable: the current design, written from the chosen options and citing K and F ids. For a short engagement it also holds the owner quotes, forks and open questions. Once forks stay open across sessions, add:
+Put the records where the repo keeps design docs; `design/` is the default when it has none. For the file shapes, copy `scripts/tests/clean/` in this skill's dir. `design.md` is the deliverable: the current design, written from the chosen options and citing K and F ids. For a short engagement it also holds the owner quotes, forks and open questions. Once forks stay open across sessions, add:
 
 | File | Holds |
 | --- | --- |
@@ -24,17 +24,17 @@ All records live in `design/`. `design.md` is the deliverable: the current desig
 | `forks.yaml` | One problem per fork, every option listed. Eliminated options stay, with `eliminated_by` (K or X only) and `why`; `preferred_by` (W) only ranks. `chosen` is your suggestion; `assumes` lists what it rests on. Open forks carry `question`, `default`, `decide_by` (the event before which not deciding locks in an option) and `asked` (date and exact text). |
 | `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (traces to nothing; delete). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
 
-A **round** is one owner turn. After every change, run `python <this skill's dir>/scripts/check.py design` and fix what it reports. If it can't run, check by hand: each fork's live options, each elimination's source, each detail's attachment.
+A **round** is one owner turn. After every change, run `python <this skill's dir>/scripts/check.py <records dir>` and fix what it reports. If it can't run, check by hand: each fork's live options, each elimination's source, each detail's attachment.
 
 ## Each session
-1. **Start.** Read `design/` first. Append the owner's new message verbatim to the vision, and match it to the open fork whose `asked` it answers.
+1. **Start.** Read the records first. Append the owner's new message verbatim to the vision, and match it to the open fork whose `asked` it answers.
 2. **End.** Before you finish, the records must be current, and the question you are about to ask must be in its fork's `asked`. The next session sees only the files.
 
 ## The loop
 1. **Corpus.** Collect the owner's statements verbatim and classify them. Add nothing of your own.
 2. **Kernel.** Items quoting the owner verbatim are live at once. A paraphrase, or a class you assigned, stays an assumption until a specific question settles it. Show the kernel for correction alongside your first real question.
 3. **Inventory** (when a design exists): every concept with a verdict.
-4. **Forks.** Every problem the design must solve becomes a fork, one problem per fork (see elegance). Split a fork when its options differ on two independent axes, or when its options combine freely with another fork's. Split an owner sentence joined by "and" into separate K items. Every number in the design is either a bound cited by a K item, or a fork. Check every new option and concept against every exclusion, by meaning, not by name.
+4. **Forks.** Every problem the design must solve becomes a fork, one problem per fork (see elegance). Split a fork when its options differ on two independent axes, when its options combine freely with another fork's, or when a single option settles more than one problem. Split an owner sentence joined by "and" into separate K items. Every number in the design is either a bound cited by a K item, or a fork. Check every new option and concept against every exclusion, by meaning, not by name.
 5. **Probe.** Walk concrete scenarios through the design (failures, concurrency, late or repeated events); where behavior is subtle, write a small formal model or test. Every undecided behavior becomes a fork.
 6. **Ask, then propagate** (below), and return to step 4.
 7. **Generating idea.** When few forks remain, propose one to three core concepts from which the kernel falls out, scored with the elegance tests, showing how each settles the remaining forks. The owner picks.

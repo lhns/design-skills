@@ -19,6 +19,20 @@ Each eval plan was committed before any run:
 
 Results will go in each plan's `results/` folder.
 
+## Field trial (current evaluation)
+The pilots measured neither harm nor benefit, so the skills are now on trial in real codebases. The trial answers "does it help here, does it hurt", not "does it work in general". Per session:
+- **Count only sessions where the skill actually fired.** Invoke it explicitly (`/elegance`, `/design-by-collapse`), or check the transcript for the `Skill` call.
+- **Record countable signs**, not impressions: tokens, diff size, concepts or modules added vs removed, special-case branches, magic numbers, duplicates, tests green, bugs found later.
+- **Watch for harm:**
+  - a constraint dropped for simplicity (a regression; one case is reason to stop);
+  - a restructure forced into a small task;
+  - an unneeded question or block;
+  - records nobody reads;
+  - an inference written into a constraint.
+- **Run a cheap A/B for substantial tasks:** the same task in two worktrees, skill on and off, then diff the results.
+
+After a few weeks, cut any rule that never shows up in the transcripts.
+
 ## Install
 Link the skills you want into your user skills folder. `design-by-collapse` needs `elegance` too. Without it, the skill still works but says that its design tests are missing.
 
@@ -33,7 +47,7 @@ mklink /D "%USERPROFILE%\.claude\skills\elegance" "%CD%\skills\elegance"
 mklink /D "%USERPROFILE%\.claude\skills\design-by-collapse" "%CD%\skills\design-by-collapse"
 ```
 
-Don't install them while running evals: user-level copies leak into the baseline runs.
+For controlled evals, uninstall them first (user-level skills stay visible even with `--setting-sources project`), or use the runner's lean mode.
 
 ## Editing
 Changes to a skill go through its evals: keep what measurably improves outputs, and cut the rest. Each skill should pass the elegance rubric itself: few concepts, few exception clauses, nothing untraced.

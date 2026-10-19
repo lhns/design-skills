@@ -36,7 +36,7 @@ When there's a fork, a designer choice or a deletion to show, end with a short l
 ## In code
 Code is the design at small scale, under the same law: types, states, functions, parameters and branches are concepts. Branches and duplicates are the two signs of a representation that doesn't fit: a special case it can't absorb, and a fact it makes you state twice. Change the representation so both disappear: a sentinel node, an empty collection instead of null, a table instead of a chain of ifs. Merge only what is the same fact; similar code that changes for different reasons is not duplication.
 
-Low complexity is a sign of elegance when every constraint still holds and you count across the whole system: a case moved into a caller, config, regex or dependency still counts. Line counts and complexity scores are diagnostics; golfing lowers them without deleting a case.
+Low complexity is a sign of elegance when every constraint still holds and you count across the whole system: a case moved into a caller, config, regex or dependency still counts. Golfing lowers line counts and complexity scores without deleting a case.
 
 ## Reviewing and comparing
 1. **Try to break it.** For each design and each constraint, name a concrete input or event that would break it, or show that none can. A design that fails a constraint loses to one that keeps it, however short it is.
