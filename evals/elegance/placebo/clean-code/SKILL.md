@@ -65,6 +65,14 @@ Treat SOLID as a set of heuristics for managing change, not a checklist to satis
 - Clean up resources reliably, using the language's construct for scoped cleanup.
 - Avoid returning null or sentinel values where a clearer type, such as an optional or an empty collection, communicates absence.
 
+## Testability
+
+- Code that is hard to test is usually too tightly coupled. Use testing difficulty as feedback on the design.
+- Inject dependencies such as clocks, network clients, and databases so tests can substitute them.
+- Keep business logic free of input and output so it can be tested quickly without setup.
+- Write tests that describe behavior, not implementation. A good test survives refactoring.
+- Keep tests small, independent, deterministic, and readable. A failing test should point clearly to the cause.
+
 ## Design trade-offs
 
 Every design choice trades something for something else: simplicity against flexibility, performance against clarity, consistency against local convenience. Make the trade-off explicit.

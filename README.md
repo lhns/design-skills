@@ -11,7 +11,14 @@ Claude Code skills for designing systems and code. Each skill is a separate fold
 - **Pilot 1 and pilot 2** (pilot 2 on commit `05a9f25`): both skills, single-shot tracks. Rating pairs, audits and first sessions were at ceiling in every condition, including no skill, for Opus and Sonnet. Design and code tasks showed no difference at 1–2 samples. No harm measured.
 - **Cost:** elegance adds about 35–40% tokens on design tasks; design-by-collapse costs 2.6–7.6× tokens on a first session.
 - **Untested:** the effects the skills claim over time (no accretion across rounds, plasticity, no re-asking) need multi-session or iterative tests, which haven't run yet.
-- **Changed since pilot 2:** the "simple" term (irreducibility, emergence) and the composition preference in reviewing.
+- **Changed since pilot 2:**
+  - the "simple" term (irreducibility, emergence) and the composition preference in reviewing;
+  - the rule reworded: every part can say why it's there;
+  - existing parts are reported as deletion candidates, not removed;
+  - docs and tests are out of scope;
+  - patterns may supply guarantees;
+  - repo conventions count as constraints;
+  - design-by-collapse: records in `docs/design/` and ADRs.
 
 Each eval plan was committed before any run:
 - [`evals/elegance/PLAN.md`](evals/elegance/PLAN.md)
@@ -28,7 +35,8 @@ The pilots measured neither harm nor benefit, so the skills are now on trial in 
   - a restructure forced into a small task;
   - an unneeded question or block;
   - records or ADRs nobody reads;
-  - an inference written into a constraint.
+  - an inference written into a constraint;
+  - something removed as unforced that served a purpose nobody had listed (a pattern, a guarantee, docs).
 - **Run a cheap A/B for substantial tasks:** the same task in two worktrees, skill on and off, then diff the results.
 
 After a few weeks, cut any rule that never shows up in the transcripts.

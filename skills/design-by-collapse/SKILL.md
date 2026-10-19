@@ -5,7 +5,7 @@ description: Run a design whose owner (a stakeholder) decides across several ses
 
 # Design by collapse
 
-Load the **elegance** skill first: it defines the goal, the tests and the fork format. If it's unavailable, say so and keep its law: every concept names the constraint that forces it; everything else is derived or deleted.
+Load the **elegance** skill first: it defines the goal, the tests and the fork format. If it's unavailable, say so and keep its rule: every part of the design can say why it's there (a constraint requires it, or it's a labeled designer choice at an open fork); anything else is an accretion.
 
 This skill keeps the whole solution space on record. The current design is one suggested point in it, and your choices hang on forks, so a new constraint moves them instead of breaking the design. **Collapsing** means fixing an open fork with an owner answer and propagating it like a constraint.
 
@@ -22,7 +22,7 @@ Put the records where the repo keeps design docs; the default is `docs/design/`.
 | `vision.md` | The owner's words, verbatim and dated: `\| V7 \| C \| "quote" (2026-03-02) \|`. Classes: C constraint, V value, X exclusion, O open, R accepted recommendation. |
 | `kernel.yaml` | Constraints (K), exclusions (X), values (W), each citing vision ids in `from`, or a checkable `source` for facts of reality (an API limit, a law, a measurement). Ids never change; a change supersedes (`status: superseded`, `superseded_by`). An item answering a fork carries `answers: F<n>`. |
 | `forks.yaml` | One problem per fork, every option listed. Eliminated options stay, with `eliminated_by` (K or X only) and `why`; `preferred_by` (W) only ranks. `chosen` is your suggestion; `assumes` lists what it rests on. Open forks carry `question`, `default`, `decide_by` (the event before which not deciding locks in an option) and `asked` (date and exact text). |
-| `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (traces to nothing; delete). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
+| `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (traces to nothing; a deletion candidate for the owner). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
 
 **ADRs** (`docs/adr/NNNN-title.md`, or the repo's convention): where the repo has them, every hard-to-reverse fork gets one, linked from the fork in `adr:`. Where it has none, propose starting them when the first hard-to-reverse fork collapses, and write them once the owner agrees. Context cites the fork and its K ids, Decision is the chosen option, Consequences is what it forces. Status follows the fork: Proposed, naming the default being built on, while it's open; Accepted once it's forced or the owner collapses it. Like kernel ids, an accepted ADR never changes: when a fork moves, write a new ADR and mark the old one Superseded, pointing to it.
 

@@ -5,12 +5,12 @@ description: Design systems and write code as few independent concepts, each for
 
 # Elegance
 
-A design is elegant when a few independent concepts satisfy every constraint. **The law: every concept names the constraint that forces it. Everything else is derived or deleted.**
+A design is elegant when a few independent concepts satisfy every constraint. **The rule: every part of the design can say why it's there. Either a constraint requires it, or it's a labeled designer choice at a fork the constraints left open. A part with neither reason is an accretion.**
 
-Scale the method to the decision. For a small change, the constraints fit in one sentence and the code itself shows the reasoning. Constraint ids, forks and a ledger are for designs, plans and redesigns.
+Scale the method to the decision. For a small change, the constraints fit in one sentence and the code itself shows the reasoning. Constraint ids, forks and a ledger are for designs, plans and redesigns. The rule is about the design's parts (Terms); docs, comments and tests describe and check the design, and this skill doesn't count or remove them.
 
 ## Terms
-- **Constraint:** something the design must satisfy, from the user's own statements or from reality (an external API, data volume, law, money, physics). Requirements the context plainly implies count too, such as "never charge twice" in a payment flow; mark those *inferred*.
+- **Constraint:** something the design must satisfy, from the user's own statements or from reality (an external API, data volume, law, money, physics). Requirements the context plainly implies count too, such as "never charge twice" in a payment flow; mark those *inferred*. The repo's and framework's conventions count as reality too.
 - **Designer choice:** anything else you decide, including defaults and conclusions drawn from constraints. It stays provisional, and it doesn't become a constraint when a user accepts your proposal; only the user's own statements do that.
 - **Concept:** a part with exactly one purpose: a type, service, state, rule, flag or config option.
 - **Independent:** each concept can be explained by one scenario that names no other concept.
@@ -25,16 +25,16 @@ Scale the method to the decision. For a small change, the constraints fit in one
 3. **Only constraints eliminate options.** Simplicity, familiarity and taste only rank what remains. A design made simpler by dropping or weakening a constraint is false elegance, the worst result here. If a constraint makes the design ugly, keep the constraint and say so.
 4. **One problem per fork.** Decide each problem at its own fork. Before you delete or shrink a concept, list every problem it solves, including ones no listed constraint names. Then check each problem on its own: a concept can become unnecessary for one problem while still carrying another.
 5. **Find the shared concept** that most constraints are cases of, and express variation as independent axes of it, not as new kinds. If exception clauses pile up in your first design, you're polishing a local optimum: sketch two or three candidates that differ in core representation and rank them by these tests. If no concept fits without exceptions, the domain is irregular: use a table and name the constraint that makes it so. Two cases are not a pattern.
-6. **Reuse before inventing,** from the system and from the field. Express a new need with an existing concept, or look for a known structure (state machine, event log, lattice, relational model, fold) whose laws already cover your cases. A real fit deletes cases you'd otherwise write; check that its guarantees are the ones your constraints need. Name the invariant the design keeps; a change that breaks it is wrong.
+6. **Reuse before inventing,** from the system and from the field. Express a new need with an existing concept, or look for a known structure (state machine, event log, lattice, relational model, fold) whose laws already cover your cases. A real fit deletes cases you'd otherwise write, or supplies a guarantee a constraint needs; check that its guarantees are the ones your constraints need. Name the invariant the design keeps; a change that breaks it is wrong.
 7. **Keep the core ignorant of optional concepts.** Put them at the edge (caller, wrapper, config). No extension point with a single user, and no new service just for this.
 8. **Make limits conditions:** "stop when an attempt makes no progress", not "retry 3 times". Where reality forces a bound but not its value, such as a timeout or a memory cap, keep one named value and state its reason.
-9. **Subtract before adding.** Ask of every concept which constraint breaks without it, or with a simpler part in its place; if none does, delete or simplify it. Compare counts (concepts, exception clauses such as "except", "only if" or "unless", special-case branches, facts stated in two places, unforced numbers) between alternatives, or before and after a change. Counts only go down, unless a named constraint forces a rise.
+9. **Subtract before adding.** Ask of every concept which constraint breaks without it, or with a simpler part in its place. If none does: in your own design, remove or simplify it; in an existing design, it's a deletion candidate, so report it along with the problems it solves (step 4). Compare counts (concepts, exception clauses such as "except", "only if" or "unless", special-case branches, facts stated in two places, unforced numbers) between alternatives, or before and after a change. Counts only go down, unless a named constraint forces a rise.
 10. **Re-derive instead of patching.** When the clean shape isn't visible yet, building a rough working version first is legitimate. An old design or such a rough version is a source of candidate constraints: collect its special cases, confirm them, derive the design without looking at it, then diff and keep what is forced. When one constraint changes, re-derive only the concepts it touches.
 
 When there's a fork, a designer choice or a deletion to show, end with a short ledger: constraints, forced decisions, designer choices, deletions.
 
 ## In code
-Code is the design at small scale, under the same law: types, states, functions, parameters and branches are concepts. Branches and duplicates are the two signs of a representation that doesn't fit: a special case it can't absorb, and a fact it makes you state twice. Change the representation so both disappear: a sentinel node, an empty collection instead of null, a table instead of a chain of ifs. Merge only what is the same fact; similar code that changes for different reasons is not duplication.
+Code is the design at small scale, under the same rule: types, states, functions, parameters and branches are concepts. Branches and duplicates are the two signs of a representation that doesn't fit: a special case it can't absorb, and a fact it makes you state twice. Change the representation so both disappear: a sentinel node, an empty collection instead of null, a table instead of a chain of ifs. Merge only what is the same fact; similar code that changes for different reasons is not duplication.
 
 Low complexity is a sign of elegance when every constraint still holds and you count across the whole system: a case moved into a caller, config, regex or dependency still counts. Golfing lowers line counts and complexity scores without deleting a case.
 
@@ -53,4 +53,4 @@ State the deciding reason in one sentence.
 | softening a constraint to simplify | restate it and show where it's met |
 | adding a flag, option, interface or layer no constraint names | delete it, or reuse an existing one |
 | picking a number like `max_retries = 3` | make it a condition or a reasoned bound |
-| naming a pattern or theory | show which cases it deletes, or drop it |
+| citing a pattern or theory | show what it changes in the design; a name that changes nothing is decoration, so cut the name and keep the structure |
