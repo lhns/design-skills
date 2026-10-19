@@ -1,0 +1,85 @@
+# Shoe size conversion for one last
+
+A small shoemaker sells one women's shoe model, built on a single last, in UK sizes 3 to 8. The web shop needs to convert between UK and EU sizes in both directions. The factory's chart is authoritative:
+
+| UK | 3 | 3.5 | 4 | 4.5 | 5 | 5.5 | 6 | 6.5 | 7 | 7.5 | 8 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| EU | 35.5 | 36 | 37 | 37.5 | 38 | 38.5 | 39 | 40 | 40.5 | 41 | 42 |
+
+Constraints:
+
+1. Both directions match the chart exactly.
+2. A size not on the chart is rejected with `ValueError`, in either direction.
+3. Sizes arrive as numbers (`6`, `6.0` and `6.5` are all possible).
+4. The chart was set by hand at the factory years ago. Rows get adjusted individually after fitting complaints: twice in the last three years, each time moving one EU value by half a size.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+```python
+# The factory chart, copied as published.
+UK_TO_EU = {
+    3: 35.5, 3.5: 36, 4: 37, 4.5: 37.5, 5: 38, 5.5: 38.5,
+    6: 39, 6.5: 40, 7: 40.5, 7.5: 41, 8: 42,
+}
+EU_TO_UK = {eu: uk for uk, eu in UK_TO_EU.items()}
+
+
+def uk_to_eu(uk):
+    try:
+        return UK_TO_EU[uk]
+    except KeyError:
+        raise ValueError(f"no such UK size: {uk}") from None
+
+
+def eu_to_uk(eu):
+    try:
+        return EU_TO_UK[eu]
+    except KeyError:
+        raise ValueError(f"no such EU size: {eu}") from None
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+import math
+
+BARLEYCORN_CM = 2.54 / 3   # one UK size step
+UK_ZERO_OFFSET = 25        # UK adult sizes count barleycorns from 25
+PARIS_POINT_CM = 2 / 3     # one EU size step
+
+UK_SIZES = [3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8]
+
+# Where the factory's grading departs from the geometric conversion.
+UK_TO_EU_ADJUST = {6: -0.5, 7.5: -0.5}
+EU_TO_UK_ADJUST = {39: +0.5}
+
+
+def _nearest_half(x):
+    return math.floor(x * 2 + 0.5) / 2
+
+
+def _last_cm(uk):
+    return (uk + UK_ZERO_OFFSET) * BARLEYCORN_CM
+
+
+def uk_to_eu(uk):
+    if uk not in UK_SIZES:
+        raise ValueError(f"no such UK size: {uk}")
+    return _nearest_half(_last_cm(uk) / PARIS_POINT_CM) + UK_TO_EU_ADJUST.get(uk, 0)
+
+
+def eu_to_uk(eu):
+    uk = _nearest_half(eu * PARIS_POINT_CM / BARLEYCORN_CM - UK_ZERO_OFFSET)
+    uk += EU_TO_UK_ADJUST.get(eu, 0)
+    if uk not in UK_SIZES or uk_to_eu(uk) != eu:
+        raise ValueError(f"no such EU size: {eu}")
+    return uk
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

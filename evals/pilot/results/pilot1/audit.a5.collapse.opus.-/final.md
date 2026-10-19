@@ -1,0 +1,21 @@
+PROBLEM: Constraints, C4: Helena's "looks good" on the designer's own mock-up is approval, not a statement of requirements. The 15-minute / 30-ticket shape is a designer choice. Recording it as constraint C4 turns the designer's proposal into a rule that eliminates options.
+
+PROBLEM: D1 Slot length: The 30- and 60-minute options are "ruled out by C4". C4 is not an owner constraint, so nothing eliminates them. D1 is still an open fork with 15 minutes as the designer's suggestion. It should not be marked "decided".
+
+PROBLEM: D2 Tickets per slot: The option "derived from C2 and the average visit length" is the only one tied to a real constraint, and it is eliminated by the invalid C4. The number 30 is unforced. The "Ruled out by" cell ("derived: C4") also confuses deriving with eliminating.
+
+PROBLEM: D2 / C2: Nothing shows that 30 tickets per 15 minutes keeps the galleries under 120. If visits last longer than 60 minutes, more than 4 slots' visitors (over 120 people) are inside at once. D4's late admission makes the overlap worse. No mechanism or calculation in the design shows C2 is met.
+
+PROBLEM: Decisions, missing fork: How C2 is enforced has no fork. Options include deriving capacity from measured visit length, a maximum visit duration, or exit counting. This is the most important undecided behavior, and it is left implicit.
+
+PROBLEM: D3 Ticket format: It is marked "decided 04-07" with no elimination source. Helena never chose "phone only". This is a designer choice recorded as a decision.
+
+PROBLEM: D3 vs C5: C5 (04-21) rules out "QR code on the phone only", but the change was never propagated. The decision table and the Design section still say phone only. The design currently violates a live owner constraint.
+
+PROBLEM: C3: "I don't want a ticket queue at the desk" was paraphrased into "no ticket sales at the desk". The paraphrase should stay an assumption until Helena confirms it. It also bundles two statements, "booked in advance" and the desk wording, into one item.
+
+PROBLEM: Design, "There is no ticket desk; staff only scan codes": This is a conclusion drawn from C3, not something Helena said. C3 at most forbids desk sales or queues. It does not forbid a desk doing name lookup. Treating it as forbidden silently eliminates D3's "name lookup at the desk" option, which is a natural way to satisfy C5.
+
+PROBLEM: D4 Late arrivals: The fork is open "to raise with Helena". It has no recorded question, no decide-by event, and no note of its effect on C2. Meanwhile the Design section states the default as settled behavior.
+
+PROBLEM: C1: "Spread people through the day" is a goal or value. It ranks options but rules none out. Classing it as a hard constraint lets it eliminate options it cannot.

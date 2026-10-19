@@ -1,0 +1,107 @@
+# Warehouse site facts for order dispatch
+
+An online garden-supplies shop ships from three warehouse sites, each identified by a site code. The dispatch module answers four questions for the rest of the system: is a site code valid, what label goes on the packing slip, which carrier collects from the site, and on which date an order placed at a given local time will ship.
+
+Constraints:
+
+1. Sites: N1 "North / Lakeside" and S2 "South / Harbour" are collected by Courier Alpha; W3 "West / Ridge" by Courier Beta.
+2. Same-day cutoff (local time): 14:00 at S2, 16:00 at N1 and W3. Orders placed at or after the cutoff ship on the next shipping day.
+3. No site ships on Sunday. Only W3 ships on Saturday.
+4. Every function except `is_valid_site` rejects an unknown site code with `ValueError`.
+5. A fourth site opens next spring. Site details (cutoff, carrier, Saturday shipping) have changed about once a year, and each change has been made by whoever was on call.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+from dataclasses import dataclass
+from datetime import date, datetime, timedelta
+
+
+@dataclass(frozen=True)
+class Site:
+    label: str            # printed on packing slips
+    carrier: str
+    cutoff_hour: int      # local; orders at or after it ship the next shipping day
+    ships_saturday: bool
+
+
+SITES = {
+    "N1": Site("North / Lakeside", carrier="Courier Alpha", cutoff_hour=16, ships_saturday=False),
+    "S2": Site("South / Harbour", carrier="Courier Alpha", cutoff_hour=14, ships_saturday=False),
+    "W3": Site("West / Ridge", carrier="Courier Beta", cutoff_hour=16, ships_saturday=True),
+}
+
+
+def site(code: str) -> Site:
+    try:
+        return SITES[code]
+    except KeyError:
+        raise ValueError(f"unknown site: {code}") from None
+
+
+def is_valid_site(code: str) -> bool:
+    return code in SITES
+
+
+def packing_label(code: str) -> str:
+    return site(code).label
+
+
+def carrier_for(code: str) -> str:
+    return site(code).carrier
+
+
+def ship_date(code: str, ordered_at: datetime) -> date:
+    s = site(code)
+    day = ordered_at.date()
+    if ordered_at.hour >= s.cutoff_hour:
+        day += timedelta(days=1)
+    while day.weekday() == 6 or (day.weekday() == 5 and not s.ships_saturday):
+        day += timedelta(days=1)
+    return day
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+from datetime import date, datetime, timedelta
+
+VALID_SITES = {"N1", "S2", "W3"}
+
+
+def _check(code: str) -> None:
+    if code not in VALID_SITES:
+        raise ValueError(f"unknown site: {code}")
+
+
+def is_valid_site(code: str) -> bool:
+    return code in VALID_SITES
+
+
+def packing_label(code: str) -> str:
+    _check(code)
+    return {"N1": "North / Lakeside", "S2": "South / Harbour", "W3": "West / Ridge"}[code]
+
+
+def carrier_for(code: str) -> str:
+    _check(code)
+    return "Courier Beta" if code == "W3" else "Courier Alpha"
+
+
+def ship_date(code: str, ordered_at: datetime) -> date:
+    _check(code)
+    day = ordered_at.date()
+    if ordered_at.hour >= (14 if code == "S2" else 16):
+        day += timedelta(days=1)
+    while day.weekday() == 6 or (day.weekday() == 5 and code != "W3"):
+        day += timedelta(days=1)
+    return day
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

@@ -1,0 +1,74 @@
+concepts:
+  - id: member
+    purpose: "One person; holds a fob (and a way to reach them from home). Outlives any one fob, so inductions survive a lost fob."
+    verdict: forced
+    traces: [K13, K7]
+  - id: machine
+    purpose: "A thing that needs an induction and may have an interlock."
+    verdict: forced
+    traces: [K1, K7]
+  - id: induction
+    purpose: "Member + machine + trainer + date + trainer's signature; kept six years."
+    verdict: forced
+    traces: [K7, K8, K17, K18]
+  - id: tap
+    purpose: "A fob tap at a reader: the one on-site event; identifies the member and asks a machine to power on."
+    verdict: forced
+    traces: [K3, K4, K13]
+  - id: interlock-rule
+    purpose: "A machine powers on for a tap only if the member is inducted on it."
+    verdict: forced
+    traces: [K4, K7, K15]
+  - id: saw-partner
+    purpose: "Saw additionally needs a second, different saw-inducted tap within the start window."
+    verdict: detail
+    detail_of: F3/two-taps-at-start
+  - id: booking
+    purpose: "Member holds a machine for a time slot, made from home."
+    verdict: forced
+    traces: [K12, K20]
+  - id: claim-by-tap
+    purpose: "First tap at the machine in the slot claims the booking; unclaimed after the grace period, it is released."
+    verdict: detail
+    detail_of: F7/release-unclaimed
+  - id: one-upcoming
+    purpose: "A member may hold one future laser booking at a time."
+    verdict: detail
+    detail_of: F6/one-upcoming
+  - id: tube-meter
+    purpose: "Hours on the current laser tube, from interlock power-on time; warns to order a spare when remaining hours < hours used over the supplier's lead time."
+    verdict: forced
+    traces: [K10, K11, K4]
+  - id: home-sign-in
+    purpose: "Emailed one-time link signs a member into the website."
+    verdict: detail
+    detail_of: F1/email-link
+  - id: insurer-register
+    purpose: "Printable list of sign-offs by trainer and date for renewal."
+    verdict: forced
+    traces: [K17, K18]
+  - id: signature-capture
+    purpose: "Trainer signs on a tablet at sign-off."
+    verdict: detail
+    detail_of: F2/digital-signed
+  - id: retrofit-interlocks
+    purpose: "Interlocks on bandsaw, lathe, printers."
+    verdict: detail
+    detail_of: F4/all-machines
+  - id: permission-cache
+    purpose: "Each interlock keeps a local copy of inductions to work offline."
+    verdict: detail
+    detail_of: F10/cached
+  - id: printer-status
+    purpose: "Live free/printing/time-left per printer on the website."
+    verdict: detail
+    detail_of: F8/not-bookable-with-status
+  - id: materials-sale
+    purpose: "Selling sheets and spools; a till or honesty-box matter."
+    verdict: outside
+rounds:
+  - round: 1
+    date: 2026-10-19
+    kernel_items: 28
+    counts: {concepts: 16, exception_clauses: 1, unforced_numbers: 1, open_forks: 12, facts_stated_twice: 0}
+    notes: "Exception clause: the saw's partner rule (forced by K14/K15). Unforced number: the booking grace period (F7), left for Ines to set."

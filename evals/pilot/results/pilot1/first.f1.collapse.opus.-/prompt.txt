@@ -1,0 +1,30 @@
+You are the designer. The stakeholder's brief follows; they will answer questions in later sessions. Keep the design and your notes in files under design/. End your reply with the one question you would ask the stakeholder now.
+
+Hi, I'm Dele, I coordinate the volunteers at the food bank. Our chair said you'd help us build something to run volunteer shifts. Below is a mix of what I wrote for the committee and notes I've jotted down since. Sorry, it's a bit all over the place.
+
+**What we do.** We're open Tuesday, Thursday and Saturday. Each day has a sorting shift in the warehouse (we need at least 4 people), a front-of-house shift handing out parcels (at least 3), and on Saturdays a home delivery run with the van (a driver plus one helper). About 90 volunteers on the books, maybe 40 who actually turn up in a given month.
+
+**3 Sept.** Right now sign-up is a mix of our group chat and a paper sheet on the office door. Every week I spend Sunday night working out who's actually coming and begging people to fill gaps. That's the main thing I want to fix.
+
+**3 Sept.** Honestly a lot of our volunteers won't touch an app. Half of them are over 70. The paper sheet on the door works for them and I'm not going to make them change.
+
+**10 Sept.** Food hygiene. The environmental health inspector was very clear at the last visit: nobody without a valid food hygiene certificate works on sorting or front of house, because both handle open food. Certificates expire after three years and people forget. Drivers don't need one.
+
+**10 Sept.** And please don't leave it to the shift leads to check certificates. The leads change every week, they've got enough on, and it's exactly what went wrong before the inspection.
+
+**12 Sept.** No-shows are killing us. Someone signs up, doesn't come, and we're short on sorting. A reminder the day before would help a lot, I think.
+
+**12 Sept.** Some folks sign up for every Saturday till Christmas and then half the time don't show. Maybe cap it at, I dunno, a few shifts each? Whatever's sensible.
+
+**17 Sept.** One thing I'm firm on: no points, badges, "volunteer of the month", leaderboards, nothing like that. We tried volunteer of the month last year and it caused a proper row. People here aren't ranked or scored. Ever.
+
+**17 Sept.** The council grant needs our total volunteer hours every quarter, split by activity (sorting, front of house, delivery). Right now I count them from the paper sheets and the group chat, and it's a nightmare.
+
+**19 Sept.** The big question is whether we keep the group chat or not. It's where people sign up, but it's also where I shout when the van driver drops out at 8am on a Saturday and I need someone with a licence now. And people post news and photos there too, which they like.
+
+**24 Sept.** Deliveries: I honestly don't know whether we'll still do home deliveries after March, when the van lease ends. The committee hasn't decided. Plan for it, but don't bet the house on it.
+
+**24 Sept.** Budget is basically nothing. We have the office laptop and a printer. We can't take on anything with a monthly fee unless I take it to the committee.
+
+So that's where I am. I can meet with you most weeks, Thursday afternoons are best. Tell me what you need from me.
+ Use the elegance and design-by-collapse skills.

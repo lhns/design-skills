@@ -1,0 +1,18 @@
+**Design 2 (Candidate B) is the better design.**
+
+**Why Candidate A falls short**
+
+- **It uses a boolean flag parameter.** `for_board` switches the function between two different behaviors. It is checked four times, so the reader has to trace two interleaved code paths to know what either export produces.
+- **It couples two exports with different reasons to change.** The board changes its format by circular. The cooperative office changes the statement when members ask. Both live in one function body, which breaks single responsibility. Constraint 4 says a change to one export must never alter the other's output. Under A, every edit to one export means editing code the other also runs through. That invites accidental cross-effects, such as adjusting the shared `row = [...]` prefix or the sort key.
+- **The shared structure is a coincidence.** The first four columns line up today: member id, date, weight, grade. That is incidental. Their formats already differ, and the next circular could reorder or drop columns. A would then need more conditionals.
+- **The docstring cannot describe the outputs.** It cannot say what either export contains without becoming a pair of descriptions, which is a sign the function is doing two things.
+
+**Why Candidate B is better**
+
+- **Each function owns one concern and one stakeholder.** A board circular means editing `board_rows` only, and `statement_rows` cannot change as a side effect. That meets constraint 4 by construction.
+- **Each function reads straight through.** There is no flag and no branching on format. The docstrings state each contract exactly.
+- **The duplication is small and cheap.** The shared part is the sort key and the loop shape. That is incidental similarity between two modules that change for different reasons, so a little copying beats the wrong abstraction. One could extract `sorted_by_date_and_ticket(deliveries)`, since constraint 3 applies to both exports. Even that is optional for one line.
+- **It fits constraint 5.** Each export has exactly one caller, so each caller just calls the function it needs. Nothing is lost by not having a single entry point.
+- **It is easier to test.** Each export gets its own focused tests, and a failure points at one format.
+
+WINNER: 2

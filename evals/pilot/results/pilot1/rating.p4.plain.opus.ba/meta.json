@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p4.plain.opus.ba",
+ "track": "rating",
+ "item": "p4",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "duration_ms": 10731,
+ "total_cost_usd": 0.03352,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2826,
+ "final_text": "**Design 2 (Candidate A) is better.**\n\nBoth designs route every ticket correctly. Candidate B gets rule 2's split right by listing `refund` in both billing rules, and it lowercases the subject before matching. So the choice comes down to which is easier to own.\n\n**Why the YAML rule engine (Design 1) doesn't pay off here:**\n\n- **The flexibility has no audience.** Engineers change these rules a few times a year, through code review and deploy. Editing YAML in a PR costs the same as editing Python in a PR, so the config layer saves nothing.\n- **It adds a small language to learn and maintain.** Readers need to know `OPS`, the meaning of `when`, that conditions are ANDed, that `{}` matches everything, and that order matters. Any new kind of rule needs new code anyway: an `or` across fields, `startswith`, or a regex.\n- **Errors show up late and are hard to trace.** A typo like `{gte: 500}` or `custmer_tier` only fails as a `KeyError` or `AttributeError` when a ticket reaches that rule. A typo in a queue name fails silently in both designs, but in Python, linters, type checkers and tests sit right next to the logic.\n- **Rule 2 is split in a way that's easy to break.** It becomes two rules, and `refund` must appear in both. A future editor who reorders them, or removes `refund` from the `billing` list, breaks the routing quietly. In Design 2 the refund logic is one nested block, so its intent is obvious.\n- **Some extra fragility:**\n  - `open(\"routing.yaml\")` depends on the current working directory.\n  - The rules load at import time.\n  - It adds a PyYAML dependency.\n  - `next()` without a default raises `StopIteration` if someone deletes the catch-all rule.\n\n**Why Design 2 fits:**\n\n- It is about 15 lines and maps one-to-one onto the written priority list.\n- It handles the `None` amount explicitly.\n- Each rule can be unit-tested directly.\n- It is easy to diff in review.\n\nA data-driven rule engine makes sense when non-engineers edit the rules, when rules change often without deploys, or when there are hundreds of them. None of that applies here.\n\nWINNER: 2"
+}

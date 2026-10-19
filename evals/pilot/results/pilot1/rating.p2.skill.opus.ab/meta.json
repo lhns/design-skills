@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p2.skill.opus.ab",
+ "track": "rating",
+ "item": "p2",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 15005,
+ "total_cost_usd": 0.0429692,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5696,
+ "final_text": "# Design 1 (Candidate A) is the better design\n\n## Both are correct today\n\nI checked each against the constraints as they stand:\n\n- **C1 to C3 (sites, carriers, cutoffs, weekends):** both give the same answers.\n  - S2 cuts off at 14:00; N1 and W3 at 16:00. \"At or after\" is `hour >= cutoff`.\n  - Sunday is always skipped.\n  - Saturday is skipped unless the site is W3.\n  - Example: S2 at Friday 15:00 goes to Saturday, which is skipped, so Monday. W3 at Friday 15:00 ships Friday.\n- **C4 (unknown code raises `ValueError`):** both hold. A uses `site()`; B uses `_check()`.\n\nSo the difference lies entirely in C5: a fourth site, and yearly edits by whoever is on call.\n\n## Trying to break each under C5\n\n**Candidate B** spreads one fact, \"what a site is\", over five places:\n- `VALID_SITES`\n- the label dict\n- the carrier ternary\n- the cutoff ternary\n- the Saturday check\n\nAdding site E4 means editing all five. Each place fails differently if missed:\n- **Carrier, cutoff or Saturday check missed:** the `else` branches give E4 Courier Alpha, a 16:00 cutoff and no Saturday shipping. Wrong dispatch dates or carriers follow, with no error at all.\n- **Label dict missed:** E4 is \"valid\", but `packing_label(\"E4\")` raises `KeyError`. That breaks C4's contract, which promises `ValueError` only for unknown codes.\n- **Second Saturday site (an expected yearly change):** `code != \"W3\"` must be rewritten into a set, and the carrier ternary must become a lookup when a third carrier appears. The structure has to change, not just the data.\n\n**Candidate A** keeps one fact in one place.\n- A site is a single row, and `Site` has no defaults. A row with a missing field fails at import.\n- Valid codes are `SITES` itself, so validity can't disagree with the data.\n- Changing a cutoff, carrier or Saturday flag is a one-field edit by anyone on call. No logic is touched.\n- I found no event in C5 that breaks it.\n\n## Concept count\n\n| | A | B |\n|---|---|---|\n| Facts stated in two places | 0 | site set stated in 2 places (`VALID_SITES` plus the label dict) |\n| Hard-coded site branches | 0 | 3 (`== \"W3\"` twice, `== \"S2\"`) |\n| Places to edit for a new site | 1 | 5 |\n| Silent wrong default possible | no | yes (3 `else` paths) |\n\nA's extra `Site` dataclass is the one concept that C1 to C3 are all cases of. It is forced by C5, not ornamental. B is a few lines shorter only because it encodes the data as branches.\n\n**Deciding reason:** under C5, B turns every site change into edits across five places, where a missed edit silently produces wrong ship dates or carriers. A turns it into a single checked table row.\n\nWINNER: 1"
+}

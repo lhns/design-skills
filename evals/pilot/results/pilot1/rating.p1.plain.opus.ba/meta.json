@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p1.plain.opus.ba",
+ "track": "rating",
+ "item": "p1",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "duration_ms": 11193,
+ "total_cost_usd": 0.03788,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3176,
+ "final_text": "**Design 1 (Candidate B) is better.** It meets the refund rule (constraint 4). Design 2 does not.\n\n**The deciding issue: refunds in Design 2 break constraint 4.**\nThe spec says each refunded hour returns to the grant it came from and keeps that grant's expiry. Design 2 records only `(hours, first_expiry)` and refunds every hour as one new grant carrying the *earliest* expiry it touched. The code comment calls this safe, but it loses hours the spec says must come back.\n\nExample:\n- Grant 5h on day 0 (expires day 90). Grant 5h on day 60 (expires day 150).\n- Spend 8h on day 70. It takes 5h from the first grant and 3h from the second, so `first` is day 90.\n- Cancel on day 100.\n  - The spec says the 5h from the expired grant are lost and the 3h go back to the grant expiring day 150. The balance becomes 2 + 3 = 5.\n  - Design 2 sees day 90 < day 100 and returns nothing. The balance stays 2.\n\nDesign 2 can also lose hours in a second way. A refund appends a new grant entry instead of restoring the original, so the ledger grows. That is harmless here, but it shows the model has drifted from what the spec describes.\n\n**Design 1 models the domain directly:**\n- Each `Spend` keeps `(grant, hours)` pairs, so a refund restores hours to the exact grant they came from, with that grant's own expiry. Only hours whose grant has expired are dropped.\n- Spending takes from live grants sorted by expiry, so the soonest-expiring hours go first (constraint 2).\n- It checks the amount is positive and the balance is sufficient before changing anything, so a failed spend changes nothing (constraint 3).\n- `balance` and `spend` both use `_live(at)`, so they always agree on what counts as unexpired (constraints 1 and 5).\n- Validation errors are clearer: \"must be positive\" and \"insufficient credit\" are separate messages, while Design 2 combines them.\n\n**Minor gaps in both designs:**\n- A reused `spend_id` silently overwrites the earlier spend.\n- Refunding an unknown id raises a bare `KeyError`.\n- Neither validates that grant amounts are positive.\n\nThese are small fixes and don't affect which design wins.\n\nDesign 2 is shorter, but its shortcut produces wrong balances in an ordinary scenario. Design 1 is correct and easy to read.\n\nWINNER: 1"
+}

@@ -1,0 +1,34 @@
+# Museum timed-entry tickets: design record
+
+Written by the designer with Helena, the visitor services manager, in sessions on 2026-04-07, 2026-04-14 and 2026-04-21.
+
+## Context
+The town museum has one entrance and four galleries. Visitors arrive in waves, especially around 11:00, and the galleries become uncomfortably full. Timed tickets will be sold through the museum's existing web shop.
+
+## What Helena said
+- 2026-04-07: "The galleries get crushed at 11:00. Timed entry should spread people through the day."
+- 2026-04-07: "Fire regulations cap us at 120 people in the galleries at once."
+- 2026-04-07: "All entries should be booked in advance. I don't want a ticket queue at the desk."
+- 2026-04-14: Helena reviewed the designer's slot mock-up (15-minute slots, 30 tickets each) and said "looks good".
+- 2026-04-21: "Some of our older members complained. They must be able to get in without a smartphone."
+
+## Constraints
+- C1: Entries are spread through the day. (Helena, 04-07)
+- C2: At most 120 visitors in the galleries at once. (Helena, 04-07)
+- C3: All entries are booked in advance; no ticket sales at the desk. (Helena, 04-07)
+- C4: Entry slots are 15 minutes long with 30 tickets each. (Helena, approved 04-14)
+- C5: Visitors without a smartphone can get in. (Helena, 04-21)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 Slot length | 15 minutes; 30 minutes; 60 minutes | 30 and 60 minutes: C4 | 15 minutes | decided |
+| D2 Tickets per slot | 30; derived from C2 and the average visit length | derived: C4 | 30 | decided |
+| D3 Ticket format | QR code on the phone only; QR code on the phone or printed at home; name lookup at the desk | - | QR code on the phone only | decided 04-07 |
+| D4 Late arrivals | admitted within the slot; admitted until the next slot ends | - | admitted until the next slot ends (designer default) | open, to raise with Helena |
+
+## Design
+The web shop offers 15-minute slots with 30 tickets each (D1, D2). After booking, the visitor receives a QR code to show on their phone at the entrance (D3). Staff scan it, and the scanner accepts a code from its own slot or the previous one, so a visitor up to one slot late still gets in (D4). There is no ticket desk; staff at the entrance only scan codes.
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

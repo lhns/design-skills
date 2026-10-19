@@ -1,0 +1,204 @@
+# One problem per fork. Only K/X ids eliminate; W ids only rank.
+# `chosen` is the designer's current suggestion; only Ines collapses a fork.
+forks:
+  - id: F1
+    problem: "How the website knows who is booking from home (no fob reader at home)."
+    conflict: "K13 says the fob is the identity 'full stop'; K20 requires home booking. Read literally, every home option breaks K13. Raised with the owner, not resolved by the designer."
+    options:
+      - id: email-link
+        forces: "Every member has an email on file (desk records it when issuing the fob). Website sends a one-time sign-in link; device stays signed in for a while. No password exists, so nothing to reset."
+        preferred_by: [W2, W4]
+      - id: personal-link
+        forces: "Each member gets one permanent secret booking address. Desk re-issues it when lost or leaked; anyone holding it books as that member."
+      - id: fob-number
+        forces: "Member types their fob number. Fob numbers are not secret, so anyone can book or cancel as anyone; any per-member booking limit (F7) can be gamed."
+      - id: kiosk-only
+        eliminated_by: [K20]
+        why: "Booking only by tapping a fob in the building ends home booking."
+      - id: password
+        eliminated_by: [X1]
+        why: "A member account with a password."
+    chosen: email-link
+    assumes:
+      - "K13 is about avoiding passwords and resets, and allows a non-password way to reach the same member record from home."
+      - "Nearly all members have an email address they read."
+    question: "The fob is the identity in the building; which non-password way may the website use to recognise a member at home?"
+    default: email-link
+    decide_by: "Before choosing a platform (F11) — many platforms only offer password accounts."
+    asked: {date: 2026-10-19, text: "Your 9 Oct note says the fob is a member's identity, 'full stop'; your 16 Oct note says booking from home must keep working and be easy. At home there is no fob reader, so the website needs another way to know it's you. Which may it use? (A, recommended) an emailed sign-in link; (B) a personal secret booking link; (C) typing your fob number; or is home booking with anything other than the fob not acceptable?"}
+
+  - id: F2
+    problem: "Which induction record is authoritative (what trainers sign, what the insurer sees)."
+    options:
+      - id: paper-only
+        eliminated_by: [K14, K15]
+        why: "The two-person rule must be enforced at the saw, so the saw's interlock must know who is inducted; a paper book cannot tell it."
+      - id: paper-plus-copy
+        forces: "Trainers keep signing the book (insurer evidence); desk also enters each sign-off into the system (what interlocks use). Two records of one fact; a missed entry means a member is locked out or the book and system disagree."
+      - id: digital-signed
+        forces: "Trainer signs on a tablet at sign-off (drawn signature, plus trainer's fob tap); system prints the insurer register by trainer and date; records kept six years (K18). Book retired. Needs the insurer to accept electronic signatures."
+      - id: fob-tap-signoff
+        forces: "Trainer and trainee both tap fobs at the machine's reader to sign off; no handwritten signature. Needs the insurer to accept a fob tap as the trainer's signature."
+    chosen: digital-signed
+    assumes:
+      - "The insurer accepts an electronic signature with date (unconfirmed; Ines would have to ask)."
+    question: "Will the insurer accept electronically signed, dated sign-offs, or must trainers keep signing the paper book?"
+    default: paper-plus-copy
+    decide_by: "Before go-live, and before the next insurance renewal."
+
+  - id: F3
+    problem: "How the two-person rule on the table saw is enforced with no staff in the evening."
+    options:
+      - id: two-taps-at-start
+        forces: "Saw powers on only after two different members, both inducted on the saw, tap within a short window; stays on until switched off. Does not detect the second person leaving afterwards."
+      - id: two-taps-and-recheck
+        forces: "As two-taps-at-start, plus the second person must re-tap periodically or the saw will not restart after its next stop. More nagging; catches a partner who left."
+      - id: room-presence
+        forces: "Woodshop door gets an in/out reader; saw powers only while at least two saw-inducted members are counted inside. Breaks when people tailgate or forget to tap out."
+      - id: staff-supervision
+        eliminated_by: [K16, X2]
+        why: "No staff in the woodshop in the evenings, and closing early is not an option."
+    chosen: two-taps-at-start
+    assumes:
+      - "The insurer accepts a two-fob start as 'enforced' (unconfirmed)."
+    question: "Is two inducted fobs tapped to start the saw enough for the insurer, or must the system keep checking the second person is still there?"
+    default: two-taps-at-start
+    decide_by: "Before the saw interlock is reconfigured."
+
+  - id: F4
+    problem: "Which machines enforce induction physically (interlock) rather than by record only."
+    options:
+      - id: existing-only
+        forces: "Only saw and laser enforce; bandsaw, lathe, printers, bench rely on the record and honesty."
+      - id: all-machines
+        forces: "Interlocks retrofitted on bandsaw, lathe and the three printers; one rule everywhere: a machine powers on for an inducted fob. Bench handled as one 'machine' (its power strip) or left out."
+    chosen: all-machines
+    assumes:
+      - "K7 'has to be inducted' is meant to hold on every machine, not just the two the insurer named."
+    question: "Should every machine refuse to start for someone not inducted on it, or only the saw and laser?"
+    default: all-machines
+    decide_by: "Before ordering interlock hardware."
+
+  - id: F5
+    problem: "Where the laser tube's hours come from."
+    options:
+      - id: power-on-time
+        forces: "Count hours the interlock has the laser powered. Always at least the real cutting time, so a warning is never late, only early. No new hardware."
+      - id: controller-counter
+        forces: "Read the laser controller's own tube-on counter. Exact, if the controller model has one and it can be read."
+      - id: current-sensor
+        forces: "Add a sensor on the tube power supply; counts real firing time. Exact; one extra part."
+    chosen: power-on-time
+    assumes:
+      - "Ordering a spare early only costs shelf space; it does not mean replacing the tube early."
+    question: "Is counting powered-on hours (warns early, never late) good enough, or do you want exact cutting hours?"
+    default: power-on-time
+    decide_by: "Before the laser interlock is reconfigured."
+
+  - id: F6
+    problem: "How the laser is shared fairly (V12: Ines asked for a recommendation)."
+    options:
+      - id: no-rule
+        forces: "Status quo; the same people keep getting it."
+      - id: weekly-cap
+        forces: "Each member may book N hours per week (Ines floated 2). N is a number nothing forces; slots go unused in quiet weeks."
+      - id: one-upcoming
+        forces: "Each member may hold one future laser booking at a time; book the next once it has been used or cancelled. No number to tune; scales with demand."
+      - id: lottery
+        forces: "Peak slots drawn by lot each week. Fair, but slow and unfamiliar."
+    chosen: one-upcoming
+    assumes:
+      - "The handful of people get the laser by booking far ahead, not by other means."
+    question: "To share the laser: one upcoming booking per member at a time, or a weekly hours cap?"
+    default: one-upcoming
+    decide_by: "Before booking rules are configured for launch."
+
+  - id: F7
+    problem: "What happens to a booking nobody turns up for."
+    options:
+      - id: keep
+        forces: "Slot sits idle."
+      - id: release-unclaimed
+        forces: "A booking is claimed by tapping a fob at the machine; if no tap within a grace period after the start, the slot frees for walk-ups. Grace period is one named value Ines sets."
+    chosen: release-unclaimed
+    assumes:
+      - "No-shows are part of why the laser looks 'booked solid'."
+    question: "Should a booking nobody claims by tapping in at the machine be released after a grace period?"
+    default: release-unclaimed
+    decide_by: "Before launch."
+
+  - id: F8
+    problem: "Whether the 3D printers are bookable."
+    note: "Ines is still thinking (V24). Do not ask before decide_by."
+    options:
+      - id: not-bookable
+        forces: "First come, first served; nothing stops fourteen-hour hogging (K19)."
+      - id: not-bookable-with-status
+        forces: "First come, but each printer's state (free / printing, time left) shows on the website, so nobody travels in for a busy printer. Needs printer integration."
+      - id: bookable
+        forces: "Printers booked like the laser; long prints need long bookings."
+    chosen: not-bookable-with-status
+    question: "Should the 3D printers be bookable?"
+    default: not-bookable-with-status
+    decide_by: "Before printer setup for launch."
+
+  - id: F9
+    problem: "How members pay for materials without a running meter."
+    options:
+      - id: unit-sale
+        forces: "Members buy materials by the piece (acrylic sheet, filament spool) before they start, or bring their own; self-service payment after 18:00. Lives outside the booking system."
+        preferred_by: [W1]
+      - id: metered
+        forces: "System charges per gram / per minute from machine data. A meter running by definition."
+      - id: bundled
+        forces: "Materials folded into the monthly fee. Heavy users are paid for by everyone."
+    chosen: unit-sale
+    assumes:
+      - "Paying for a sheet up front doesn't feel like a meter running."
+    question: "Sell materials by the sheet or spool up front, rather than charging for what each job uses?"
+    default: unit-sale
+    decide_by: "Before launch (does not block the core)."
+
+  - id: F10
+    problem: "What an interlock does when the internet is down."
+    options:
+      - id: cached
+        forces: "Each interlock keeps its own copy of who is inducted (and saw partners) and decides locally; taps upload when back online."
+      - id: fail-closed
+        forces: "No internet, no machine; an evening outage stops the woodshop."
+    chosen: cached
+    question: "If the internet drops, should machines keep working from a local copy of who is inducted?"
+    default: cached
+    decide_by: "Before interlock setup."
+
+  - id: F11
+    problem: "Where the system runs and who builds it."
+    options:
+      - id: hosted-platform
+        forces: "Subscribe to a hosted makerspace platform that drives fob interlocks, bookings and inductions; must pass F1 (no passwords) and work with the existing interlocks or replace them."
+        preferred_by: [W5]
+      - id: custom-managed
+        forces: "Custom app on managed cloud hosting; built and maintained by a contractor."
+        preferred_by: [W5]
+      - id: self-hosted
+        forces: "Our own server on site."
+    chosen: hosted-platform
+    assumes:
+      - "A hosted platform exists that passes the kernel; to be checked once F1 and the interlock make are known."
+    question: "Buy a hosted makerspace platform, or have one built?"
+    default: hosted-platform
+    decide_by: "Before procurement."
+
+  - id: F12
+    problem: "What happens when a laser job is still running at the end of a booking."
+    options:
+      - id: never-cut
+        forces: "Interlock never cuts power mid-job; the next booking starts late and the overrun is visible to the next booker."
+      - id: hard-cutoff
+        forces: "Power cuts at slot end; a running job is ruined."
+    chosen: never-cut
+    assumes:
+      - "Cutting power mid-job wastes material and may leave the work in an unsafe state."
+    question: "If a laser job runs past the end of its booking, should the machine keep running?"
+    default: never-cut
+    decide_by: "Before laser interlock setup."

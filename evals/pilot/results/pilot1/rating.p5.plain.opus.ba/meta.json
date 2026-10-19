@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p5.plain.opus.ba",
+ "track": "rating",
+ "item": "p5",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "duration_ms": 15267,
+ "total_cost_usd": 0.043932,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 3427,
+ "final_text": "**Design 1 (Candidate B, the lookup table) is the better design.**\n\n**Why Design 1 wins**\n\n- **It matches the source of truth.** The chart is authoritative and was set by hand. A literal copy of it makes correctness obvious by inspection: you compare the dict to the chart, row by row.\n- **Maintenance matches how the data changes (constraint 4).** Rows get adjusted individually, and it has happened twice in three years. In Design 1 that is a one-number edit. The inverse map is derived automatically, so the two directions can't drift apart.\n- **It handles the input constraints correctly.** In Python, `6 == 6.0` and `hash(6) == hash(6.0)`, so the lookups for `6`, `6.0` and `6.5` all work. Likewise, `36` and `36.0` both find the EU key. Anything off the chart raises `KeyError`, which is converted to `ValueError` in both directions (constraint 2). Because the chart is strictly increasing, the inversion is lossless.\n\n**Why Design 2 is worse**\n\n- **It's correct only by coincidence.** I traced it by hand, and it does reproduce the chart today. For example:\n  - UK 6 gives 39.37 cm, which rounds to 39.5, then the \u22120.5 adjustment yields 39.\n  - EU 39 gives 5.71, which rounds to 5.5, then the +0.5 adjustment yields 6.\n  - UK 6.5 lands at 40.005, a hair from a rounding boundary.\n\n  Correctness depends on floating-point results near the `.25`/`.75` edges and on hand-tuned patches. Nothing in the code shows that it equals the chart; you have to recompute it to know.\n- **Each chart change is now a puzzle.** Moving one EU value by half a size means working out how the geometric formula rounds. You then have to update `UK_TO_EU_ADJUST` and possibly `EU_TO_UK_ADJUST` separately, because the reverse rounding doesn't mirror the forward one. Any EU value whose reverse lookup lands on the wrong UK size gets a `ValueError` from the round-trip check, so a single mistake makes a valid size unsellable.\n- **The model doesn't describe the data.** Barleycorns and Paris points describe idealized systems. This factory's grading is empirical, which is exactly why patches were needed. The \"explanatory\" model adds complexity and explains nothing.\n- **It has more code, more constants and more failure modes**, with no added capability. Both designs support exactly the same 11 sizes.\n\nA formula would only make sense if the size range were large or open-ended and the grading truly followed it. Neither applies here.\n\nWINNER: 1"
+}

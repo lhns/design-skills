@@ -1,0 +1,21 @@
+{
+ "run_id": "gen.g1.skill.opus.-",
+ "track": "gen",
+ "item": "g1",
+ "condition": "skill",
+ "model": "opus",
+ "order": "-",
+ "duration_ms": 129436,
+ "total_cost_usd": 0.42908860000000004,
+ "mode": "full",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": "elegance",
+ "skills_invoked": [
+  "elegance"
+ ],
+ "timed_out": false,
+ "tokens": 140645,
+ "final_text": "I've written the design to `answer.md`. It comes to 598 words, just under the 600 limit.\n\n**The core idea:** each stored fact applies only from the moment it was recorded until the moment it is withdrawn. Nothing is ever updated or deleted. So a later edit can't change who was on call at a past moment, and payroll for a past month always comes out the same. That one rule removes the 90-day schedule cache, the nightly rebuild job and the archived payroll snapshots.\n\n**What's stored:**\n- **Engineers:** never deleted.\n- **Rotation list changes:** each one records the ordered list and the week it starts from.\n- **Assignments:** one table for swapped weeks, holiday cover and overrides. Each row has a layer, and the order is swapped week < holiday < override. Swaps have to lose to holiday cover, so they can't be stored as overrides.\n\n**Who is on call at a given time:** if any assignments apply, the highest layer wins, and within a layer the most recently created one wins. Otherwise the rotation list answers. Weeks are counted on the local calendar, so weeks with a clock change just run 167 or 169 hours.\n\n**The new requirement:** while Chris covers Wednesday 13:00\u201317:00 inside Ana's Tuesday\u2013Thursday cover for Ben, Chris is on call and is shown as replacing Ana. After 17:00 it is Ana again, shown as replacing Ben.\n\n**Planning page and payroll:** the roster for any date range is worked out on request, not read from a cache. It splits the range at every handover and at every point where an assignment starts or stops applying, and works for any range. Payroll is the same calculation for a calendar month, adding up the hours per engineer.\n\n**What the old system loses:**\n- the 168-hour week count and its daylight-saving correction;\n- the swapped-week index mapping;\n- splitting overrides at the Monday handover;\n- the rule that the shorter override wins;\n- the old exception where an earlier override loses to holiday cover;\n- the 90-day limit on the planning page;\n- physically deleting rows.\n\n**My own design choices,** all labelled in the file:\n- \"Whom it replaces\" is worked out when shown, not stored, so it can't contradict the data.\n- Allowance is paid for actual elapsed hours, so a clock-change night counts as 23 or 25 hours.\n- When someone leaves, their future swapped weeks are withdrawn and those weeks fall back to the list.\n- Rotation position is counted from the start of each new list.\n- There is no cache, because paging needs only a few indexed lookups."
+}

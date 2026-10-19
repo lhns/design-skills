@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p1.skill.opus.ab",
+ "track": "rating",
+ "item": "p1",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 13363,
+ "total_cost_usd": 0.0405452,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5609,
+ "final_text": "# Candidate B is the better design\n\n**Candidate A breaks constraint 4. Candidate B keeps every constraint.**\n\n## Breaking Candidate A\n\nConstraint 4 says each refunded hour goes back to the grant it came from and keeps that grant's expiry. A records only `(hours, first_expiry)` per spend, so it returns all hours with the earliest expiry. A concrete case that breaks it:\n\n- Day 0: grant 1h. It expires on day 90.\n- Day 60: grant 5h. It expires on day 150.\n- Day 61: spend 6h. One hour comes from grant 1 and five from grant 2.\n- Day 100: refund.\n  - **Constraint 4 requires** 5h back, because grant 2 is still live.\n  - **A returns 0h,** because `first` (day 90) has passed.\n  - **If the refund came on day 70 instead,** A would return 6h that all expire on day 90. That cuts 60 days off five of the hours.\n\nA's comment (\"never lets a refund outlive the credit it replaces\") turns \"keep each hour's own expiry\" into \"never exceed the original expiry\". That is a weaker constraint. The design gets simpler only by dropping a requirement, which is false elegance. A's refund also creates a new grant entry instead of restoring the original one. That is harmless for the balance, but it is another sign that A does not record where each hour came from.\n\n## Checking Candidate B\n\n| Constraint | How B meets it |\n|---|---|\n| C1: 90-day expiry | `VALIDITY` is applied in `grant`. |\n| C2: soonest expiry first | `spend` sorts live grants by `expires`. |\n| C3: atomic, positive spend | Both checks run before any mutation, so a failed spend changes nothing. |\n| C4: per-grant refund | `Spend.taken` keeps `(grant, hours)` pairs. A refund adds each amount back to that exact grant and skips grants that have expired. |\n| C5: balance counts live grants only | `_live` filters by `at`. |\n\nI found no input that breaks any of these.\n\n## Is B's extra structure justified?\n\nB has one more concept than A: `Spend.taken`, the record of which grant each hour came from. Constraint 4 forces it, because a per-grant refund is impossible without knowing the per-grant origin. A is shorter only because it leaves that constraint out.\n\n**Deciding reason:** B keeps the per-grant record that constraint 4 requires, while A replaces it with a single expiry and returns the wrong hours with the wrong expiries.\n\nWINNER: 2"
+}

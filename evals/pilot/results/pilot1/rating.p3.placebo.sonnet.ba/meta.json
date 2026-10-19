@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p3.placebo.sonnet.ba",
+ "track": "rating",
+ "item": "p3",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "ba",
+ "duration_ms": 9149,
+ "total_cost_usd": 0.015359399999999999,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5248,
+ "final_text": "**Design 1 (Candidate B) is better.**\n\n**Why Design 1 wins**\n\n- **Constraint 4 is the deciding factor.** The two exports change for different reasons and on different schedules: the board by annual circular, the office whenever members ask. Design 1 gives each export its own function, so editing one cannot alter the other. In Design 2, every change to either format happens inside one shared function threaded with `for_board` branches. A tweak meant for the statement (say, a new column) risks breaking the board's output, and the board's required format is the one with external consequences.\n- **Design 2 uses a boolean flag parameter that switches behavior.** It is effectively two functions fused together. Every line has to be read twice, once per mode, to know what each export does. The `running` variable is computed even for the board and only meaningful for one path, and the row is built in a partly shared, partly patched-on way (`row += ...`). Each `if for_board` conditional is a place where the two exports are coupled.\n- **Single responsibility and readability.** Each function in Design 1 reads top to bottom as the spec for one export, and its docstring matches the constraints. A reader can answer \"what does the board get?\" without mentally filtering out the statement logic.\n- **Testability.** Each export can be tested on its own, and a failing test points directly at one format.\n\n**The duplication in Design 1 is acceptable**\n\nThe only repeated pieces are the sort key `(d.date, d.ticket)` and the loop skeleton. That duplication is incidental, not a shared business rule that must stay in sync. Constraint 3 states the ordering for both, so it could be extracted into a small `in_delivery_order(deliveries)` helper if you want a single home for it. That is a minor optional improvement. Two small uses is not enough to justify a bigger abstraction, and the helper would not couple the formats (formatting remains independent).\n\nBecause each export is called from exactly one place (constraint 5), there is also no caller-side benefit from Design 2's single entry point. The shared function buys nothing and costs isolation.\n\n**Minor nits in Design 1 (non-blocking)**\n\n- Consider named constants or column-header definitions if the formats grow.\n- `f\"{d.weight_kg:.0f}\"` uses banker's-style float rounding for halves. If the board expects specific rounding for fractional kg, make that explicit.\n\nWINNER: 1"
+}

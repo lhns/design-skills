@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p3.plain.sonnet.ab",
+ "track": "rating",
+ "item": "p3",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ab",
+ "duration_ms": 6011,
+ "total_cost_usd": 0.013062,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2434,
+ "final_text": "**Candidate B (Design 2) is better.**\n\nThe two exports change for different reasons and on different schedules: the board by annual circular, the statement whenever members ask. Constraint 4 says a change to one must never alter the other's output.\n\n**Candidate A** couples them through a `for_board` flag. Every line that differs is a branch on that flag, so the function is really two exports interleaved. This causes several problems:\n- Any edit to the shared function, even one aimed at the statement, puts the board output at risk. Nothing in the structure prevents an accidental change to the board report.\n- Each new statement column or board format change adds more flag conditionals, and the function grows harder to read.\n- The shared pieces are small: the sort and the loop. They are not worth coupling the exports for.\n- Constraint 5 says each export is called from exactly one place. That removes the usual argument for a shared, parameterized function, because there is no set of callers that benefits from one entry point. A boolean parameter that every caller passes as a constant is a sign the function should be split.\n\n**Candidate B** gives each export its own function containing its own filter, formatting, and columns. A circular only touches `board_rows`, and a member request only touches `statement_rows`. The only duplication is the sort key `(d.date, d.ticket)` and the loop skeleton, which is one line and trivial. If someone later changed the sort in one, that would be a deliberate and visible edit, and constraint 4 explicitly permits the exports to diverge. Each function is also short, readable top to bottom, and documents its own format.\n\nThe duplication in B is incidental, while A's coupling is a real maintenance risk. B respects the stated requirement that the exports evolve independently.\n\nWINNER: 2"
+}

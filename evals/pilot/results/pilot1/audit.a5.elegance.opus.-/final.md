@@ -1,0 +1,17 @@
+PROBLEM: C4: The 15-minute / 30-ticket slot plan was the designer's own mock-up, and Helena only said "looks good". A user accepting a proposal does not turn it into a constraint. C4 should be removed from the constraint list and recorded as a designer choice (D1, D2).
+
+PROBLEM: D1: The 30- and 60-minute options are "ruled out by C4". C4 is not a constraint, so neither option has actually been eliminated. All three lengths are still open, and only C1 and C2 can narrow them down. Preference can then rank whatever remains.
+
+PROBLEM: D2: The option "derived from C2 and the average visit length" is the one the real constraint C2 actually forces. It was thrown out using the invalid C4. As a result, nothing shows that C2 holds. If the average visit is longer than 60 minutes, more than four slots overlap, and more than 4 × 30 = 120 people are in the galleries at once. The "Ruled out by" cell also mixes two things: it reads "derived: C4" when it should name a constraint. The number 30 is unforced and needs to be derived from C2.
+
+PROBLEM: D3: "QR code on the phone only" was marked decided on 04-07, before C5 arrived on 04-21. It was never re-derived after that. C5 now rules this option out, so the design as written breaks a real constraint: a member without a smartphone cannot get in. The "Ruled out by" column shows "-", which means the other options were rejected without any constraint. "Printed at home" and "name lookup at the desk" both still satisfy C5.
+
+PROBLEM: Design / C3: The sentence "There is no ticket desk; staff at the entrance only scan codes" is stronger than C3. C3 forbids ticket *sales* at the desk. It does not forbid a desk or a booking lookup. This over-reading is what hides the name-lookup option that would satisfy C5. Helena also hasn't said whether booking itself must be possible without a smartphone or internet access, for example by phone. That is a fork that should be listed, not assumed away.
+
+PROBLEM: D4: Correctly labelled as an open designer default, but its effect on C2 is not checked. Accepting the previous slot's codes lets up to 60 ticket-holders enter in one 15-minute window. That raises peak occupancy, which C2 does not allow for unless the capacity derivation in D2 accounts for it. The "one slot" grace period is also an unforced number with no reason given.
+
+PROBLEM: Design: The Design section presents D4 as built ("the scanner accepts a code from its own slot or the previous one") while the table marks it as open. It should be flagged as provisional in the Design section too, so the two places agree.
+
+PROBLEM: C2 (overall): No concept in the design enforces or verifies the 120-person cap. There is no capacity derivation, no exit count, and no visit-length assumption. A constraint that comes from fire regulations is currently met only by an unexamined approved number.
+
+Deciding reason: two real constraints are currently broken or unverified. C5 is broken by D3, and C2 is not met by the D1, D2 and D4 numbers. Both trace to the same root error: a designer choice Helena accepted was treated as a constraint, and decisions were not re-derived when a new constraint arrived.

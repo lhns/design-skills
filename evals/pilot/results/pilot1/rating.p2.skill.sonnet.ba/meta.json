@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p2.skill.sonnet.ba",
+ "track": "rating",
+ "item": "p2",
+ "condition": "skill",
+ "model": "sonnet",
+ "order": "ba",
+ "duration_ms": 10029,
+ "total_cost_usd": 0.0194526,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5494,
+ "final_text": "**Constraints**\n- C1: site \u2192 label and carrier (N1, S2 share Alpha; W3 uses Beta).\n- C2: per-site cutoff (14:00 at S2, 16:00 at N1 and W3).\n- C3: no Sunday shipping; only W3 ships Saturday.\n- C4: all functions except `is_valid_site` raise `ValueError` on an unknown code.\n- C5: a fourth site is coming. Site details change about once a year, and whoever is on call makes the change.\n\n**Core concept.** Every constraint is a fact about a site, keyed by code: label, carrier, cutoff, Saturday shipping. One table row per site covers them all. Site facts are data, and shipping logic is a single rule that reads that data.\n\n**Design 1** states the site facts in several places:\n- The set of valid codes lives in `VALID_SITES`.\n- Labels live in a dict inside `packing_label`.\n- The carrier lives in an `== \"W3\"` branch.\n- The cutoff lives in a `== \"S2\"` branch with the numbers 14 and 16.\n- Saturday shipping lives in a `!= \"W3\"` branch.\n\nAdding a fourth site touches five places. If one is missed, the code still runs. For example, a new site added to `VALID_SITES` but not to the label dict raises `KeyError` instead of the required `ValueError` (C4). A new site would silently get Alpha and a 16:00 cutoff from the defaults in the branches. Under C5, a change made by whoever is on call is exactly where this kind of omission happens. The code also bakes in \"everything that isn't W3 is Alpha\" and \"everything that isn't S2 is 16:00\", which are facts nobody stated.\n\n**Design 2** has one `Site` record and one `SITES` table. Validity, the error path (`site()` is the only place that raises), and the shipping rule all derive from that table. A new site is one row. A cutoff or carrier change is one edit to one value. A missing field in a new row fails at construction, because the dataclass has no defaults. `ship_date` has the same logic as in Design 1, but it reads the site's data rather than comparing site codes.\n\n**Breaking attempts**\n\n| Constraint | Design 1 | Design 2 |\n|---|---|---|\n| C1\u2013C3 | Correct for the three sites | Correct for the three sites |\n| C4 | Breaks if a code is added to one place and not another (`KeyError`) | One raise point, so it cannot diverge |\n| C5 | Five places to edit, with silent wrong defaults | One row |\n\nDesign 2 adds one concept, the `Site` record. C5 forces it, because it is the single place where each site fact is stated. It also removes the special-case branches on site codes, the duplicated code list, and the unforced defaults.\n\n**Ledger**\n- Constraints: C1\u2013C5.\n- Forced: a per-site table (C5, C1\u2013C3). One validation point (C4).\n- Designer choices: the frozen dataclass and the field names.\n- Deletions: the `VALID_SITES` duplicate, three code-literal branches, and the `_check` helper.\n\nDeciding reason: Design 2 states each site fact once, so the fourth site and the yearly changes (C5) are single-row edits that cannot leave the code partly updated, while Design 1 spreads those facts across five places.\n\nWINNER: 2"
+}

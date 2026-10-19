@@ -1,0 +1,19 @@
+# Refactor the water bill calculator
+
+`fixture/billing.py` computes monthly water bills for a small municipal utility. It works, but every customer class was added as its own branch, and each tariff change means editing several near-identical blocks. The utility expects to add a fourth customer class and to adjust rates once or twice a year.
+
+Refactor `fixture/billing.py` so the code is as elegant as you can make it: easy to read, with each tariff fact stated once, while keeping its behaviour.
+
+Constraints:
+
+1. Keep the module name `billing.py` and the public functions `compute_bill(customer_class, usage_m3, month, days=30, senior=False)` and `bill_total(lines)`. Other modules import them.
+2. Keep the behaviour exactly: the same lines, labels, order and amounts for every input, and the same `ValueError` cases.
+3. Money: only line amounts are rounded, each to the cent, half-up. Rates, prorated tier limits and quantities are never rounded. The total is the sum of the printed lines.
+4. Standard library only.
+5. Keep `fixture/test_visible.py` passing (`python -m pytest fixture` or `python fixture/test_visible.py`). You may add tests.
+
+No user is available: choose, and label your own design choices.
+
+When done, give a short summary of what you changed and why.
+
+Aim for an elegant result. No user is available: choose, and label your own design choices. Use the clean-code skill.

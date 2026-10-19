@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p6.plain.opus.ba",
+ "track": "rating",
+ "item": "p6",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ba",
+ "duration_ms": 10367,
+ "total_cost_usd": 0.034216,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2985,
+ "final_text": "Design 2 is the better design.\n\n**Correctness.** Both appear correct for the stated constraints.\n\n- **Design 1:** The five-branch `_same_day_price` handles every way a stay can sit relative to 06:00 and 22:00. Splitting at midnight into first partial day, whole days and last partial day is also sound.\n- **Design 2:** It intersects the stay with every band occurrence from the day before entry through the exit day. Starting one day early catches a night band that began the previous evening. Because the bands tile the day, every minute is counted once. When `exit <= entry`, every overlap is non-positive, so the price is 0 without a special case.\n\n**Constraint 6 decides it: bands change about once a year.**\n\n- **Design 1** builds the band layout into its control flow:\n  - `six` and `ten` are hard-coded boundaries.\n  - The branch structure assumes exactly one day band between two night segments.\n  - The full-day constant `16 * 60 * DAY_RATE + 8 * 60 * NIGHT_RATE` repeats the band layout.\n\n  If the council splits the day band (say, a peak band from 16:00 to 19:00) or moves a boundary, the branch logic must be redesigned. The constant must also be updated separately, and it is easy to forget. Each revision risks a subtle bug.\n- **Design 2** keeps the bands as data in `BANDS`. A split or a move only means editing the table. The overlap algorithm stays the same and remains correct for any set of bands that tile the day, including ones that cross midnight.\n\n**Simplicity.** Design 2 has one small loop and no case analysis. A 7-day stay means at most about 9 days \u00d7 the number of bands iterations, which costs nothing. Design 1's whole-days shortcut is an optimization this problem doesn't need, and it adds a second place where the band layout is encoded.\n\n**Minor points.** Design 2 has no explicit guard for `exit <= entry`. It returns 0 anyway, but a one-line early return would make that intent obvious. Design 1's guard is explicit. That is not enough to outweigh how hard it is to maintain.\n\nWINNER: 2"
+}

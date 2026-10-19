@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p1.skill.sonnet.ba",
+ "track": "rating",
+ "item": "p1",
+ "condition": "skill",
+ "model": "sonnet",
+ "order": "ba",
+ "duration_ms": 10928,
+ "total_cost_usd": 0.021544600000000004,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5738,
+ "final_text": "**Design 1 is the better design, because it is the only one that meets constraint 4.**\n\n**Design 2 breaks C4.** It records a spend as `(hours, first expiry)` and refunds every hour with the soonest expiry among the grants touched. C4 says each hour goes back to the grant it came from, with that grant's expiry. Two concrete failures:\n\n- Grant A (10h, expires day 90) and grant B (10h, expires day 150). A spend of 15h takes 10 from A and 5 from B. Refunding on day 80 returns 15h all expiring on day 90, so B's 5h lose 60 days of validity. A refund on day 95 returns nothing, although B's 5h are still live and C4 says they must come back.\n- Its comment claims the refund never outlives the credit it replaces. That is true, but the constraint also forbids shortening the credit, and the design does shorten it.\n\nThe design collapses a spend into one number plus one expiry. That is a lossy representation of what C4 requires: a spend is a set of (grant, hours) pairs. Its brevity comes from dropping that fact, which makes it falsely elegant.\n\n**Design 1 meets every constraint.**\n\n- C1: `grant` sets `expires = at + VALIDITY`, for paid and goodwill grants alike.\n- C2: it sorts live grants by `expires` and takes from the earliest first.\n- C3: the check runs before any mutation, so a failed spend changes nothing. Non-positive spends are rejected.\n- C4: `Spend.taken` keeps `(grant, hours)` pairs. Refund returns each portion to its own grant, which keeps its expiry. A portion is dropped only if that grant has expired by `at`.\n- C5: `_live` filters on `expires > at`, and `balance` uses it.\n- C6: all times are passed in, and amounts are integers.\n\n**Concept check.** Design 1 has one extra concept, `Spend`, which records where the hours came from. C4 forces it. Design 2 has fewer parts, but it needs a comment to justify a deviation from the constraint, and that is an exception clause in disguise.\n\n**Shared weaknesses, not differentiators.** Both designs have these gaps:\n\n- Neither validates grant amounts.\n- Neither handles a duplicate `spend_id`, which would overwrite the earlier record.\n- Neither handles refunding an unknown id; both raise `KeyError`.\n\nDesign 1 is also slightly sloppier about leaving zero-hour grants in the list, which is harmless.\n\n**Deciding reason:** only Design 1 returns each hour to the grant it came from with that grant's expiry, which is what C4 requires.\n\nWINNER: 1"
+}

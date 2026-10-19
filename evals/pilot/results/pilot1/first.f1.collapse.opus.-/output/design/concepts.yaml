@@ -1,0 +1,71 @@
+# Concepts: one purpose each, with a verdict.
+concepts:
+  - id: volunteer
+    purpose: A person on the books, with how to reach them.
+    verdict: forced
+    traces: [K5, K6]
+  - id: qualification
+    purpose: A dated credential a role may require (food hygiene certificate with its date; driving licence).
+    verdict: forced
+    traces: [K10, K11, K12, K17]
+  - id: role_table
+    purpose: Table of roles - activity, weekday, minimum people, required qualification, hours. Delivery is two rows that can be removed after March.
+    verdict: forced
+    traces: [K1, K2, K3, K4, K10, K12, K16, K18]
+    open: true
+  - id: commitment
+    purpose: One row per (volunteer, date, role), marked when the person arrives. Unique per volunteer and date+role, so a double sign-up is harmless.
+    verdict: forced
+    traces: [K7, K14, K16]
+  - id: eligibility_rule
+    purpose: A food-handling commitment needs a certificate valid on the shift date; refused online, flagged from paper.
+    verdict: forced
+    traces: [K10, K11, K13]
+  - id: gaps_view
+    purpose: Per shift, minimum minus signed up; read from the register instead of worked out by hand.
+    verdict: forced
+    traces: [K2, K3, K4, K7]
+  - id: hours_report
+    purpose: Hours present, by activity, for any date range (so any quarter definition works).
+    verdict: forced
+    traces: [K16]
+  - id: register
+    purpose: The one list holding volunteers, roles and commitments.
+    verdict: detail
+    detail_of: F1/register
+  - id: signup_form
+    purpose: Free online form for volunteers who use phones.
+    verdict: detail
+    detail_of: F2/self_serve_plus_paper
+  - id: door_grid
+    purpose: Printed sheet from the register; names x shifts, ineligible boxes greyed, tick to sign up, initial on arrival.
+    verdict: detail
+    detail_of: F3/printed_grid
+  - id: signup_window
+    purpose: Sign-ups only for shifts on the current sheet; the cap on long-range sign-ups.
+    verdict: detail
+    detail_of: F8/window
+  - id: evening_run
+    purpose: Evening before each opening day - type the sheet, see gaps and certificate flags, send reminders.
+    verdict: detail
+    detail_of: F11/evening_before
+  - id: reminder_way
+    purpose: Each volunteer's one way of getting the day-before reminder.
+    verdict: detail
+    detail_of: F7/per_person_channel
+  - id: renewal_notice
+    purpose: List and tell people whose certificate ends within lead time L.
+    verdict: detail
+    detail_of: F16/advance_notice
+  - id: driver_phone_list
+    purpose: Licensed volunteers and phone numbers, for 8am dropouts.
+    verdict: detail
+    detail_of: F15/chat_plus_list
+rounds:
+  - round: 1
+    date: 2026-10-19
+    kernel_items: 24
+    counts:
+      concepts: 15
+      exception_clauses: 1   # paper sign-ups can only be flagged, not refused (forced by K9)
+      unforced_numbers: 0    # sheet length, shift hours and renewal lead time are all open forks (F9, F12, F16)

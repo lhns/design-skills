@@ -1,0 +1,39 @@
+# Parking garage pricing: Candidate A is the better design
+
+**Both are correct today.** I tried to break each one against every constraint and could not:
+
+- **C1 and C2 (each minute charged at its band's rate).**
+  - A: it sums each band occurrence's overlap with the stay.
+  - B: it splits the stay at midnights and has one branch for each way a stay can sit relative to 06:00 and 22:00.
+- **C3 (stays up to 7 days, crossing midnight).**
+  - A: it starts the loop the day before entry, so a night band that began the previous evening is caught. It ends on `exit.date()`, whose night band runs into the next morning.
+  - B: it handles a first partial day, then whole days at a fixed price, then a last partial day.
+- **C4 (whole minutes).** Every boundary falls on a whole minute, so dividing by 60 never truncates in either design.
+- **C5 (exit not after entry costs 0).**
+  - A: every overlap is negative, so the total stays 0. It needs no special case.
+  - B: it checks this explicitly.
+
+**C6 (annual band revisions) decides it.**
+
+- **A** keeps the band structure as one fact, the `BANDS` table. Each row says "this band, this rate, wrapping past midnight if end ≤ start." Splitting a band or moving a boundary means editing table rows. The algorithm stays the same.
+- **B** spreads the same fact across many places:
+  - the hours 06:00 and 22:00 inside `_same_day_price`;
+  - a five-branch case analysis that only works for exactly two bands, with the night band wrapping midnight;
+  - the full-day price `16*60*DAY_RATE + 8*60*NIGHT_RATE`;
+  - the comments on the rate constants.
+
+  Moving 22:00 to 21:00 means editing four places, and missing one silently misprices stays. Splitting a band into three means rewriting the case analysis, because the number of branches grows with the number of bands. B also has special cases that A avoids: the same-day versus multi-day split, the fixed whole-day price, the `exit > last_midnight` check and the C5 guard.
+
+**Counts, A versus B:**
+
+| | A | B |
+|---|---|---|
+| Special-case branches | 1 (the overlap check) | about 9 |
+| Facts stated in more than one place | 0 | band hours ×4 |
+| Unforced numbers | none outside the table | 16, 8, 60·60 in the whole-day price |
+
+A loops over at most about 9 days × the number of bands. C3 bounds this, so its cost is trivial and needs no optimization.
+
+**Deciding reason:** both designs are correct today, but A states the band structure once, as data that revisions edit, while B hard-codes it into branches and constants that a band split or moved boundary forces you to rewrite.
+
+WINNER: 1

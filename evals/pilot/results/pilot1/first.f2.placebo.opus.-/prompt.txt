@@ -1,0 +1,28 @@
+You are the designer. The stakeholder's brief follows; they will answer questions in later sessions. Keep the design and your notes in files under design/. End your reply with the one question you would ask the stakeholder now.
+
+Hello! Ines here, I run the community workshop on Mill Lane. We want a proper system for machine bookings and inductions. I've pasted my notes from the last few weeks, roughly in order.
+
+**The space.** Woodshop (table saw, bandsaw, lathe), one laser cutter, three 3D printers, and a small electronics bench. About 180 members on a flat monthly fee. Members get in with a key fob, and the table saw and laser already sit behind fob-controlled power interlocks, so they only switch on when a fob is tapped. Staff are on site 10:00-18:00. Members can stay until 22:00.
+
+**2 Oct.** Everyone has to be inducted on a machine before they use it. A trainer shows them and signs them off. At the moment that's a paper sign-off book at the front desk.
+
+**2 Oct.** Members pay for materials. Sure, people should pay for the acrylic and filament they use. But I hate nickel-and-diming people. I don't want anyone feeling a meter running while they work.
+
+**6 Oct.** The laser tube died without warning twice this year. The supplier says a tube lasts about 1,000 hours of cutting, but we never know where we are, so we can't order a spare in time.
+
+**6 Oct.** The laser is booked solid and the same handful of people seem to get it. Should we limit bookings to, like, two hours a week each? I don't know, you tell me.
+
+**9 Oct.** Please, no member accounts with passwords. The last booking system had them, half the members forgot theirs, and the front desk spent all day resetting them. Members tap their fob. That's their identity, full stop.
+
+**9 Oct.** The table saw needs two people in the room who are both inducted on it. After the incident last spring our insurer said an honour system isn't good enough any more; it has to be enforced. And there are no staff in the woodshop in the evenings, which is exactly when most of our woodworkers come in after work, so closing it early isn't an option.
+
+**14 Oct.** The other big thing is inductions. Do we keep the paper sign-off book or go digital? The book is what the trainers sign. It's also what the insurer asks to see at renewal, with each trainer's signature and the date, and they want those kept for six years.
+
+**14 Oct.** 3D printers: I'm not sure yet whether they should be bookable at all. People start fourteen-hour prints and hog them, but booking them feels like overkill for printers. Not sure. Let me think about it.
+
+**16 Oct.** Members book from home now, through the website. That has to keep working, and it has to be easy.
+
+**16 Oct.** Budget is fine for this. The board approved it. We'd rather not run our own server, though.
+
+That's everything I can think of. I'm around most Tuesdays and Fridays.
+ Use the elegance and design-process skills.

@@ -1,0 +1,15 @@
+**Design 2 (the lookup table) is better.**
+
+**The chart is the source of truth, and B states it directly.** The factory chart is authoritative and was set by hand. It is data, not the output of a formula. B transcribes it, so a reader can compare it against the published chart line by line. A's formula is a fiction layered over the data. It reproduces the chart only after patching it with adjustment tables.
+
+**A's formula doesn't fit the data.** The geometric conversion (barleycorns, Paris points) is a rough model of how sizes relate, and the factory chart departs from it. A needs three constants, two helper functions, and two override dicts to approximate a table that could be written in eleven entries. The code is longer, harder to read, and has more places to be wrong.
+
+**Change cost favors B.** Rows get adjusted individually, twice in three years, each time by half a size. In B, that is a one-number edit in one place, and `EU_TO_UK` is derived automatically so the two directions cannot drift apart. In A, the same change means working out how the formula rounds, then editing an adjustment dict, probably both `UK_TO_EU_ADJUST` and `EU_TO_UK_ADJUST`. These must be kept consistent by hand, and the reverse direction has its own rounding and adjustment logic. A change at one row could also interact with the rounding at neighbouring rows. The two adjustment dicts are duplicated knowledge, which is precisely the drift risk DRY warns about.
+
+**Correctness and edge cases.** A relies on floating-point arithmetic (`2.54 / 3`, `2/3`) and `math.floor(x*2+0.5)`, so exactness depends on rounding behaving well near .25 boundaries. That is fragile, and it is only validated by the final round-trip check in `eu_to_uk`. B has no arithmetic to go wrong. Dict lookup with `6`, `6.0` and `6.5` works because `6 == 6.0` and they hash equally, so constraint 3 holds. Unknown sizes raise `ValueError` in both directions (constraint 2), and the `from None` keeps the traceback clean.
+
+**Testability.** B is trivially testable, and its tests are just the chart. A needs tests for every row anyway, because the formula can't be trusted without them. That makes the formula pure overhead.
+
+**Trade-off.** A's formula could be justified if the system had to generate sizes for many models or lasts, or for ranges beyond the chart. The requirement is a single last with 11 sizes, so that generality is speculative (YAGNI). One small improvement to B would be a test asserting the chart is a bijection (no duplicate EU values), since the reverse dict silently drops duplicates. That doesn't change the verdict.
+
+WINNER: 2

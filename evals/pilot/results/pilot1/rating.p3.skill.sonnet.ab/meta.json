@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p3.skill.sonnet.ab",
+ "track": "rating",
+ "item": "p3",
+ "condition": "skill",
+ "model": "sonnet",
+ "order": "ab",
+ "duration_ms": 8593,
+ "total_cost_usd": 0.0148166,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 4908,
+ "final_text": "**Constraints.** C1 board: accepted only, 4 columns. C2 statement: all loads, 7 columns, running total, `money`. C3 same sort for both. C4 the two exports change independently, and a change to one must never alter the other. C5 each is called from one place.\n\n**Candidate A** puts both formats behind a `for_board` flag. Every format fact is a branch (`if for_board` appears four times), and the two exports share one function body. A change to the statement, such as a new column or a different date format, is made inside the function the board report also runs through. The flag also leaves `running` as dead state in board mode. C4 is met only by care, not by structure. C5 means the flag never selects at runtime between callers, so it buys nothing.\n\n**Candidate B** gives each export its own function. Each states its filter, columns and formats in one place, with no branches on export kind. A circular touches only `board_rows`, and a member request touches only `statement_rows`, so C4 holds by construction.\n\n**What is duplicated?** Only the sort key `(date, ticket)`. C3 states it for both, so it looks like one fact. But the two exports could diverge on ordering too, since each changes for its own reasons. If the office wanted a different order, the board would have to stay as it is (C4). That makes it two coincidentally equal facts, not one fact stated twice. If you want to share it, a tiny `by_date_ticket` key is defensible, but it would couple the exports on ordering. That would be a designer choice and would work against C4, so leaving it duplicated is the safer option.\n\n**Try to break each.**\n- A: add a \"moisture\" column to the statement and forget the `for_board` guard, and the board output changes. This breaks C4.\n- B: no change to one function can reach the other.\n\n**Count.** A has one function, a boolean parameter that forks the whole body, and four conditionals. B has two functions, no kind-flags, and one repeated sort expression. B's extra function traces to C4, and A's flag is the exception-clause pile the representation cannot absorb.\n\n**Deciding reason:** C4 requires the exports to change independently, and B enforces that structurally, while A couples them through a shared body and a flag that C5 shows has no use.\n\nWINNER: 2"
+}

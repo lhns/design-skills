@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p2.skill.opus.ba",
+ "track": "rating",
+ "item": "p2",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ba",
+ "duration_ms": 13840,
+ "total_cost_usd": 0.0420412,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5649,
+ "final_text": "# Design 2 (Candidate A) is better\n\n**Constraints**\n- C1: label and carrier for each site.\n- C2: cutoff hour per site.\n- C3: no Sunday shipping; only W3 ships on Saturday.\n- C4: unknown codes raise `ValueError`.\n- C5: sites get added and edited by whoever is on call.\n\n**Trying to break each design**\n\nFor today's three sites, both designs behave the same. Both meet C1\u2013C4. Comparing hour against a whole-hour cutoff is fine because every cutoff is on the hour. The difference shows up under C5: a fourth site, or a changed fact, edited by someone unfamiliar with the code.\n\n- **Design 1** stores each site's facts in five places:\n  - `VALID_SITES`\n  - the label dict\n  - the carrier ternary\n  - the cutoff ternary\n  - the Saturday condition\n\n  Each ternary also has a hidden default. That leaves concrete ways to break it:\n  - Add `\"E4\"` to `VALID_SITES` and forget the label dict: `packing_label(\"E4\")` raises `KeyError`, which violates C4.\n  - Add E4 with a 15:00 cutoff, Courier Beta and Saturday shipping, but miss the ternaries: E4 silently gets Courier Alpha, 16:00 and no Saturday. Nothing fails. Orders just ship on the wrong dates with the wrong carrier.\n  - Move W3 to Courier Alpha: the edit goes inside an `if code == \"W3\"` expression whose meaning is spread across functions.\n- **Design 2** keeps one record per site, and every field is required. If a new site omits a fact, the code fails when the module is imported, not quietly in production. Validity is derived from `SITES`, so the code list cannot drift from the facts, and every lookup goes through `site()`, so C4 holds for any code. A per-site change is a one-field edit.\n\n**Concept counts**\n\n| | Design 1 | Design 2 |\n|---|---|---|\n| Places stating site facts | 5 (validity twice: in `VALID_SITES` and in the dict keys) | 1 table |\n| Special-case branches on specific codes | 3 (`== \"W3\"`, `== \"S2\"`, `!= \"W3\"`) | 0 |\n| Silent defaults for unlisted sites | 3 | 0 |\n| Unnamed numbers in logic | 14, 16 inline | named field `cutoff_hour` |\n\nDesign 2 adds one concept, the `Site` record. C1\u2013C3 force it: they are all per-site facts, so they belong on one per-site entity. The only rule that stays in code is \"Sunday never ships\", which is genuinely global.\n\n**Deciding reason:** Design 1 states each site's facts in several places, with silent defaults. Adding the fourth site (C5) can violate C4 or ship on the wrong days without any error. Design 2 keeps every site fact in one complete record, so neither failure can happen.\n\nWINNER: 2"
+}

@@ -1,0 +1,44 @@
+# Planted errors per audit doc. Kinds:
+#   inference-as-constraint, value-rules-out-option, bundled-decision,
+#   forced-decision-asked, approval-as-constraint, stale-choice, orphan-detail
+# A finding matches when it names the same kind (or an equivalent description) at the same place.
+# Consequences of a planted error (rows it rules out, choices it forces) are part of that error, not extra errors.
+
+a1:
+  - kind: inference-as-constraint
+    where: "C5 'No remote or app control; everything happens at the shed panel.', used in D4 to rule out text message and app"
+    why: "Mira said volunteers aren't comfortable with apps and will use the shed panel. That is about volunteers' everyday use, not a ban on remote features. The inferred ban removes the only options that serve C6 ('I need to know ... wherever I am'), and the remaining choice, a panel light, does not."
+  - kind: orphan-detail
+    where: "Design: 'Moisture readings are kept for 400 days on the controller's SD card.'"
+    why: "No decision or constraint covers reading history or its retention. The 400 days is an unexplained number attached to nothing."
+
+a2: []
+# Clean, with look-alikes: D2 is forced and correctly reported rather than asked; 'simpler' in D1 is Tomas's own words;
+# Tomas's 'looks good' on 05-18 is recorded as an event, not a constraint; D4 was moved when C5 arrived;
+# D3 stays open with a labelled default after 'not sure yet'; D5 is a labelled designer default.
+
+a3:
+  - kind: value-rules-out-option
+    where: "D1, 'automatic rotation: more complex than needed, claiming is simpler'"
+    why: "The rule-out is the designer's value, not a constraint from Priya. It also removes the only option that addresses C5 (fair spread of good games), which no decision now covers."
+  - kind: forced-decision-asked
+    where: "D3 Payment method, status 'open, asked Priya 02-17'"
+    why: "C3 rules out cash and C4 rules out vouchers, so bank transfer is the only option left. It should be recorded as forced and reported, not asked."
+
+a4:
+  - kind: bundled-decision
+    where: "D1 'Rebalancing and full-station response'"
+    why: "Two problems are decided together: when the van moves bikes (C1) and how staff learn that a station is full (C3). C1 rules out on-demand van runs but says nothing about alerting staff. Bundled, the immediate-alert option was discarded with the van option, and checking only at runs fails C3's 'quickly'. It should be split into a van-schedule decision (fixed runs, forced by C1) and a full-station alert decision (open)."
+
+a5:
+  - kind: approval-as-constraint
+    where: "C4 'Entry slots are 15 minutes long with 30 tickets each. (Helena, approved 04-14)', used to rule out options in D1 and D2"
+    why: "The 15 minutes and 30 tickets came from the designer's mock-up. Helena's 'looks good' approved a proposal; it did not give a constraint. D1 and D2 remain designer choices, and deriving the slot size from C2 is still open."
+  - kind: stale-choice
+    where: "D3 Ticket format, choice 'QR code on the phone only' (decided 04-07), and the design paragraph's phone-only QR code"
+    why: "C5 (04-21, visitors without a smartphone can get in) rules out phone-only. C3 forbids desk sales, so there is no other way in. The choice and its dependent design text should have moved to printed-at-home or name lookup."
+
+a6:
+  - kind: inference-as-constraint
+    where: "C3 'No manual entry of sample IDs anywhere.', used in D3 to rule out the short code"
+    why: "Rosa asked not to make students type long sample IDs in the normal flow. 'Anywhere' widens that into a ban that removes a short-code fallback, which serves the scanner-failure problem ('the whole class is stuck'). The remaining choice, waiting until the scanner is fixed, leaves that problem unsolved."

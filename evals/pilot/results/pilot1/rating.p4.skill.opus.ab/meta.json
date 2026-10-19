@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p4.skill.opus.ab",
+ "track": "rating",
+ "item": "p4",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 16037,
+ "total_cost_usd": 0.0444132,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5668,
+ "final_text": "# Design 1 (Candidate A) is better\n\n**Constraints**\n- C1\u2013C6: the six routing rules. The first one that applies wins.\n- C7: subject matching ignores case.\n- C8: the rules change a few times a year, only by the owning engineers, through code review and deploy.\n\n## Does each design keep the rules?\n\nI traced both designs against C1\u2013C7 and could not find an input that breaks either one.\n\n- **Refund amounts:** in B, a refund with `amount=None` or an amount of 500 or less falls through to the `billing` row.\n- **Missing amounts:** B's `gt` guards against `None`.\n- **Phone logins:** B's `security` row comes before `self-service`, so a phone login reaches `security`.\n- **Fallback:** the empty `when` on `general` catches everything else, so `next()` cannot run out of rules.\n\nCorrectness does not decide this comparison. Concept count and failure modes do.\n\n## What Candidate B adds, and whether any constraint forces it\n\nB adds a YAML rule format, an operator table (`eq`, `ne`, `gt`, `contains_any`), an interpreter (`_matches`, `route`), and a file load when the module is imported. These parts are only worth having if someone other than the engineers edits the rules, or if rules change without a deploy. C8 rules out both cases. B is an extension point with no user beyond the code itself.\n\n## Costs that come with B's extra layer\n\n- **Facts stated twice.** C2 is split across two rows, so `refund` appears twice. C4 is split the same way, so `password, login` appears twice. Changing a keyword now means editing two rows, and missing one causes a silent misroute. A states each rule once, one block per constraint.\n- **A new way to break at runtime.** `open(\"routing.yaml\")` uses a path relative to the current working directory. If the service starts from another directory, it crashes on import. A typo in a field name or operator, such as `channle` or `contains`, also passes review and only fails as an `AttributeError` or `KeyError` when a ticket arrives. In A, the same typo is ordinary Python that linters and tests catch.\n- **The flexibility isn't real.** Any rule change outside the four operators, such as word-boundary matching, OR across fields, or a new comparison, still requires editing Python. Engineers then have to change two languages instead of one.\n\n## Candidate A\n\nA is one function. The constraint order maps directly onto the order of the `if` statements. Each nested branch, the amount check and the channel check, sits under the rule that requires it. The only unforced detail is that `subject.lower()` runs before the enterprise check, which is harmless.\n\n## Ledger\n\n- **Forced:** the rules are evaluated in priority order, first match wins, with case-insensitive subject matching. Both designs do this.\n- **Designer choice in B, not forced by any constraint:** a data-driven rule format plus an interpreter.\n- **Deletions when choosing A:** the YAML format, the operator table, the interpreter, the file I/O, and the two duplicated keyword lists.\n\n**Deciding reason:** both designs route correctly, but no constraint calls for B's rule engine, and it adds concepts, duplicated keywords and runtime failure modes on top of a function the owning engineers already change through code review.\n\nWINNER: 1"
+}

@@ -1,0 +1,296 @@
+# Forks: one problem each. Only K/X ids eliminate; W ids only rank.
+# chosen = designer's current suggestion; only Dele closes an open fork.
+forks:
+  - id: F1
+    problem: Where does the truth about who is coming live?
+    options:
+      - id: register
+        forces: One list (the register) holds every sign-up; paper sheet and any other channel feed it. Gaps, reminders, certificate checks and grant hours are all read from it.
+      - id: paper_is_record
+        forces: The door sheet is the only record; chat sign-ups stop. Certificate checks and hour counts are done by hand against paper.
+      - id: several_sources
+        forces: Chat and paper both stay places where sign-ups live, merged by hand each week.
+        eliminated_by: [K7]
+        why: Merging chat and paper every Sunday is exactly the work K7 says is the main thing to fix.
+    chosen: register
+    assumes:
+      - A1 Typing the paper sheet into one list is less work than today's Sunday-night reconciliation.
+    question: Should there be one list that holds every sign-up, with the paper sheet feeding it?
+    default: register
+    decide_by: Before anything is built.
+
+  - id: F2
+    problem: Who puts sign-ups into the register?
+    options:
+      - id: office_only
+        forces: Dele (or one office helper) types in every sign-up, from paper and from chat. Register can be offline on the office laptop; reminders by hand; chat stays a sign-up channel that someone reads.
+      - id: self_serve_plus_paper
+        forces: Volunteers comfortable with a phone sign up themselves on a free online form; only paper ticks are typed in. Register must be online (free tool, F13); online sign-ups can be refused at once if a certificate has lapsed; sign-ups leave the chat.
+      - id: all_online
+        forces: Everyone signs up online.
+        eliminated_by: [K9]
+        why: The paper sheet stays; Dele won't make paper users change.
+    chosen: self_serve_plus_paper
+    assumes:
+      - A2 A useful share of the ~40 active volunteers would use a phone form (only Dele can judge this).
+      - A3 The office laptop has internet.
+    question: Who should put sign-ups into the shared list - only you/an office helper, or also volunteers themselves on a phone form?
+    default: self_serve_plus_paper
+    decide_by: Before choosing the tool (F13); it sets whether anything has to be online.
+    asked:
+      date: 2026-10-19
+      text: >-
+        Who should put sign-ups into the shared list? I recommend B.
+        (A) Only you or one office helper types everything in: the ticks on the door sheet and anything people say in the chat.
+        Nothing has to be online (a spreadsheet on the office laptop is enough), but every single sign-up goes through that person
+        and day-before reminders are sent by hand.
+        (B) Volunteers who are happy using a phone sign themselves up on a simple free online form; only the door sheet is typed in,
+        the evening before each opening day. This needs a free online spreadsheet (for example Google Sheets with a Google Form, no monthly fee).
+        In return, the list can turn down a sorting or front-of-house sign-up at the moment someone makes it if their certificate has run out,
+        reminders can go out by email automatically, and sign-ups stop happening in the group chat (the chat stays for news, photos and 8am emergencies).
+        Example, a Thursday: under A, six people tick the sheet and four post "I'm in" in the chat, and you type all ten.
+        Under B, the four use the form themselves and you, or a helper, type the six ticks on Wednesday evening.
+        Most small charities that keep a paper rota run it this way: an online form for the people who like phones, paper for the rest, and one list behind both.
+
+  - id: F3
+    problem: What does the door sheet look like?
+    options:
+      - id: blank_write_in
+        forces: Today's sheet. Anyone can write any name in any shift; certificate problems are only found when the sheet is typed in.
+      - id: printed_grid
+        forces: Printed from the register each period. Names down the side, one box per shift; boxes are greyed where the person isn't allowed (no valid certificate on that date, no licence). Tick to sign up, initial on the day when you arrive. Blank rows at the bottom for new people.
+    chosen: printed_grid
+    assumes:
+      - A4 A printed grid still counts as "the paper sheet on the door" that K9 protects (needs Dele's view).
+    question: Is a printed tick-box grid with names, made from the list each period, acceptable in place of the blank sheet?
+    default: printed_grid
+    decide_by: Before the first sheet is printed.
+
+  - id: F4
+    problem: Who or what checks food hygiene certificates?
+    options:
+      - id: register_rule
+        forces: The register knows each person's certificate date and refuses or flags any sorting/front-of-house sign-up on a date after expiry.
+      - id: shift_leads
+        forces: Leads check certificates on the day.
+        eliminated_by: [K13]
+        why: Dele said not to leave it to the shift leads.
+      - id: self_declared
+        forces: Volunteers tick "my certificate is valid".
+        eliminated_by: [K11]
+        why: People forget expiry dates; a self-declaration repeats the failure.
+    chosen: register_rule
+
+  - id: F5
+    problem: Does the delivery helper need a food hygiene certificate?
+    options:
+      - id: helper_needs_cert
+        forces: Delivery helper role requires a certificate; fewer people can help.
+      - id: helper_no_cert
+        forces: Delivery helper open to anyone.
+    chosen: helper_no_cert
+    assumes:
+      - A5 Delivered parcels are packed and closed, so the helper does not handle open food. Dele only said drivers.
+    question: Does the van helper need a food hygiene certificate, or only sorting and front of house?
+    default: helper_no_cert
+    decide_by: Before the first printed sheet greys out boxes.
+
+  - id: F6
+    problem: Who may drive the van?
+    options:
+      - id: any_licence
+        forces: Register records "has a driving licence"; anyone with one may take the driver box.
+      - id: named_on_insurance
+        forces: Register records the drivers named on the van's insurance; only they may take the driver box.
+    chosen: any_licence
+    assumes:
+      - A6 The van insurance covers any licensed volunteer.
+    question: Can any volunteer with a driving licence drive the van, or only drivers named on its insurance?
+    default: any_licence
+    decide_by: Before the first printed sheet; and moot if deliveries stop after March (K18).
+
+  - id: F7
+    problem: How does each person get the day-before reminder?
+    options:
+      - id: per_person_channel
+        forces: Each volunteer has one reminder way (email, a text sent by hand, a phone call, or none). Email goes automatically; the rest come out as a short printed/visible list for whoever does the evening run.
+      - id: chat_post
+        forces: One post in the group chat each evening listing tomorrow's names. Misses people not in the chat.
+      - id: paid_sms
+        forces: An SMS service texts everyone. Costs money per message or per month; needs the committee (K20).
+      - id: none
+        forces: No reminders.
+    chosen: per_person_channel
+    preferred_by: [W1]
+    assumes:
+      - A7 Some paper-sheet volunteers have a phone they answer, and someone can make a few calls.
+    question: For volunteers without email, is a short call or text the evening before, by you or a helper, workable?
+    default: per_person_channel
+    decide_by: Before reminders start.
+
+  - id: F8
+    problem: How do we stop sign-ups far ahead that then don't happen?
+    options:
+      - id: window
+        forces: You can only sign up for shifts on the current sheet period (F9). Regulars re-tick each period. No per-person counting.
+      - id: per_person_max
+        forces: Each person may hold at most N future shifts; the register counts each person's bookings. N is unforced.
+      - id: reliability_based
+        forces: People who miss shifts get fewer sign-ups.
+        eliminated_by: [X2]
+        why: Limiting people by their no-show record is scoring them.
+      - id: no_cap
+        forces: Long sign-ups continue (K15 problem stays).
+    chosen: window
+    assumes:
+      - A8 The problem in K15 is sign-ups made weeks ahead, not people who sign up for many shifts in the same week.
+    question: Is "you can only sign up for the shifts on the current sheet" the right kind of cap?
+    default: window
+    decide_by: Before the first sheet is printed.
+
+  - id: F9
+    problem: How long is one sheet period (and so how far ahead people can sign up)?
+    options:
+      - id: weekly
+        forces: Sheet printed weekly; at most a week's notice of gaps.
+      - id: fortnightly
+        forces: Sheet printed every two weeks; gaps show up to two weeks ahead; two A4 pages.
+      - id: monthly
+        forces: Long-range sign-ups return (weaker against K15).
+    chosen: fortnightly
+    assumes:
+      - A9 Two weeks is long enough to fill gaps and short enough that people still mean it.
+    question: Should a sheet cover one week or two?
+    default: fortnightly
+    decide_by: Before the first sheet is printed.
+
+  - id: F10
+    problem: How do we know who actually came?
+    options:
+      - id: self_initial
+        forces: People initial their own box on the door sheet when they arrive; online sign-ups also initial (their name is printed). Typed in with the next evening run.
+      - id: lead_marks
+        forces: The shift lead records who came. Adds a task to leads, who "have enough on".
+      - id: assume_attended
+        forces: Everyone signed up counts as present; grant hours overstate by every no-show (K14).
+    chosen: self_initial
+    assumes:
+      - A10 The grant hours should be hours actually worked, not hours signed up for.
+    question: Should volunteers initial the sheet when they arrive, so we record who really came?
+    default: self_initial
+    decide_by: Start of the first grant quarter we report from the register.
+
+  - id: F11
+    problem: When does the paper sheet get typed into the register?
+    options:
+      - id: evening_before
+        forces: Monday, Wednesday and Friday evenings someone types the new ticks and yesterday's initials, sees gaps and certificate flags, and sends reminders. One routine.
+      - id: weekly
+        forces: Sunday only; certificate flags and gaps found late; no day-before reminders for paper sign-ups.
+      - id: photo_of_sheet
+        forces: Someone photographs the sheet and the typist works from home; still the evening run, done remotely.
+    chosen: evening_before
+    assumes:
+      - A11 Someone can reach the sheet the evening before each opening day (or photograph it after each shift).
+    question: Can someone see the door sheet (or a photo of it) on Monday, Wednesday and Friday evenings?
+    default: evening_before
+    decide_by: Before the first sheet is printed.
+
+  - id: F12
+    problem: How many hours does each shift count for?
+    options:
+      - id: fixed_per_activity
+        forces: Each activity has set hours (e.g. sorting 9:00-12:00); hours = number present x length. Needs the real times.
+      - id: actual_times
+        forces: Volunteers write arrival and leaving times; more writing and typing.
+    chosen: fixed_per_activity
+    assumes:
+      - A12 Shifts have fixed start and end times and people stay for the whole shift.
+    question: What are the start and end times of each shift?
+    default: fixed_per_activity
+    decide_by: First grant report from the register.
+
+  - id: F13
+    problem: What tool holds the register?
+    options:
+      - id: google_sheets_forms
+        forces: Free online spreadsheet plus form; email reminders by a small built-in script; prints the grid. Needs a free Google account for the food bank.
+      - id: local_spreadsheet
+        forces: Spreadsheet on the office laptop only; no self-serve form; reminders by hand. Fits F2 office_only.
+      - id: custom_web_app
+        forces: Something built and hosted; hosting has to stay free, and someone must maintain it.
+    chosen: google_sheets_forms
+    assumes:
+      - A3 The office laptop has internet.
+    question: Is a free Google account for the food bank acceptable to hold the list?
+    default: google_sheets_forms
+    decide_by: Before anything is built; follows F2.
+
+  - id: F14
+    problem: What is the group chat for?
+    options:
+      - id: news_and_urgent
+        forces: Chat stays for news, photos and urgent calls; sign-ups go to the form or the sheet. Anyone who still posts "I'm in" is pointed to the form.
+      - id: also_signups
+        forces: Chat stays a sign-up channel; whoever runs the register must read and type chat posts.
+      - id: replace
+        forces: Chat closed; news, photos and urgent calls need another home.
+    chosen: news_and_urgent
+    preferred_by: [W2]
+    question: Keep the chat for news, photos and emergencies, but stop using it for sign-ups?
+    default: news_and_urgent
+    decide_by: Launch of the register; follows F2.
+
+  - id: F15
+    problem: How is an 8am Saturday driver dropout filled?
+    options:
+      - id: chat_plus_list
+        forces: Dele shouts in the chat as now; the register also shows who holds a licence (F6) and their phone number, to ring directly.
+      - id: broadcast_tool
+        forces: An automated text to all licensed drivers; likely costs (K20).
+    chosen: chat_plus_list
+    question: Is a phone list of licensed drivers, next to the usual chat shout, enough for 8am dropouts?
+    default: chat_plus_list
+    decide_by: Before the first Saturday on the register; moot if deliveries stop (K18).
+
+  - id: F16
+    problem: How do people hear their certificate is about to run out?
+    options:
+      - id: advance_notice
+        forces: The register lists anyone whose certificate ends within a lead time L, and tells them by their reminder way. L must be long enough to book and pass a course; its value is unknown.
+      - id: on_refusal_only
+        forces: People find out when a sign-up is refused or their box is greyed; they're off food roles until they renew.
+    chosen: advance_notice
+    assumes:
+      - A13 Renewing takes some weeks (course booking); L is set from that.
+    question: How long does it take a volunteer to renew a food hygiene certificate (book and pass the course)?
+    default: advance_notice
+    decide_by: Before the first certificate in the register comes within a few weeks of expiry.
+
+  - id: F17
+    problem: What totals does the register show about people?
+    options:
+      - id: aggregate_only
+        forces: Reports show hours by activity and date range only; no per-person totals anywhere.
+      - id: private_on_request
+        forces: Dele can look up one person's hours (e.g. for a reference letter); never listed or sorted.
+      - id: public_totals
+        forces: Per-person hours or counts shown or ranked.
+        eliminated_by: [X1, X2]
+        why: Per-person totals on show are points and a ranking.
+    chosen: aggregate_only
+    question: Do you ever need one person's total hours, for example for a reference letter?
+    default: aggregate_only
+    decide_by: Any time; adding the private lookup later changes nothing else.
+
+  - id: F18
+    problem: Is there a maximum number of people per shift?
+    options:
+      - id: no_max
+        forces: Minimums only; extra people welcome; grid shows needed vs signed up.
+      - id: max_per_activity
+        forces: Each activity has a cap; boxes close when full.
+    chosen: no_max
+    question: Is there ever such a thing as too many people on a shift?
+    default: no_max
+    decide_by: Before the first sheet is printed.

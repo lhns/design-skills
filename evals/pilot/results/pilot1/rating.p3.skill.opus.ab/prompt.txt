@@ -1,0 +1,77 @@
+# Delivery exports for a farm cooperative
+
+A grain cooperative records each delivery a member brings to its silo: ticket number, member id, date, weight in kg, grade, whether the load was rejected (with a reason), and the amount credited in cents (0 for rejected loads). Two exports are built from the same deliveries.
+
+Constraints:
+
+1. **Board report** for the regional produce board: accepted loads only; columns member id, ISO date, weight in whole kg, grade.
+2. **Member statement** from the cooperative office: all loads, rejected ones included; columns member id, date as `dd.mm.yyyy`, weight in tonnes with 3 decimals, grade, reject reason (empty if accepted), amount, running total of amounts. Amounts use the existing `money(cents)` helper.
+3. Both are sorted by date, then ticket number.
+4. The board changes its required format by circular, roughly once a year. The cooperative office changes the statement whenever members ask. A change to one export must never alter the other's output.
+5. Each export is called from exactly one place.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate A
+
+```python
+def export_rows(deliveries, for_board):
+    """Rows for the produce board report (for_board=True) or a member statement."""
+    rows = []
+    running = 0
+    for d in sorted(deliveries, key=lambda d: (d.date, d.ticket)):
+        if for_board and d.rejected:
+            continue
+        date = d.date.isoformat() if for_board else d.date.strftime("%d.%m.%Y")
+        weight = f"{d.weight_kg:.0f}" if for_board else f"{d.weight_kg / 1000:.3f}"
+        row = [d.member_id, date, weight, d.grade]
+        if not for_board:
+            running += d.amount_cents
+            row += [d.reject_reason or "", money(d.amount_cents), money(running)]
+        rows.append(row)
+    return rows
+```
+
+Design 2:
+
+# Candidate B
+
+```python
+def board_rows(deliveries):
+    """Produce board report, in the format set by the board's latest circular.
+
+    Accepted loads only. Columns: member id, ISO date, weight (whole kg), grade.
+    """
+    rows = []
+    for d in sorted(deliveries, key=lambda d: (d.date, d.ticket)):
+        if d.rejected:
+            continue
+        rows.append([d.member_id, d.date.isoformat(), f"{d.weight_kg:.0f}", d.grade])
+    return rows
+
+
+def statement_rows(deliveries):
+    """Member statement, in the format set by the cooperative office.
+
+    All loads. Columns: member id, date (dd.mm.yyyy), weight (t, 3 decimals),
+    grade, reject reason, amount, running total.
+    """
+    rows = []
+    running = 0
+    for d in sorted(deliveries, key=lambda d: (d.date, d.ticket)):
+        running += d.amount_cents
+        rows.append([
+            d.member_id,
+            d.date.strftime("%d.%m.%Y"),
+            f"{d.weight_kg / 1000:.3f}",
+            d.grade,
+            d.reject_reason or "",
+            money(d.amount_cents),
+            money(running),
+        ])
+    return rows
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

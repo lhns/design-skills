@@ -1,0 +1,93 @@
+# Parking garage pricing by time band
+
+A municipal parking garage charges per minute, at a rate that depends on the time of day.
+
+Constraints:
+
+1. Day band 06:00-22:00 costs 5 cents per minute. Night band 22:00-06:00 costs 2 cents per minute.
+2. Each minute of a stay is charged at the rate of the band it falls in.
+3. Stays may last up to 7 days and cross midnight any number of times.
+4. Entry and exit are naive local datetimes in whole minutes (the gate drops seconds). The garage ignores daylight saving changes.
+5. If exit is not after entry, the price is 0.
+6. The council revises the bands about once a year (a band may be split or moved). The function returns the price in cents.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+```python
+from datetime import datetime, time, timedelta
+
+DAY_RATE = 5    # cents per minute, 06:00-22:00
+NIGHT_RATE = 2  # cents per minute, 22:00-06:00
+
+
+def _minutes(a: datetime, b: datetime) -> int:
+    return int((b - a).total_seconds()) // 60
+
+
+def _same_day_price(start: datetime, end: datetime) -> int:
+    """start and end fall on one calendar day (end may be the following midnight)."""
+    six = datetime.combine(start.date(), time(6))
+    ten = datetime.combine(start.date(), time(22))
+    if end <= six or start >= ten:
+        return _minutes(start, end) * NIGHT_RATE
+    if start < six and end <= ten:
+        return _minutes(start, six) * NIGHT_RATE + _minutes(six, end) * DAY_RATE
+    if start < six:
+        return (_minutes(start, six) * NIGHT_RATE
+                + _minutes(six, ten) * DAY_RATE
+                + _minutes(ten, end) * NIGHT_RATE)
+    if end <= ten:
+        return _minutes(start, end) * DAY_RATE
+    return _minutes(start, ten) * DAY_RATE + _minutes(ten, end) * NIGHT_RATE
+
+
+def price(entry: datetime, exit: datetime) -> int:
+    if exit <= entry:
+        return 0
+    if entry.date() == exit.date():
+        return _same_day_price(entry, exit)
+    # First partial day, whole days in between, last partial day.
+    first_midnight = datetime.combine(entry.date() + timedelta(days=1), time(0))
+    total = _same_day_price(entry, first_midnight)
+    full_days = (exit.date() - first_midnight.date()).days
+    total += full_days * (16 * 60 * DAY_RATE + 8 * 60 * NIGHT_RATE)
+    last_midnight = datetime.combine(exit.date(), time(0))
+    if exit > last_midnight:
+        total += _same_day_price(last_midnight, exit)
+    return total
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+from datetime import datetime, time, timedelta
+
+# (start, end, cents per minute). The bands tile the day; end <= start means the next day.
+BANDS = [
+    (time(6), time(22), 5),
+    (time(22), time(6), 2),
+]
+
+
+def price(entry: datetime, exit: datetime) -> int:
+    """Each band occurrence's overlap with the stay, in minutes, times its rate."""
+    total = 0
+    day = entry.date() - timedelta(days=1)  # a night band that began the evening before entry
+    while day <= exit.date():
+        for start, end, rate in BANDS:
+            band_start = datetime.combine(day, start)
+            band_end = datetime.combine(day + timedelta(days=1 if end <= start else 0), end)
+            overlap = min(band_end, exit) - max(band_start, entry)
+            if overlap > timedelta(0):
+                total += int(overlap.total_seconds()) // 60 * rate
+        day += timedelta(days=1)
+    return total
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

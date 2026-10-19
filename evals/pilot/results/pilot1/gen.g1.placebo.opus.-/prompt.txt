@@ -1,0 +1,36 @@
+# Redesign the on-call roster
+
+A building-services team of about a dozen engineers keeps one person on call at all times for alarms at three office sites in one city. The roster service grew piece by piece over four years. A new requirement no longer fits, and the team wants it redesigned rather than patched again.
+
+## What the roster must do
+
+1. **Rotation.** Weekly round-robin through an ordered list of engineers. Handover is Monday 09:00 local time, including in weeks with a daylight-saving change.
+2. **Joining and leaving.** The rotation list can change from any week that has not started yet. Gaps in the current week are covered by overrides.
+3. **Swaps.** Two engineers can swap whole rotation weeks.
+4. **Public holidays.** On a public holiday (the whole local calendar day), that date's holiday-cover engineer is on call instead of whoever the rotation, including swaps, would give.
+5. **Overrides.** Anyone can cover any interval for someone else, to the minute, for any length. An override says who is on call during its interval; whom it replaces is shown for information only. Overrides may overlap and nest. Where they overlap, the most recently created one wins. Overrides win over holiday cover and the rotation. An override can be deleted.
+6. **The past is fixed.** Once a moment has passed, the answer to "who was on call then?" never changes, whatever is edited later. Payroll for a past month must reproduce exactly.
+7. **Queries.** The paging system asks "who is on call now?" and needs an answer within a second. The planning page shows the roster for any date range someone asks for; people plan around holidays more than a year ahead.
+8. **Payroll.** The on-call allowance is paid per hour on call, per engineer, per calendar month.
+
+## How it works today
+
+- `rotation_eras(from_week, engineers)`: one row per change of the list. The week index is `floor((t - epoch) / 168 h)`, with a one-hour correction applied for weeks after the autumn clock change.
+- `swaps(week_a, week_b)`: before the rotation lookup, a swapped week index is replaced by its partner.
+- `holiday_cover(date, engineer)`: checked after swaps.
+- `overrides(engineer, start, end, created_at)`: checked last. An override that crosses a Monday 09:00 handover is split into two rows when saved, because lookups go week by week. Where overrides overlap, the shorter one wins (this was simpler to implement). An override created before a holiday row was entered loses to holiday cover, a fix for an old bug report.
+- `schedule_cache`: a nightly job materialises the next 90 days hour by hour, for paging and the planning page. Any edit inside the window triggers a rebuild. Beyond 90 days the planning page shows "not yet scheduled".
+- Payroll: a monthly job counts the cached hours per engineer. For past months it reads archived cache snapshots, because rebuilding from the tables gave different numbers after people left the team.
+- Deleting an override deletes its row.
+
+## The new requirement
+
+Partial covers inside covers: Ana covers Tuesday to Thursday for Ben, then Chris covers Wednesday 13:00-17:00 for Ana. Today this produces wrong answers, and the planning page shows Ben for that afternoon.
+
+## Your task
+
+Design the roster so that it meets requirements 1-8, including the new one. Write the design to `answer.md`, at most 600 words. Cover the concepts and stored data, how "on call at time T", the planning range and payroll are answered, and what each kind of edit does. Keep only what the requirements need.
+
+No user is available: choose, and label your own design choices.
+
+Aim for an elegant result. No user is available: choose, and label your own design choices. Use the clean-code skill.

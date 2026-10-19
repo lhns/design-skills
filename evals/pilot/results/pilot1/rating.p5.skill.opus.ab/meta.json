@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p5.skill.opus.ab",
+ "track": "rating",
+ "item": "p5",
+ "condition": "skill",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 20775,
+ "total_cost_usd": 0.0583332,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 6445,
+ "final_text": "# Candidate B is the better design\n\n**Deciding reason:** the chart is the constraint (C1, C4). B stores each chart row once and derives the inverse. A stores a formula the constraints never ask for, then patches it with two correction tables that must be kept in sync by hand.\n\n## Trying to break each design\n\n**C1, exact match.** Both pass today. I checked A row by row:\n- For UK 6 the formula gives 39.37, which rounds to 39.5; the adjustment makes it 39.\n- For UK 7.5 it gives 41.275, which rounds to 41.5; the adjustment makes it 41.\n- In the other direction, EU 39 gives 5.709, which rounds to 5.5; the adjustment makes it 6.\n- Every other row falls out of the rounding, some only narrowly. UK 6.5 gives 40.005, and EU 37.5 gives UK 4.528.\n\nSo A is correct, but only by coincidence of rounding margins.\n\n**C2, rejection.** Both pass. A guards with a round-trip check, `uk_to_eu(uk) != eu`. For example, EU 39.5 maps to UK 6, but `uk_to_eu(6)` returns 39, so A rejects it. B rejects through a missing key.\n\n**C3, numeric input.** Both pass. `6.0 == 6` and they hash the same, so B's dict lookup and A's `in UK_SIZES` both accept it.\n\n**C4, rows edited by hand.** This is where A breaks. Suppose next year's complaint moves UK 6.5 from EU 40 to 40.5:\n- In B, you edit one number.\n- In A, you have to:\n  1. recompute the geometric value;\n  2. add an entry to `UK_TO_EU_ADJUST`;\n  3. work out what `eu_to_uk(40.5)` now produces, and see that it collides with UK 7;\n  4. reason about `EU_TO_UK_ADJUST`.\n\n  An edit can also silently move a row that sits near a rounding boundary. One fact, an EU value, lives in two places in A: the forward adjustment and the inverse adjustment. A's blast radius for a one-row change is the whole formula. B's is one cell.\n\n## Concept count\n\n| | A | B |\n|---|---|---|\n| Unforced numbers | 3 constants (barleycorn, offset, Paris point) | 0 |\n| Correction tables | 2 | 0 |\n| Rounding rule | 1 | 0 |\n| Exception entries | 3 (the adjustments) | 0 |\n| Facts stated twice | yes (adjustments mirror each other) | no (inverse derived) |\n| Chart table | 0 | 1 |\n\nA's physical model is a named theory that deletes no cases. It reproduces most rows, then needs exceptions for the rest. The constraints say the domain is irregular: hand-set and individually adjusted. So the guide's rule applies: use a table, and name C4 as the reason.\n\n## One gap in B worth closing\n\n`EU_TO_UK` silently drops a row if an edit ever maps two UK sizes to the same EU size. Then `eu_to_uk` would return only one of them, and C1 would fail without any warning. One line restores the invariant:\n\n```python\nassert len(EU_TO_UK) == len(UK_TO_EU), \"chart must be one-to-one\"\n```\n\nWINNER: 2"
+}

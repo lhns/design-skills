@@ -1,0 +1,35 @@
+# Youth football league referee assignment: design record
+
+Written by the designer with Priya, the league coordinator, in sessions on 2026-02-03, 2026-02-10 and 2026-02-17.
+
+## Context
+The league runs about 60 games each weekend across five age groups and has a pool of around 40 volunteer and paid referees. Today Priya assigns every game by phone and spreadsheet, which takes her most of each Thursday.
+
+## What Priya said
+- 2026-02-03: "Every game needs a confirmed referee at least 48 hours before kick-off."
+- 2026-02-03: "Only certified referees may take under-14 games and older."
+- 2026-02-10: "The treasurer pays referees only by bank transfer now. No cash at the fields after last season's theft."
+- 2026-02-10: "We tried vouchers two seasons ago. The referees hated them. Never again."
+- 2026-02-10: "Referees keep complaining that the same few people get all the good games."
+
+## Constraints
+- C1: Each game has a confirmed referee 48 hours before kick-off. (Priya, 02-03)
+- C2: Under-14 and older games go only to certified referees. (Priya, 02-03)
+- C3: No cash payments at the fields. (Priya, 02-10)
+- C4: No vouchers. (Priya, 02-10)
+- C5: Good games are spread fairly across referees. (Priya, 02-10)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 Who assigns games | Priya by hand; referees claim open games; automatic rotation | automatic rotation: more complex than needed, claiming is simpler | referees claim open games | decided |
+| D2 Certification check | block the claim; Priya reviews claims afterwards | review afterwards: C2 | block the claim | decided |
+| D3 Payment method | bank transfer; cash at the field; vouchers | cash: C3; vouchers: C4 | - | open, asked Priya 02-17: "Which payment method should we use?" |
+| D4 Games still open near the deadline | email all eligible referees; Priya assigns by hand | - | email at 72 hours, Priya assigns at 48 hours (designer default) | open |
+| D5 Reminder to the referee | the day before; the morning of the game | - | the day before (designer default) | open |
+
+## Design
+Each Monday the system publishes the weekend's games. Eligible referees see the games they may claim. Under-14 and older games are hidden from uncertified referees, so they cannot claim them (D2). A claim confirms the referee at once. At 72 hours before kick-off, any unclaimed game is emailed to all eligible referees. At 48 hours it lands on Priya's list to assign by hand (D4). Referees get a reminder the day before (D5). After the game, the referee's fee is queued for payment (D3).
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

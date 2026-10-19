@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p5.placebo.opus.ba",
+ "track": "rating",
+ "item": "p5",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ba",
+ "duration_ms": 12901,
+ "total_cost_usd": 0.0382988,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5729,
+ "final_text": "# Design 1 (Candidate B) is the better design\n\n**It matches the problem.** The requirements say the factory chart is authoritative and set by hand. Design 1 stores that chart as data, and the code is the chart. Anyone can check it against the factory sheet in seconds, and it meets constraint 1 by construction.\n\n**It handles the real change pattern.** Constraint 4 is the deciding factor. Rows get edited one at a time after fitting complaints.\n- **Design 1:** you change one number in one dictionary. The reverse map is derived from it automatically, so the two directions cannot drift apart.\n- **Design 2:** you have to work out the geometric value from barleycorns and Paris points, find the new offset, and update `UK_TO_EU_ADJUST`. You also have to check whether `EU_TO_UK_ADJUST` needs a matching entry, because the rounding in the reverse direction lands differently. Today EU 39 needs a reverse adjustment but UK 7.5 \u2192 EU 41 does not, which is easy to get wrong. Two independently maintained adjustment tables are exactly the kind of duplicated knowledge that drifts.\n\n**Design 2's model does not pay for itself.** The barleycorn and Paris-point formula looks principled, but the factory does not follow it. That is why the patch tables exist. The real source of truth is still a hand-set chart, now spread across a formula, a rounding helper, two offset tables, and a round-trip check. Those parts work together for the current values, but they are fragile. A future half-size adjustment could leave the rounding at a tie or produce a value the round-trip check rejects. A reader cannot confirm correctness without recomputing every row.\n\n**Validation is equally good in Design 1.** Python treats `6`, `6.0` and `6.5` correctly as dictionary keys, because `6 == 6.0` and both have the same hash. Unknown sizes in either direction raise `ValueError` with a clear message, which meets constraints 2 and 3.\n\n**Two small things to watch in Design 1:**\n- The reverse map silently assumes EU values are unique. An assertion or test such as `len(EU_TO_UK) == len(UK_TO_EU)` would protect against a future edit that makes two UK sizes map to the same EU size.\n- A test that checks the full chart in both directions would also be worth adding.\n\nWINNER: 1"
+}

@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p4.plain.sonnet.ab",
+ "track": "rating",
+ "item": "p4",
+ "condition": "plain",
+ "model": "sonnet",
+ "order": "ab",
+ "duration_ms": 8240,
+ "total_cost_usd": 0.015628,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2714,
+ "final_text": "**Design 1 is better.**\n\n**Why Candidate A fits this situation**\n\n- The rules are changed only by the engineers who own the service, through code review and deploy. The usual reason to move rules into config is to let non-engineers change them or to change them without a deploy. Neither applies here, so the YAML buys no flexibility and adds an interpretation layer.\n- Candidate A is about 15 lines, readable top to bottom, and its order mirrors the stated priority list one-to-one. Type checkers, linters, tests, and \"find usages\" all work on it directly.\n- A rule change is a code diff reviewed the same way as any other, so there is no separate config path to review or deploy.\n\n**Problems with Candidate B**\n\n- It builds a small rule-engine DSL (`eq`, `ne`, `gt`, `contains_any`) that someone has to learn, maintain, and extend whenever a rule needs something new, such as an OR across fields, a negation, or a comparison between fields. Each of those means changing the interpreter anyway, so changes are split across two files and two languages.\n- It does not faithfully express the spec as a flat list. Rule 2 (\"refund\": over 500 goes to escalations, else billing) has been split into two rules, and rule 4 into two as well. That works because of ordering, but the correspondence with the requirements is less direct and easier to break during edits.\n- Errors move from import or review time to runtime or are silently wrong: a typo in a field name raises `AttributeError` at routing time, a typo in an operator raises `KeyError`, and a mistaken `contains_any: refund` (a string rather than a list) would silently match on single characters. `next(...)` raises `StopIteration` if the catch-all is ever removed.\n- `routing.yaml` is opened relative to the current working directory at import, so it breaks depending on where the service is launched, and the file must be shipped with the code.\n- It adds a dependency (PyYAML) and has no type safety.\n\n**Caveats on Candidate A**\n\n- It is a long `if` chain, which could get unwieldy if the rule count grows into the dozens. At a handful of rules that changes a few times a year, this is not a concern. If requirements later change (non-engineers editing rules, per-tenant rules, runtime reloads), revisiting a data-driven design would then be justified.\n\nSince the stated change process is code review and deploy by the owning engineers, the simple, direct code is the better design.\n\nWINNER: 1"
+}

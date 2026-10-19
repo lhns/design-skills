@@ -1,0 +1,4 @@
+better: b
+longer: b
+kind: wrong-abstraction-merge-with-mode-flag-vs-two-plain-functions
+reason: "The two exports share only a loop shape and change for different owners (constraint 4), so A's for_board flag braids two formats through four branch points where any edit risks the other export, while B's two plain functions keep each format whole and independently changeable at the cost of repeating a sort key."

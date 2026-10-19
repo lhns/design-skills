@@ -1,0 +1,4 @@
+better: b
+longer: b
+kind: shorter-but-drops-a-stated-constraint
+reason: "A refunds a whole spend as one grant with the first grant's expiry, which breaks constraint 4 whenever a spend drew from several grants (later hours return expiring too early, or not at all once the first grant has expired), while B keeps it by recording which grant each hour came from."

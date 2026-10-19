@@ -1,0 +1,21 @@
+{
+ "run_id": "gen.g1.placebo.opus.-",
+ "track": "gen",
+ "item": "g1",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "-",
+ "duration_ms": 108246,
+ "total_cost_usd": 0.3910466,
+ "mode": "full",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": "clean-code",
+ "skills_invoked": [
+  "clean-code"
+ ],
+ "timed_out": false,
+ "tokens": 132850,
+ "final_text": "I've written the design to `answer.md` (591 words, under the 600 limit). It replaces the layered patches with two ideas.\n\n**1. One rule to look up who is on call, nothing stored ahead of time.** `on_call(T)` checks three things in order and takes the first match:\n- **Override:** the newest override covering T.\n- **Holiday:** the cover engineer if T's local date is a public holiday.\n- **Rotation:** otherwise, the engineer the rotation gives for that week, after applying any swap.\n\nNested covers then need no special handling. Chris's override is newer than Ana's, so Chris is on call Wednesday 13:00\u201317:00 and Ana for the rest of her cover. The planning page cuts the requested range at the moments the answer can change (handovers, holiday midnights, override starts and ends) and looks up each piece, so it works for any range, however far ahead. Payroll adds up those pieces per engineer over the local calendar month. Paging needs three indexed lookups, with no cache or nightly job.\n\n**2. Edits only add rows; they never change or remove them.** Each row records when it was entered and, if withdrawn, when that happened. The answer for time T uses only the rows in force at T, so no edit can change the past. That is why payroll for a past month always comes out the same, and why snapshots and the \"not in the past\" checks for each edit type are no longer needed. Deleting an override just marks it withdrawn from that moment.\n\nWeeks are counted by calendar date rather than in blocks of 168 hours, so a week with a clock change is simply 167 or 169 hours long and the one-hour correction goes away.\n\n**My design choices** (each is labelled in the file):\n- A new rotation list starts with its first engineer.\n- A week can be in only one swap at a time; swaps don't chain.\n- Payroll pays the hours actually on call, so a clock-change day counts as 23 or 25 hours.\n- An edit entered late takes effect from when it was entered: an 08:00 cover entered at 08:20 starts at 08:20.\n- Correcting history is treated as a payroll adjustment and left out of this design.\n\n**Dropped from the current system:** override splitting, \"shortest wins\", the holiday exception for older overrides, the schedule cache and its nightly job, payroll snapshots, and permanent deletes."
+}

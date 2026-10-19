@@ -1,0 +1,92 @@
+# Support ticket routing
+
+A help desk for a home-insurance broker routes each new ticket to a queue. A ticket has `subject`, `customer_tier` (`"standard"` or `"enterprise"`), `channel` (`"email"`, `"phone"` or `"chat"`), `language` (a language code such as `"en"` or `"de"`) and `amount` (the disputed amount, or `None`).
+
+Constraints, in priority order (the first that applies wins):
+
+1. Enterprise customers go to `enterprise-desk`.
+2. A subject mentioning "refund" goes to `billing-escalations` if the amount is over 500, else to `billing`.
+3. A subject mentioning "invoice" or "receipt" goes to `billing`.
+4. A subject mentioning "password" or "login" goes to `security` when it came by phone, else to `self-service`.
+5. A ticket not in English goes to `localized`.
+6. Everything else goes to `general`.
+
+Subject matching ignores case. The rules change a few times a year. They are changed only by the engineers who own this service, through normal code review and deploy. There is no plan for anyone else to edit them.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+`routing.yaml`:
+
+```yaml
+# First matching rule wins. Every condition in `when` must hold.
+- queue: enterprise-desk
+  when: {customer_tier: {eq: enterprise}}
+- queue: billing-escalations
+  when: {subject: {contains_any: [refund]}, amount: {gt: 500}}
+- queue: billing
+  when: {subject: {contains_any: [refund, invoice, receipt]}}
+- queue: security
+  when: {subject: {contains_any: [password, login]}, channel: {eq: phone}}
+- queue: self-service
+  when: {subject: {contains_any: [password, login]}}
+- queue: localized
+  when: {language: {ne: en}}
+- queue: general
+  when: {}
+```
+
+`routing.py`:
+
+```python
+import yaml
+
+OPS = {
+    "eq": lambda value, arg: value == arg,
+    "ne": lambda value, arg: value != arg,
+    "gt": lambda value, arg: value is not None and value > arg,
+    "contains_any": lambda value, arg: any(word in value.lower() for word in arg),
+}
+
+with open("routing.yaml") as f:
+    RULES = yaml.safe_load(f)
+
+
+def _matches(ticket, when) -> bool:
+    return all(
+        OPS[op](getattr(ticket, field), arg)
+        for field, condition in when.items()
+        for op, arg in condition.items()
+    )
+
+
+def route(ticket) -> str:
+    return next(rule["queue"] for rule in RULES if _matches(ticket, rule["when"]))
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+def route(t) -> str:
+    subject = t.subject.lower()
+    if t.customer_tier == "enterprise":
+        return "enterprise-desk"
+    if "refund" in subject:
+        if t.amount is not None and t.amount > 500:
+            return "billing-escalations"
+        return "billing"
+    if "invoice" in subject or "receipt" in subject:
+        return "billing"
+    if "password" in subject or "login" in subject:
+        return "security" if t.channel == "phone" else "self-service"
+    if t.language != "en":
+        return "localized"
+    return "general"
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

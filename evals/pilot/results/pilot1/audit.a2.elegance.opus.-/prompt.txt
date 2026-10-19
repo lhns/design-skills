@@ -1,0 +1,37 @@
+# Branch library hold queue: design record
+
+Written by the designer with Tomas, the branch librarian, in sessions on 2026-05-04, 2026-05-11 and 2026-05-18.
+
+## Context
+Members can hold a book that is out on loan. Today staff keep a paper list, and waiting members often hear nothing when the book returns. The queue will live in the existing catalogue system.
+
+## What Tomas said
+- 2026-05-04: "When a book comes back, the next person waiting should be told it's ready."
+- 2026-05-04: "Keep it simpler than the old system: no hold fees at all."
+- 2026-05-04: "Since the data review last year we don't keep phone numbers."
+- 2026-05-11: "Every member has an email address on file. We stopped printing pickup slips last year and we're not going back."
+- 2026-05-11, on whether teachers should go to the front of the queue: "Not sure yet. I need to ask the head librarian."
+- 2026-05-18: "Reference books can't be held. They never leave the building."
+- 2026-05-18: Tomas looked at the queue-flow sketch and said "looks good". The sketch shows decisions D1-D5 as below and adds no new constraint.
+
+## Constraints
+- C1: The next member waiting is told when a held item is ready. (Tomas, 05-04)
+- C2: No hold fees. (Tomas, 05-04)
+- C3: No phone numbers are stored. (Tomas, 05-04)
+- C4: Pickup notices are not printed. (Tomas, 05-11)
+- C5: Reference books cannot be held. (Tomas, 05-18)
+
+## Decisions
+
+| Decision | Options | Ruled out by | Choice | Status |
+| --- | --- | --- | --- | --- |
+| D1 Hold fee | flat fee per hold; no fee | flat fee: C2 | no fee | decided by Tomas 05-04 |
+| D2 Ready notice | email; text message; printed slip | text message: C3; printed slip: C4 | email | forced; reported to Tomas 05-11, not asked |
+| D3 Queue order | first come, first served; teachers first | - | first come, first served (designer default) | open: Tomas "not sure yet" (05-11) |
+| D4 What can be held | all items; all items except reference | all items: C5 | all items except reference | decided; changed from "all items" on 05-18 |
+| D5 Pickup window | 3 days; 7 days | - | 7 days (designer default) | open, to raise with Tomas |
+
+## Design
+A hold joins the end of the item's queue (D3). When a copy is checked in, the system marks it for the first member in the queue and sends that member an email (D2). If the member doesn't collect it within the pickup window (D5), the copy passes to the next member and the first member's hold is cancelled. Reference items show no "place hold" button (D4). Holds are free (D1). If Tomas later decides that teachers go first, D3 becomes a queue sorted by member type, then date.
+
+Review this design record for problems in how decisions were made and recorded. List each as `PROBLEM: <where>: <what is wrong>`, or write `NO PROBLEMS`.

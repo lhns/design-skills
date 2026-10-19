@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p4.placebo.opus.ab",
+ "track": "rating",
+ "item": "p4",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 14431,
+ "total_cost_usd": 0.038850800000000005,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5675,
+ "final_text": "**Candidate A is the better design.**\n\nBoth candidates route every ticket correctly. I checked B's rule order against the spec: the refund split, the shared `billing` rule and the password/login split all match. So the choice comes down to design. The deciding fact is that the rules change a few times a year, only by the owning engineers, through code review and deploy. B's main benefit is that rules can be edited without touching code, and nobody needs that.\n\n**Why A wins**\n\n- **It is the simplest thing that works (KISS, YAGNI).** It is 15 lines of plain Python that read almost word for word like the spec. A reviewer can check it against the six numbered rules in seconds.\n- **Changes are just as cheap.** Changing a rule means editing one `if`. B would need a YAML edit of the same size. B's extra machinery only pays off for non-engineer editors or runtime reloads, and neither is planned.\n- **The spec's structure stays visible.** Rule 2 and rule 4 each appear as one rule with a branch, as written. B splits each into two entries and merges \"refund\" into the invoice/receipt rule. The rules are still correct, but the YAML no longer maps one-to-one to the requirements. Someone must reason about ordering to confirm that `billing-escalations` stays above `billing`.\n- **Tools work on it.** Type checkers, linters, IDE navigation and coverage all apply to A. In B, a typo such as `custmer_tier`, `contians_any` or a misspelled queue name is just data. It fails at routing time with an `AttributeError`, a `KeyError` or a wrong queue, not at review or import.\n\n**B's specific weaknesses**\n\n- `open(\"routing.yaml\")` resolves relative to the current working directory, not the module. It breaks when the service starts from a different directory.\n- The file loads at import with no schema validation. Unknown operators or fields only fail when a ticket hits that rule.\n- `next(...)` with no default raises a bare `StopIteration` if someone removes the catch-all `general` rule. That is an obscure failure far from its cause.\n- It adds a YAML dependency and a small homemade rule language, with its own semantics: implicit AND, first match wins, `contains_any` lowercasing only the value. Every future maintainer has to learn it.\n- Testing it means testing the engine and the data together. A's tests describe routing behaviour directly.\n\n**When B would be right**\n\nIf non-engineers needed to edit the rules, or the rules had to change without a deploy, a data-driven engine would earn its cost. It would also need schema validation at load time and a path resolved relative to the module. That isn't the situation here.\n\n**Optional small improvements to A**\n\n- Name the threshold, for example `REFUND_ESCALATION_THRESHOLD = 500`.\n- Add a type hint for `t` and rename it to `ticket`.\n- Write one test per rule, plus tests for the priority boundaries, such as an enterprise refund and a non-English login ticket.\n\nWINNER: 1"
+}

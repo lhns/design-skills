@@ -1,0 +1,4 @@
+better: a
+longer: b
+kind: complexity-hidden-elsewhere-vs-plain
+reason: "B's low complexity is bought by moving the same seven cases into a YAML file plus a four-operator interpreter, so readers must learn a rule language and its ordering semantics to see what A states directly, and the stated reason for config (non-engineers editing rules without a deploy) does not exist here."

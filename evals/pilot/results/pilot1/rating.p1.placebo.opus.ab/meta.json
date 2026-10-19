@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p1.placebo.opus.ab",
+ "track": "rating",
+ "item": "p1",
+ "condition": "placebo",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 14555,
+ "total_cost_usd": 0.06308,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5993,
+ "final_text": "**Design 2 (Candidate B) is the better design.** Design 1 breaks a stated requirement, and its comment presents the bug as a deliberate choice.\n\n### Correctness: Candidate A violates constraint 4\n\nConstraint 4 says each refunded hour goes back to *the grant it was taken from* and keeps *that grant's* expiry. Candidate A records only `(hours, first_expiry)` per spend. On refund it either returns everything with the earliest expiry or returns nothing.\n\nConcrete failure:\n\n- Day 0: grant 1h (expires day 90).\n- Day 50: grant 10h (expires day 140).\n- Day 60: spend 5h. This takes 1h from the first grant and 4h from the second.\n- Day 100: refund.\n  - **Spec:** the 1h is lost because its grant expired. The 4h go back to the day-140 grant.\n  - **Candidate A:** `first` is day 90, which is earlier than day 100, so **all 5h are lost**. The customer is short-changed by 4 hours.\n\nWhen the refund happens before the first expiry, A gives all hours the earliest expiry. That shortens the life of credit that came from later grants. The comment (\"never lets a refund outlive the credit it replaces\") reasons only about not over-crediting. It ignores under-crediting, which the spec forbids just as clearly. A comment that justifies a spec violation is worse than no comment, because it discourages reviewers from questioning the code.\n\nA also re-adds refunded hours as a new `[expires, hours]` entry instead of restoring the original grant. That fragments the grant list, and the provenance the spec cares about is lost.\n\n### Clarity and design\n\n| Aspect | A | B |\n|---|---|---|\n| Data model | Anonymous `[expires, hours]` lists, indexed by `g[0]`/`g[1]` | Named `Grant` and `Spend` dataclasses |\n| Spend record | Lossy `(hours, expiry)` | Exact `(grant, hours)` provenance |\n| Errors | One message for two different failures | Separate \"must be positive\" and \"insufficient credit\" messages |\n| Side effects | `spend` sorts `self.grants` in place as a hidden mutation | Sorts a filtered copy and leaves stored order alone |\n| Loop | Visits every grant, with `first = first or \u2026` tricks | Iterates live grants only and stops early once satisfied |\n| Liveness rule | `expires > at` duplicated inline | Kept in one place, `_live(at)` |\n\n### Minor nits on B\n\n- `taken: list` could be typed `list[tuple[Grant, int]]`.\n- Neither design validates that `grant` hours are positive, or rejects a duplicate or unknown `spend_id` with a clear error. B's `pop` raises a bare `KeyError`.\n- `Spend` could simply be a list. The wrapper is acceptable as a named concept, though.\n\nNone of these come close to A's correctness bug. B models what the spec actually describes, which is per-grant provenance, and it does so readably.\n\nWINNER: 2"
+}

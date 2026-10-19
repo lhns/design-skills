@@ -1,0 +1,16 @@
+{
+ "run_id": "rating.p2.plain.opus.ab",
+ "track": "rating",
+ "item": "p2",
+ "condition": "plain",
+ "model": "opus",
+ "order": "ab",
+ "duration_ms": 9378,
+ "total_cost_usd": 0.03276,
+ "mode": "lean",
+ "skills_installed": [],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 2887,
+ "final_text": "**Design 1 is better.**\n\n**Behaviour today is the same.** Both handle the four questions correctly:\n\n- Both use an \"at or after cutoff\" rule (`hour >= cutoff`).\n- Both skip Sundays, and skip Saturdays for every site except W3.\n- Both raise `ValueError` for unknown codes, except in `is_valid_site`.\n\nSo the choice depends on constraint 5: a new site next spring, yearly detail changes, and edits made by whoever is on call.\n\n**Design 1 puts each fact in one place.**\n- Each site is a single `Site` record in `SITES`.\n- Adding the fourth site means adding one line. Changing a cutoff, carrier or Saturday policy means editing one named field.\n- Validity comes from the same table, so a site can't be \"valid\" while missing a label or carrier.\n- The frozen dataclass forces every field to be filled in. A new site therefore can't silently inherit a default.\n- An unfamiliar on-call engineer can see and change everything about a site without reading the logic.\n\n**Design 2 scatters site facts across the code.**\n- Each site's details are spread over four places: `VALID_SITES`, the label dict, and the conditionals in `carrier_for` and `ship_date`.\n- Several of those facts are hidden in defaults:\n  - `code == \"W3\"` means \"Beta, otherwise Alpha\".\n  - `code == \"S2\"` means \"14:00, otherwise 16:00\".\n  - `code != \"W3\"` means \"no Saturday\".\n- Adding site E4 to `VALID_SITES` and the label dict would compile and pass a quick check. But E4 would silently get Courier Alpha, a 16:00 cutoff and no Saturday shipping, whether or not that's true.\n- Likewise, moving Saturday shipping to N1 means rewriting a boolean expression rather than flipping a field. That kind of edit is easy to get wrong under on-call pressure.\n- These failures don't raise errors. They show up as the wrong carrier or a wrong ship date.\n\n**Shared limitation:** both store the cutoff as a whole hour. A future 15:30 cutoff would need a change in either design. In Design 1 that is one field type (e.g. `datetime.time`) changed in one place.\n\nWINNER: 1"
+}

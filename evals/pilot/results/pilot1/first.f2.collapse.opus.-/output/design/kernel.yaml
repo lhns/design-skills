@@ -1,0 +1,88 @@
+# Constraints (K), exclusions (X), values (W). Ids never change.
+# Statements quote the owner; anything read into them lives in forks.yaml `assumes`.
+items:
+  - id: K1
+    from: [V1]
+    statement: "Machines: table saw, bandsaw, lathe (woodshop); one laser cutter; three 3D printers; a small electronics bench."
+  - id: K2
+    from: [V2]
+    statement: "About 180 members on a flat monthly fee."
+  - id: K3
+    from: [V3]
+    statement: "Members get in with a key fob."
+  - id: K4
+    from: [V3]
+    statement: "The table saw and laser already sit behind fob-controlled power interlocks; they only switch on when a fob is tapped."
+  - id: K5
+    from: [V4]
+    statement: "Staff are on site 10:00-18:00."
+  - id: K6
+    from: [V4]
+    statement: "Members can stay until 22:00."
+  - id: K7
+    from: [V5]
+    statement: "Everyone has to be inducted on a machine before they use it."
+  - id: K8
+    from: [V6]
+    statement: "A trainer shows them and signs them off."
+  - id: K9
+    from: [V8]
+    statement: "People should pay for the acrylic and filament they use."
+  - id: W1
+    from: [V9]
+    statement: "No nickel-and-diming; nobody should feel a meter running while they work."
+  - id: K10
+    source: "Laser tube supplier, as reported by Ines (V11)"
+    from: [V11]
+    statement: "A laser tube lasts about 1,000 hours of cutting."
+  - id: K11
+    from: [V10, V11]
+    statement: "The tube died without warning twice this year; 'we never know where we are, so we can't order a spare in time.'"
+  - id: K12
+    from: [V12]
+    statement: "The laser is booked (it is a bookable machine today) and is booked solid."
+  - id: X1
+    from: [V13]
+    statement: "No member accounts with passwords."
+  - id: W2
+    from: [V14]
+    statement: "Front desk should not spend its day on credential resets."
+  - id: K13
+    from: [V15]
+    statement: "Members tap their fob. That's their identity, full stop."
+  - id: K14
+    from: [V16]
+    statement: "The table saw needs two people in the room who are both inducted on it."
+  - id: K15
+    from: [V17]
+    statement: "Insurer: an honour system isn't good enough; the two-person rule has to be enforced."
+  - id: K16
+    from: [V18]
+    statement: "There are no staff in the woodshop in the evenings, when most woodworkers come in."
+  - id: X2
+    from: [V18]
+    statement: "Closing the woodshop early isn't an option."
+  - id: K17
+    from: [V21]
+    statement: "At renewal the insurer asks to see induction sign-offs with each trainer's signature and the date."
+  - id: K18
+    from: [V21]
+    statement: "The insurer wants sign-off records kept for six years."
+  - id: K19
+    from: [V23]
+    statement: "People start fourteen-hour prints and hog the printers."
+  - id: W3
+    from: [V23]
+    statement: "Booking printers feels like overkill."
+  - id: K20
+    from: [V25]
+    statement: "Members book from home through the website; that has to keep working."
+  - id: W4
+    from: [V25]
+    statement: "Booking from home has to be easy."
+  - id: K21
+    from: [V26]
+    statement: "Budget is fine; the board approved it."
+  - id: W5
+    from: [V27]
+    statement: "We'd rather not run our own server."

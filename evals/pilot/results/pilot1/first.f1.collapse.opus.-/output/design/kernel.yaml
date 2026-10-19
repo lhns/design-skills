@@ -1,0 +1,76 @@
+# Kernel: constraints (K), exclusions (X), values (W).
+# Every text is Dele's own wording (see vision.md). Ids never change.
+# My readings of these are NOT here; they are assumptions in forks.yaml (assumes:).
+items:
+  - id: K1
+    text: "We're open Tuesday, Thursday and Saturday."
+    from: [V1]
+  - id: K2
+    text: "Each day has a sorting shift in the warehouse (we need at least 4 people)"
+    from: [V2]
+  - id: K3
+    text: "a front-of-house shift handing out parcels (at least 3)"
+    from: [V2, V3]
+  - id: K4
+    text: "on Saturdays a home delivery run with the van (a driver plus one helper)"
+    from: [V4]
+  - id: K5
+    text: "About 90 volunteers on the books, maybe 40 who actually turn up in a given month."
+    from: [V5]
+  - id: K6
+    text: "Right now sign-up is a mix of our group chat and a paper sheet on the office door."
+    from: [V6]
+  - id: K7
+    text: "Every week I spend Sunday night working out who's actually coming and begging people to fill gaps. That's the main thing I want to fix."
+    from: [V7]
+  - id: K8
+    text: "a lot of our volunteers won't touch an app. Half of them are over 70."
+    from: [V8]
+  - id: K9
+    text: "The paper sheet on the door works for them and I'm not going to make them change."
+    from: [V9]
+  - id: K10
+    text: "nobody without a valid food hygiene certificate works on sorting or front of house"
+    from: [V10]
+  - id: K11
+    text: "Certificates expire after three years and people forget."
+    from: [V11]
+  - id: K12
+    text: "Drivers don't need one."
+    from: [V12]
+  - id: K13
+    text: "please don't leave it to the shift leads to check certificates."
+    from: [V13, V14]
+  - id: K14
+    text: "No-shows are killing us. Someone signs up, doesn't come, and we're short on sorting."
+    from: [V15]
+  - id: K15
+    text: "Some folks sign up for every Saturday till Christmas and then half the time don't show."
+    from: [V17]
+  - id: K16
+    text: "The council grant needs our total volunteer hours every quarter, split by activity (sorting, front of house, delivery)."
+    from: [V21, V22]
+  - id: K17
+    text: "[the group chat is] where I shout when the van driver drops out at 8am on a Saturday and I need someone with a licence now."
+    from: [V24]
+  - id: K18
+    text: "[home deliveries after March, when the van lease ends:] Plan for it, but don't bet the house on it."
+    from: [V26, V27]
+  - id: K19
+    text: "We have the office laptop and a printer."
+    from: [V28]
+  - id: K20
+    text: "We can't take on anything with a monthly fee unless I take it to the committee."
+    from: [V29]
+  - id: X1
+    text: "no points, badges, \"volunteer of the month\", leaderboards, nothing like that."
+    from: [V19]
+  - id: X2
+    text: "People here aren't ranked or scored. Ever."
+    from: [V20]
+  - id: W1
+    text: "A reminder the day before would help a lot, I think."
+    from: [V16]
+  - id: W2
+    text: "people post news and photos there too, which they like."
+    from: [V25]

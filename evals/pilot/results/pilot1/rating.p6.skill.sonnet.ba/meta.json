@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p6.skill.sonnet.ba",
+ "track": "rating",
+ "item": "p6",
+ "condition": "skill",
+ "model": "sonnet",
+ "order": "ba",
+ "duration_ms": 11956,
+ "total_cost_usd": 0.0220986,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5785,
+ "final_text": "**Design 2 is better.** Constraint 6 decides it: the council revises the bands about once a year, and a band may be split or moved.\n\n**Correctness today.** Both designs satisfy constraints 1-5. Here is how I checked that, including attempts to break each one.\n\n- **Design 2:**\n  - The loop starts at the day before entry so a night band that began the previous evening is counted.\n  - Bands that start after exit give a negative overlap and are skipped.\n  - If exit is not after entry, no overlap is positive, so the price is 0.\n  - Whole-minute inputs make the floor division exact.\n  - A 7-day stay needs about 9 iterations, which is trivial.\n- **Design 1:** I could not find a failing input. Its same-day branches cover every case, and the first partial day, the whole days in between and the last partial day are handled correctly.\n\n**Cost of the yearly revision (C6).**\n- **Design 1** encodes the band structure in several places:\n  - the literals `6` and `22`;\n  - the five-branch case analysis in `_same_day_price`, which assumes exactly one day band inside one night band;\n  - the full-day constant `16*60*DAY_RATE + 8*60*NIGHT_RATE`, which states the band lengths a second time;\n  - the day/night rates, which exist as named constants separate from the boundaries.\n\n  Splitting a band, such as adding an evening peak, means rewriting the branch logic and the full-day constant. Forgetting the constant gives silently wrong prices for long stays. The count of special-case branches and duplicated facts is high, and a single constraint change touches most of the code.\n- **Design 2** expresses the bands as data in one table. A split or move is a one-row edit, and the algorithm is untouched. The bands are the only place that holds boundaries and rates. The single shared concept is \"overlap of the stay with each band occurrence, times its rate\", and this deletes the case analysis and the full-day constant.\n\n**Remaining caveat for Design 2.** It assumes the bands tile the day without gaps or overlaps. Nothing checks this, so a bad table would misprice silently. A one-line assertion over the table could enforce it, and it would be a small addition next to Design 1's duplicated facts.\n\n**Deciding reason:** both are correct today, but Design 2 keeps C6 with one data table and no branches, while Design 1 hardcodes the band structure in branches and a derived constant that must all be rewritten when the bands change.\n\nWINNER: 2"
+}

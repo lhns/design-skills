@@ -1,0 +1,118 @@
+# Prepaid desk-hour credits
+
+A coworking space sells prepaid desk-hour packs. Front-desk staff can also grant free hours as goodwill. Booking a desk spends hours; cancelling a booking refunds them. We need the core ledger: `grant`, `spend`, `refund` and `balance`. Persistence and the HTTP layer are out of scope.
+
+Constraints:
+
+1. Every grant expires 90 days after it was made, paid packs and goodwill alike.
+2. A spend uses the hours that expire soonest first.
+3. A spend larger than the unexpired balance fails and changes nothing. Spends must be positive.
+4. Cancelling a booking refunds its spend: each hour goes back to the grant it was taken from and keeps that grant's expiry. Hours whose grant has expired by the time of the refund are not returned.
+5. The balance at time `t` counts only hours in grants unexpired at `t`.
+6. Amounts are whole hours. Times are timezone-aware datetimes, and the caller passes them in.
+
+Two candidate implementations follow. Which one is the better design?
+
+Design 1:
+
+# Candidate B
+
+```python
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+
+VALIDITY = timedelta(days=90)
+
+
+@dataclass
+class Grant:
+    hours: int
+    expires: datetime
+
+
+@dataclass
+class Spend:
+    taken: list = field(default_factory=list)  # (grant, hours taken from it)
+
+
+class Ledger:
+    def __init__(self):
+        self.grants = []
+        self.spends = {}  # spend id -> Spend
+
+    def grant(self, hours, at):
+        self.grants.append(Grant(hours, at + VALIDITY))
+
+    def balance(self, at):
+        return sum(g.hours for g in self._live(at))
+
+    def spend(self, spend_id, hours, at):
+        if hours <= 0:
+            raise ValueError("spend must be positive")
+        if hours > self.balance(at):
+            raise ValueError("insufficient credit")
+        spend = Spend()
+        left = hours
+        for g in sorted(self._live(at), key=lambda g: g.expires):
+            take = min(g.hours, left)
+            if take:
+                g.hours -= take
+                spend.taken.append((g, take))
+                left -= take
+            if not left:
+                break
+        self.spends[spend_id] = spend
+
+    def refund(self, spend_id, at):
+        """Return each hour to the grant it came from; hours of expired grants are lost."""
+        for g, hours in self.spends.pop(spend_id).taken:
+            if g.expires > at:
+                g.hours += hours
+
+    def _live(self, at):
+        return [g for g in self.grants if g.expires > at]
+```
+
+Design 2:
+
+# Candidate A
+
+```python
+from datetime import timedelta
+
+VALIDITY = timedelta(days=90)
+
+
+class Ledger:
+    def __init__(self):
+        self.grants = []  # [expires, hours] pairs
+        self.spent = {}   # spend id -> (hours, expiry to refund with)
+
+    def grant(self, hours, at):
+        self.grants.append([at + VALIDITY, hours])
+
+    def balance(self, at):
+        return sum(h for expires, h in self.grants if expires > at)
+
+    def spend(self, spend_id, hours, at):
+        if hours <= 0 or hours > self.balance(at):
+            raise ValueError("invalid or insufficient credit")
+        self.grants.sort()
+        left, first = hours, None
+        for g in self.grants:
+            if g[0] > at and g[1] and left:
+                take = min(g[1], left)
+                g[1] -= take
+                left -= take
+                first = first or g[0]
+        # Hours are drawn soonest-expiry first, so refunding them all with the
+        # first grant's expiry never lets a refund outlive the credit it replaces.
+        self.spent[spend_id] = (hours, first)
+
+    def refund(self, spend_id, at):
+        hours, expires = self.spent.pop(spend_id)
+        if expires > at:
+            self.grants.append([expires, hours])
+```
+
+Which design is better? End your answer with a line `WINNER: 1` or `WINNER: 2`.

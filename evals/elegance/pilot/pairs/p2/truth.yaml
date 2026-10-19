@@ -1,0 +1,4 @@
+better: a
+longer: a
+kind: true-duplication-vs-single-source
+reason: "B states the set of sites in two places and each site's facts as scattered code-specific conditionals (\"W3\" twice, \"S2\" once, everyone else by default), so opening the fourth site means four coordinated edits that can silently disagree; A states each site once in one table that every function reads."

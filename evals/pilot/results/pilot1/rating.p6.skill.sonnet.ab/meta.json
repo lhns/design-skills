@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p6.skill.sonnet.ab",
+ "track": "rating",
+ "item": "p6",
+ "condition": "skill",
+ "model": "sonnet",
+ "order": "ab",
+ "duration_ms": 15158,
+ "total_cost_usd": 0.024526600000000003,
+ "mode": "lean",
+ "skills_installed": [
+  "elegance"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 6026,
+ "final_text": "**Design 1 is better.** It keeps constraint 6 (the council revises the bands about once a year) and still satisfies the others. Design 2 satisfies the current tariff but breaks constraint 6.\n\n**Constraints**\n- C1 and C2: each minute is charged at its band's rate.\n- C3: stays last up to 7 days and cross midnight repeatedly.\n- C4: whole minutes, no daylight saving.\n- C5: a non-positive stay costs 0.\n- C6: bands get split or moved, about once a year.\n\n**Design 1 against each constraint**\n- **C1/C2:** it sums the overlap of the stay with each band occurrence, times the rate. This is the definition of the price.\n- **C3:** it starts one day before entry, so a night band that began the previous evening is counted. That is enough because no band is longer than 24 hours. It runs to the exit date, so any number of midnights is covered.\n- **C4:** the inputs are whole minutes, so the floor division per overlap loses nothing. Naive datetimes mean no timezone logic.\n- **C5:** when exit \u2264 entry, every overlap is \u2264 exit \u2212 entry \u2264 0, so the total is 0 without a separate branch.\n- **C6:** a change to the bands is an edit to the `BANDS` table, such as splitting a band or moving a boundary. The algorithm does not change.\n\n**Design 2 against each constraint**\n- **C1\u2013C5:** it is correct for today's tariff. The case analysis in `_same_day_price` is exhaustive, and the partial-day, full-day and partial-day split handles multi-day stays.\n- **C6:** the bands are hardcoded in three places:\n  - the 6 and 22 boundaries and the `DAY_RATE`/`NIGHT_RATE` constants;\n  - a five-way branch on how the stay sits relative to those boundaries;\n  - the full-day constant `16*60*DAY + 8*60*NIGHT`, which restates the band lengths a second time.\n\n  A split or moved band means rewriting the branch analysis and the full-day constant. A third band multiplies the cases. The fact \"what the bands are\" is stated in several places that can drift apart.\n\n**Counts**\n- **Concepts:** Design 1 has one (the band table) plus one overlap rule. Design 2 has the same two rates plus a branch per relative position, a full-day constant, and a three-part day decomposition (first partial day, whole days, last partial day).\n- **Exception clauses:** Design 1 has none, because it needs no special case for same-day stays, whole days, or non-positive stays. Design 2 has several, including the same-day branch, the `exit > last_midnight` guard, and the explicit C5 check.\n- **Duplicated facts:** Design 1 states the bands once. Design 2 states them in three places.\n\n**Deciding reason:** Design 1 expresses the price as \"overlap of the stay with band occurrences\", so C6 becomes a data edit. Design 2 hardcodes the band shape into its branching and its full-day constant, so every tariff revision means rewriting logic.\n\nWINNER: 1"
+}

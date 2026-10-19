@@ -1,0 +1,4 @@
+better: b
+longer: a
+kind: forced-clean-model-vs-honest-lookup-table
+reason: "The chart is hand-set and edited row by row, so A's geometric model still needs the size list plus two correction tables that must be re-fitted (in both directions) whenever a row moves, while B states the chart once and derives the inverse; the formula explains nothing the factory actually uses."

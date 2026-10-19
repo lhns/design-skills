@@ -1,0 +1,18 @@
+{
+ "run_id": "rating.p1.placebo.sonnet.ab",
+ "track": "rating",
+ "item": "p1",
+ "condition": "placebo",
+ "model": "sonnet",
+ "order": "ab",
+ "duration_ms": 7341,
+ "total_cost_usd": 0.027816,
+ "mode": "lean",
+ "skills_installed": [
+  "clean-code"
+ ],
+ "expected_skill": null,
+ "skills_invoked": [],
+ "tokens": 5623,
+ "final_text": "**Design 2 is better.** Design 1 breaks constraint 4 and has a latent crash.\n\n**Design 1 problems**\n\n- **Refund semantics are wrong.** A spend can draw from several grants with different expiries. Design 1 refunds all hours as a single grant with the *first* (soonest) expiry. Its comment claims this is safe, but it is wrong in both directions:\n  - Hours taken from a later-expiring grant come back with an earlier expiry, so they are lost sooner than they should be.\n  - If the soonest grant has expired by refund time, the whole refund is dropped, including hours from grants that are still live. That violates \"each hour goes back to the grant it was taken from and keeps that grant's expiry.\"\n- **Refund can crash.** `refund` compares `expires > at` for an unknown spend id; `pop` raises a bare `KeyError`. More importantly, the `first = first or g[0]` idiom is fragile, and `expires` could be `None` only in edge cases, but the real issue is the lack of any explicit error contract.\n- **Clarity.** Anonymous `[expires, hours]` lists, `g[0]`/`g[1]`, and `self.grants.sort()` (which sorts by hours on ties and mutates state as a side effect) hurt readability. The spend loop packs three conditions into one `if`.\n- **Refund double-merge.** Refunds append new grant records instead of restoring the original, so grant identity is lost.\n\n**Design 2 strengths**\n\n- It records exactly which grant each hour came from (`Spend.taken` holds `(grant, hours)`), so refunds restore hours to the original grant with its original expiry, and skip only grants that have actually expired. This matches constraints 4 and 5 precisely.\n- Validation is split into clear, separate errors (non-positive vs. insufficient), and both happen before any mutation, so a failed spend changes nothing (constraint 3).\n- Named `Grant` and `Spend` types, a `_live` helper, and a docstring on `refund` make it much easier to read.\n- Sorting uses a key on expiry and does not mutate the ledger's list.\n\n**Minor issues in Design 2** (not decisive)\n\n- `Spend.taken` is typed as a bare `list`; `list[tuple[Grant, int]]` would be clearer.\n- Re-using a `spend_id` silently overwrites the earlier record, and refunding an unknown id raises a bare `KeyError`. Both should be explicit errors.\n- `grant` doesn't validate `hours > 0`.\n- Those are small, easily fixed gaps; Design 1 shares them and additionally gets the core refund rule wrong.\n\nWINNER: 2"
+}
