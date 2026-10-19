@@ -27,7 +27,7 @@ The pilots measured neither harm nor benefit, so the skills are now on trial in 
   - a constraint dropped for simplicity (a regression; one case is reason to stop);
   - a restructure forced into a small task;
   - an unneeded question or block;
-  - records nobody reads;
+  - records or ADRs nobody reads;
   - an inference written into a constraint.
 - **Run a cheap A/B for substantial tasks:** the same task in two worktrees, skill on and off, then diff the results.
 

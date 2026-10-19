@@ -24,7 +24,7 @@ Put the records where the repo keeps design docs; the default is `docs/design/`.
 | `forks.yaml` | One problem per fork, every option listed. Eliminated options stay, with `eliminated_by` (K or X only) and `why`; `preferred_by` (W) only ranks. `chosen` is your suggestion; `assumes` lists what it rests on. Open forks carry `question`, `default`, `decide_by` (the event before which not deciding locks in an option) and `asked` (date and exact text). |
 | `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (traces to nothing; delete). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
 
-**ADRs** (`docs/adr/NNNN-title.md`, or the repo's convention) carry the context and consequences of hard-to-reverse forks; the fork links its ADR in `adr:`. An ADR's status follows its fork: Proposed while the fork is open, Accepted once the owner collapses it, Superseded when a new constraint moves it. The records stay the index; don't repeat their reasoning in the ADR.
+**ADRs** (`docs/adr/NNNN-title.md`, or the repo's convention) record hard-to-reverse forks; the fork links its ADR in `adr:`. Context cites the fork and its K ids, Decision is the chosen option, Consequences is what it forces. Status follows the fork: Proposed, naming the default being built on, while it's open; Accepted once it's forced or the owner collapses it. Like kernel ids, an accepted ADR never changes: when a fork moves, write a new ADR and mark the old one Superseded, pointing to it.
 
 A **round** is one owner turn. After every change, run `python <this skill's dir>/scripts/check.py <records dir>` and fix what it reports. If it can't run, check by hand: each fork's live options, each elimination's source, each detail's attachment.
 
@@ -52,9 +52,9 @@ A **round** is one owner turn. After every change, run `python <this skill's dir
 
 ## Propagating
 When an answer or a new constraint arrives:
-1. **Record it.** Quote it in the vision and add a K item with a new id, superseding any item it changes. Update the status of any affected fork's ADR.
+1. **Record it.** Quote it in the vision and add a K item with a new id, superseding any item it changes.
 2. **Eliminate.** Add the K id to `eliminated_by` on every option it rules out, with a `why`.
-3. **Move your own choices.** Where the eliminated option was your `chosen`, move the choice and re-attach its details (the check lists them as stranded).
+3. **Move your own choices.** Where the eliminated option was your `chosen`, move the choice, re-attach its details (the check lists them as stranded), and write the superseding ADR if the fork has one.
 4. **Treat owner choices as conflicts.** Where the eliminated option was one the owner picked (its fork is answered by a K item), it is a conflict: ask the owner.
 5. **Recount.** Never patch the design locally to work around the change.
 
