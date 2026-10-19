@@ -8,12 +8,12 @@ Every prompt asks for an elegant result and says: "No user is available: choose,
 | Condition | Extra context |
 | --- | --- |
 | plain | none |
-| placebo | `placebo.md`: generic clean-code guidance, length-matched to `SKILL.md` |
-| skill | the skill in `.claude/skills/elegance`, and the prompt tells the model to use it |
+| placebo | `placebo.md` installed as a skill in `.claude/skills/clean-code`: generic clean-code guidance, length-matched to `SKILL.md`; the prompt tells the model to use it |
+| skill | the skill in `.claude/skills/elegance`; the prompt tells the model to use it |
 
-The main comparison is skill vs placebo, which isolates the skill's content.
+The main comparison is skill vs placebo. Both load the same way, so they differ only in content.
 
-- **Skill use is verified:** a run counts as "skill confirmed" when its `stream-json` output shows a `Skill` call. Results are reported for all runs and for confirmed runs.
+- **Skill use is verified:** a run counts as "skill confirmed" when its `stream-json` output shows a `Skill` call for its condition's skill. Results are reported for all runs and for confirmed runs.
 - **Natural triggering is measured separately,** with skill-creator's description loop.
 
 ## Isolation
@@ -90,7 +90,7 @@ Token and time overhead is reported. If the skill doesn't beat the placebo, the 
 ```
 evals/
   PLAN.md         this file
-  placebo.md
+  placebo.md      installed as skills/clean-code/SKILL.md in placebo runs
   gen/<task>/     task.md, constraints, fixture/, hidden checks, reference.md (judge only)
   pairs/<pair>/   a.md, b.md, truth.yaml (winner, trap kind)
   holdout/        same shape
