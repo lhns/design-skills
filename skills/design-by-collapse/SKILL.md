@@ -15,7 +15,7 @@ These rules override the elegance skill:
 - **Inferences are not constraints.** What elegance calls an "inferred" constraint is an **assumption** here. It goes in the fork's `assumes:` list and may rank options, but it eliminates nothing until the owner states it. Never write a conclusion into a constraint. For example, "users sign in with company accounts" must not become "so we need no password reset".
 
 ## Records
-Put the records where the repo keeps design docs; `design/` is the default when it has none. For the file shapes, copy `scripts/tests/clean/` in this skill's dir. `design.md` is the deliverable: the current design, written from the chosen options and citing K and F ids. For a short engagement it also holds the owner quotes, forks and open questions. Once forks stay open across sessions, add:
+Put the records where the repo keeps design docs; the default is `docs/design/`. For the file shapes, copy `scripts/tests/clean/` in this skill's dir. `design.md` is the deliverable: the current design, written from the chosen options and citing K and F ids. For a short engagement it also holds the owner quotes, forks and open questions. Once forks stay open across sessions, add:
 
 | File | Holds |
 | --- | --- |
@@ -23,6 +23,8 @@ Put the records where the repo keeps design docs; `design/` is the default when 
 | `kernel.yaml` | Constraints (K), exclusions (X), values (W), each citing vision ids in `from`, or a checkable `source` for facts of reality (an API limit, a law, a measurement). Ids never change; a change supersedes (`status: superseded`, `superseded_by`). An item answering a fork carries `answers: F<n>`. |
 | `forks.yaml` | One problem per fork, every option listed. Eliminated options stay, with `eliminated_by` (K or X only) and `why`; `preferred_by` (W) only ranks. `chosen` is your suggestion; `assumes` lists what it rests on. Open forks carry `question`, `default`, `decide_by` (the event before which not deciding locks in an option) and `asked` (date and exact text). |
 | `concepts.yaml` | Each concept's purpose and verdict: forced (`traces` K ids), detail (`detail_of: F<n>/<option>`), outside (belongs elsewhere), accretion (traces to nothing; delete). `open: true` marks an enumeration that will grow. `rounds` holds counts per round; a rise names its K id. |
+
+**ADRs** (`docs/adr/NNNN-title.md`, or the repo's convention) carry the context and consequences of hard-to-reverse forks; the fork links its ADR in `adr:`. An ADR's status follows its fork: Proposed while the fork is open, Accepted once the owner collapses it, Superseded when a new constraint moves it. The records stay the index; don't repeat their reasoning in the ADR.
 
 A **round** is one owner turn. After every change, run `python <this skill's dir>/scripts/check.py <records dir>` and fix what it reports. If it can't run, check by hand: each fork's live options, each elimination's source, each detail's attachment.
 
@@ -50,7 +52,7 @@ A **round** is one owner turn. After every change, run `python <this skill's dir
 
 ## Propagating
 When an answer or a new constraint arrives:
-1. **Record it.** Quote it in the vision and add a K item with a new id, superseding any item it changes.
+1. **Record it.** Quote it in the vision and add a K item with a new id, superseding any item it changes. Update the status of any affected fork's ADR.
 2. **Eliminate.** Add the K id to `eliminated_by` on every option it rules out, with a `why`.
 3. **Move your own choices.** Where the eliminated option was your `chosen`, move the choice and re-attach its details (the check lists them as stranded).
 4. **Treat owner choices as conflicts.** Where the eliminated option was one the owner picked (its fork is answered by a K item), it is a conflict: ask the owner.
