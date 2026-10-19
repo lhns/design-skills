@@ -14,6 +14,7 @@ Scale the method to the decision. For a small change, the constraints fit in one
 - **Designer choice:** anything else you decide, including defaults and conclusions drawn from constraints. It stays provisional, and it doesn't become a constraint when a user accepts your proposal; only the user's own statements do that.
 - **Concept:** a part with exactly one purpose: a type, service, state, rule, flag or config option.
 - **Independent:** each concept can be explained by one scenario that names no other concept.
+- **Simple:** irreducible. No part can be removed, merged or replaced by a simpler one without breaking a constraint. Measure in parts, not lines. Irreducibility is local; step 5 says when to look for a smaller representation.
 
 ## Designing
 1. **List the constraints,** with short ids (C1, C2, …) when the design needs them.
@@ -27,7 +28,7 @@ Scale the method to the decision. For a small change, the constraints fit in one
 6. **Reuse before inventing,** from the system and from the field. Express a new need with an existing concept, or look for a known structure (state machine, event log, lattice, relational model, fold) whose laws already cover your cases. A real fit deletes cases you'd otherwise write; check that its guarantees are the ones your constraints need. Name the invariant the design keeps; a change that breaks it is wrong.
 7. **Keep the core ignorant of optional concepts.** Put them at the edge (caller, wrapper, config). No extension point with a single user, and no new service just for this.
 8. **Make limits conditions:** "stop when an attempt makes no progress", not "retry 3 times". Where reality forces a bound but not its value, such as a timeout or a memory cap, keep one named value and state its reason.
-9. **Subtract before adding.** Ask of every concept which constraint breaks without it; if none does, delete it. Compare counts (concepts, exception clauses such as "except", "only if" or "unless", special-case branches, facts stated in two places, unforced numbers) between alternatives, or before and after a change. Counts only go down, unless a named constraint forces a rise.
+9. **Subtract before adding.** Ask of every concept which constraint breaks without it, or with a simpler part in its place; if none does, delete or simplify it. Compare counts (concepts, exception clauses such as "except", "only if" or "unless", special-case branches, facts stated in two places, unforced numbers) between alternatives, or before and after a change. Counts only go down, unless a named constraint forces a rise.
 10. **Re-derive instead of patching.** When the clean shape isn't visible yet, building a rough working version first is legitimate. An old design or such a rough version is a source of candidate constraints: collect its special cases, confirm them, derive the design without looking at it, then diff and keep what is forced. When one constraint changes, re-derive only the concepts it touches.
 
 When there's a fork, a designer choice or a deletion to show, end with a short ledger: constraints, forced decisions, designer choices, deletions.

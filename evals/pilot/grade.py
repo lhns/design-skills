@@ -122,10 +122,11 @@ def audit_truth(item):
     if isinstance(t, list):
         es = [e for e in t if str(e.get("doc", e.get("item", e.get("id", "")))).replace(".md", "") == item]
         return es, []
+    top_extra = ((t or {}).get("acceptable_extra") or {}).get(item) or []  # wave-2 shape: top-level map
     t = next((v for k, v in (t or {}).items() if str(k).replace(".md", "") == item), [])
     if isinstance(t, dict):
-        return t.get("errors") or [], t.get("acceptable_extra") or []
-    return t or [], []
+        return t.get("errors") or [], (t.get("acceptable_extra") or []) + top_extra
+    return t or [], top_extra
 
 
 def audit_class(c):
