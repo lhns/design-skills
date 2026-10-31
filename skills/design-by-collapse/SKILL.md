@@ -12,6 +12,7 @@ This skill keeps the whole solution space on record. The current design is one s
 ## When an owner is present
 These rules override the elegance skill:
 - **Only the owner collapses a fork.** You derive what is forced and you recommend; you don't close an open fork yourself. Work proceeds on each open fork's `default`. Only work that would need a different answer, or that is hard to reverse, waits.
+- **A statement is a need plus a mechanism.** "Errors mirror cats-effect" states a need (errors compose and reach the nearest handler) and picks a mechanism (cats-effect's rules). Owners pick mechanisms while chasing elegance too, and can be wrong. The need binds; the mechanism binds until a simpler design meets the same need, and then you propose revising it (see Revising statements). Never weaken a need.
 - **Inferences are not constraints.** What elegance calls an "inferred" constraint is an **assumption** here. It goes in the fork's `assumes:` list and may rank options, but it eliminates nothing until the owner states it. Never write a conclusion into a constraint. For example, "users sign in with company accounts" must not become "so we need no password reset".
 
 ## Records
@@ -39,8 +40,15 @@ A **round** is one owner turn. After every change, run `python <this skill's dir
 4. **Forks.** Every problem the design must solve becomes a fork, one problem per fork (see elegance). Split a fork when its options differ on two independent axes, when its options combine freely with another fork's, or when a single option settles more than one problem. Split an owner sentence joined by "and" into separate K items. Every number in the design is either a bound cited by a K item, or a fork. Check every new option and concept against every exclusion, by meaning, not by name.
 5. **Probe.** Walk concrete scenarios through the design (failures, concurrency, late or repeated events); where behavior is subtle, write a small formal model or test. Every undecided behavior becomes a fork.
 6. **Ask, then propagate** (below), and return to step 4.
-7. **Generating idea.** When few forks remain, propose one to three core concepts from which the kernel falls out, scored with the elegance tests, showing how each settles the remaining forks. The owner picks.
-8. **Rescue.** For an accreted design, re-derive in a clean room from the kernel and the chosen idea (see elegance), then rewrite `design.md`. Recount every round.
+7. **Generating idea.** When few forks remain, or when the design has accreted, propose one to three core concepts from which the kernel falls out, scored with the elegance tests, showing how each settles the remaining forks. The owner picks.
+8. **Rescue.** For an accreted design, re-derive in a clean room from the needs behind the kernel and the chosen idea (see elegance), propose the statement revisions it needs (see Revising statements), then rewrite `design.md`. Recount every round.
+
+## Revising statements
+Early statements were made with less knowledge than later ones; the record is a working history, not gospel. At every generating idea, rescue or audit, and whenever the design has accreted (exception clauses piling up, questions only specialists can follow), re-examine the statements the accretion rests on:
+1. Split each into its need and its mechanism; say which part forces the accretion.
+2. If a simpler design meets every need, propose the revision to the owner: the statement's id and words, the replacement, the concepts it deletes, and the needs that still hold, with one concrete example.
+3. On the owner's yes, record the new statement superseding the old one, and propagate like any answer. Until then, the old statement stands.
+4. If you can't tell need from mechanism, ask that, with an example; it is a better question than another edge case.
 
 ## Asking the owner
 - **One question per round,** about the fork whose answer changes the live options of the most other forks. Report forced forks; don't ask about them or ask to confirm them. Never repeat a question found in an `asked` field.
