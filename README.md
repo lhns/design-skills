@@ -18,7 +18,8 @@ Claude Code skills for designing systems and code. Each skill is a separate fold
   - docs and tests are out of scope;
   - patterns may supply guarantees;
   - repo conventions count as constraints;
-  - design-by-collapse: records in `docs/design/` and ADRs.
+  - design-by-collapse: records in `docs/design/` and ADRs;
+  - design-by-collapse: a statement is a need plus a mechanism, and the owner can revise mechanisms.
 
 Each eval plan was committed before any run:
 - [`evals/elegance/PLAN.md`](evals/elegance/PLAN.md)
