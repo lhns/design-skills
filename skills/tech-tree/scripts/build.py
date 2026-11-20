@@ -690,10 +690,19 @@ def r_done_by_month(cfg, nodes, today):
         while f"{y:04d}-{m:02d}" <= dated[-1]:
             months.append(f"{y:04d}-{m:02d}")
             y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    quiet = []  # a run of consecutive months with nothing finished, newest first; written as one line
+
+    def flush_quiet():
+        if quiet:
+            span = month_name(quiet[0]) if len(quiet) == 1 else f"{month_name(quiet[-1])} to {month_name(quiet[0])}"
+            parts.append(f"<b>{span}</b>: nothing finished")
+            quiet.clear()
+
     for ym in sorted(months, reverse=True) + ([""] if "" in groups else []):
         if ym not in groups:
-            parts.append(f"<b>{month_name(ym)}</b>: nothing finished")
+            quiet.append(ym)
             continue
+        flush_quiet()
         group = sorted(groups[ym], key=lambda n: (n["end"] or n["start"], n["id"]))
         head = month_name(ym) if ym else "Undated"
         done = sum(1 for n in group if n["state"] == "done")

@@ -42,7 +42,7 @@ skipped:
 - sha: "ef385da8"
   reason: "gitignore change"
 ```
-Prefer a commit message over a digest entry as `quote_source` whenever both state the result. Never quote the owner's chat lines verbatim; paraphrase what they decided in `plain`.
+Prefer a commit message over a digest entry as `quote_source` whenever both state the result. Quote only commit messages and digest reports (`assistant`, `handback`, `compaction` entries), never `user` entries: paraphrase what the owner said or decided in `plain`. A quote sourced from a `user` entry is rejected.
 
 Records are checked mechanically and rejected, not repaired: every sha must resolve, `start` and `end` must match the commits' dates, and a quote that is not a literal substring of its source rejects the record. When unsure of the outcome, write `unknown` and leave the quote empty.
 

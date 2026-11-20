@@ -34,6 +34,8 @@ CODE_EXTENSIONS = (".py", ".rs", ".js", ".ts", ".go", ".java", ".rb")
 SNAKE_RE = re.compile(r"[a-z0-9]+_[a-z0-9_]+")
 ENV_RE = re.compile(r"[A-Z][A-Z0-9]*_[A-Z0-9_]+")
 KEBAB_RE = re.compile(r"[a-z0-9]+(-[a-z0-9]+){2,}")
+# plain compounds ("end-to-end", "up-to-date", "copy-on-write") join words with a connective; branch names do not
+CONNECTIVES = {"to", "of", "on", "in", "the", "and", "or", "by", "for", "at"}
 ID_RE = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 # GitHub fails to render some Mermaid blocks ("Unable to render rich display") when one page holds too many;
 # the cause is not known, the cap is empirical: 3 blocks per file rendered, more failed from some block on.
@@ -54,13 +56,18 @@ def _date(v):
     return datetime.date.fromisoformat(str(v))
 
 
+def _count(n, noun):
+    """'1 done node is' / '3 done nodes are'."""
+    return f"{n} {noun} is" if n == 1 else f"{n} {noun}s are"
+
+
 def title_identifier(title):
     """The first token of a title that looks like an identifier (snake_case, ENV_NAME, a path or code file, a
     branch-style kebab name), else None. Words, product names and short hyphenated words do not match."""
     for raw in title.split():
         t = raw.strip(".,;:!?()[]\"'`")
-        if (SNAKE_RE.fullmatch(t) or ENV_RE.fullmatch(t) or t.count("/") >= 2 or t.lower().endswith(CODE_EXTENSIONS)
-                or KEBAB_RE.fullmatch(t)):
+        if (SNAKE_RE.fullmatch(t) or ENV_RE.fullmatch(t) or t.count("/") >= 2 or (t.islower() and t.endswith(CODE_EXTENSIONS))
+                or (KEBAB_RE.fullmatch(t) and not CONNECTIVES & set(t.split("-")))):
             return t
     return None
 
@@ -239,7 +246,7 @@ def validate_nodes(cfg, nodes):
                 warnings.append(f"{n['id']}: prerequisite '{d}' starts after it ({by[d]['start']} > {n['start']})")
 
     if done_unrated:
-        warnings.append(f"{len(done_unrated)} done nodes are unrated (no quoted verdict yet): " + ", ".join(done_unrated))
+        warnings.append(f"{_count(len(done_unrated), 'done node')} unrated (no quoted verdict yet): " + ", ".join(done_unrated))
     finished = collections.defaultdict(int)  # start month -> done or abandoned nodes
     drawn = set()  # start months holding an overview node
     for n in good:
@@ -249,13 +256,13 @@ def validate_nodes(cfg, nodes):
             if n["overview"]:
                 drawn.add(ym)
     now = datetime.date.today().strftime("%Y-%m")
-    for ym in sorted(finished):
-        if finished[ym] and ym not in drawn and ym != now:
-            warnings.append(f"overview: no node from {build.month_name(ym)} ({finished[ym]} finished nodes that month); "
-                            "pick its turning points")
+    bare = [ym for ym in sorted(finished) if finished[ym] and ym not in drawn and ym != now]
+    if bare:
+        warnings.append("overview: months with finished work but no overview node (pick their turning points): "
+                        + ", ".join(f"{build.month_name(ym)} ({finished[ym]})" for ym in bare))
     unconfirmed = [n for n in good if build.is_rated(n) and not n.get("confirmed")]
     if unconfirmed:
-        warnings.append(f"{len(unconfirmed)} rated nodes not confirmed by the owner")
+        warnings.append(f"{_count(len(unconfirmed), 'rated node')} not confirmed by the owner")
     if cfg.overview:
         size = sum(1 for n in good if n["overview"])
         if not cfg.overview["min"] <= size <= cfg.overview["max"]:

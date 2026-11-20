@@ -72,8 +72,8 @@ records:
   digest_refs: ["2026-03-14T09:12:03Z"]
   plain: "The owner wants the cache to answer most reads."
   outcome_word: decided
-  verdict_quote: "We want the cache to answer 92% of reads."
-  quote_source: "2026-03-14T09:12:03Z"
+  verdict_quote: ""
+  quote_source: ""
   existing_node: "data-cache-layer"
 skipped:
 - sha: "$D_short"
@@ -422,8 +422,20 @@ class ValidateRecordsTests(unittest.TestCase):
         self.assertIn("digest_ref 2026-03-15T10:00:00Z is not a heading timestamp", errors["Product cache"])
         self.assertIn("quote_source '2026-03-15T10:00:00Z' is neither a digest heading timestamp nor a commit",
                       errors["Product cache"])
-        self.assertIn("quote_source '2026-03-14T09:12:03Z' is neither", errors["Cache decision"])
+        self.assertIn("digest_ref 2026-03-14T09:12:03Z is not a heading timestamp", errors["Cache decision"])
         self.assertEqual((res["uncovered"], res["conflicts"], res["chunk_errors"] if "chunk_errors" in res else []), ([], [], []))
+
+    def test_a_quote_from_a_chat_message_is_rejected(self):
+        import tree_config
+        import validate_records as vr
+        rec = {"title": "Cache decision", "track": "data", "kind": "owner-decision", "start": "2026-03-14", "end": "",
+               "shas": [], "digest_refs": ["2026-03-14T09:12:03Z"], "plain": "p", "outcome_word": "decided",
+               "verdict_quote": "We want the cache to answer 92% of reads.", "quote_source": "2026-03-14T09:12:03Z",
+               "existing_node": ""}
+        chunk = vr.Chunk("c", [], vr.parse_digest(DIGEST), {})
+        errs = vr.validate_record(rec, chunk, tree_config.load(CONFIG), set(), None, [])[0]
+        self.assertIn("quote_source '2026-03-14T09:12:03Z' is a chat message; paraphrase it in plain and quote a commit "
+                      "or a report", errs)
 
     def test_unreadable_chunk_and_bad_arguments(self):
         with tempfile.TemporaryDirectory() as t:

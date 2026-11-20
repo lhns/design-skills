@@ -38,7 +38,8 @@ import tree_config  # noqa: E402
 OUTCOME_WORDS = ["merged", "refuted", "parked", "abandoned", "measured", "decided", "unknown"]
 MAX_QUOTE = 300
 SHA_RE = re.compile(r"^[0-9a-f]{7,40}$")
-DIGEST_HEAD_RE = re.compile(r"(?m)^## (\S+)[^\n]*\n")
+DIGEST_HEAD_RE = re.compile(r"(?m)^## (\S+)[ \t]*(\S*)[^\n]*\n")
+CHAT_KINDS = ("user",)  # typed chat lines: paraphrased in `plain`, never quoted as a verdict
 
 IPV4 = re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b")
 EMAIL = re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
@@ -86,7 +87,7 @@ def parse_digest(text):
     heads = list(DIGEST_HEAD_RE.finditer(text))
     for i, m in enumerate(heads):
         end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
-        entries[m.group(1)].append(text[m.end():end])
+        entries[m.group(1)].append((m.group(2), text[m.end():end]))
     return entries
 
 
@@ -177,13 +178,15 @@ def validate_record(rec, chunk, cfg, node_ids, repo, private_words):
             errs.append(f"verdict_quote is {len(str(quote))} characters, max {MAX_QUOTE}")
         src = str(rec.get("quote_source") or "")
         if src in chunk.digest:
-            haystacks = [norm(t) for t in chunk.digest[src]]
+            haystacks = [norm(t) for k, t in chunk.digest[src] if k not in CHAT_KINDS]
+            if not haystacks:
+                errs.append(f"quote_source {src!r} is a chat message; paraphrase it in plain and quote a commit or a report")
         else:
             full = repo.full(src) if SHA_RE.match(src) else None
             haystacks = [norm(repo.info(full)[1])] if full else []
-        if not haystacks:
-            errs.append(f"quote_source {src!r} is neither a digest heading timestamp nor a commit")
-        elif not any(norm(quote) in h for h in haystacks):
+            if not haystacks:
+                errs.append(f"quote_source {src!r} is neither a digest heading timestamp nor a commit")
+        if haystacks and not any(norm(quote) in h for h in haystacks):
             errs.append("verdict_quote is not a literal substring of its quote_source")
     errs += [f"secret scan: {f}" for f in secret_findings(rec, private_words)]
     return errs, fulls

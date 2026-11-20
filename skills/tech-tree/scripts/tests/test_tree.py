@@ -366,7 +366,7 @@ class ValidateTests(unittest.TestCase):
         self.assertIn("evidence", e)
         errs, warns = check.validate_nodes(CFG, [node("api-a", state="done", outcome="unrated", evidence=["x"])])
         self.assertEqual(errs, [])
-        self.assertIn("1 done nodes are unrated (no quoted verdict yet): api-a", warns)
+        self.assertIn("1 done node is unrated (no quoted verdict yet): api-a", warns)
         # an unrated node may keep its source quote as evidence: a warning, not an error
         errs, warns = check.validate_nodes(CFG, [node("api-a", state="done", outcome="unrated", evidence=["x"], verdict_quote="q"),
                                                  node("api-b", state="done", outcome="unrated", evidence=["x"])])
@@ -456,7 +456,7 @@ class ValidateTests(unittest.TestCase):
         nodes = [node(f"api-{c}", state="done", outcome="mixed", verdict_quote="q", evidence=["e"]) for c in "abc"]
         nodes[0]["confirmed"] = "2026-01-02"
         agg = [w for w in self.warns(nodes) if "not confirmed" in w]
-        self.assertEqual(agg, ["2 rated nodes not confirmed by the owner"])
+        self.assertEqual(agg, ["2 rated nodes are not confirmed by the owner"])
         nodes[1]["confirmed"] = nodes[2]["confirmed"] = "2026-01-03"
         self.assertFalse([w for w in self.warns(nodes) if "not confirmed" in w])
 
@@ -972,34 +972,35 @@ class LayoutAndWarningTests(unittest.TestCase):
         self.assertIn("- `api-b`: T api-b (\u2714 done \u00b7 unrated). 12 ms", out)
         self.assertIn("- `api-c`: T api-c (\u2716 dead end). Dropped it.", out)
         self.assertIn("- `api-d`: T api-d (\u2714 done \u00b7 unrated)\n", out + "\n")
-        self.assertIn("<b>Mar 2026</b>: nothing finished", out)
-        self.assertIn("<b>Feb 2026</b>: nothing finished", out)
+        self.assertIn("<b>Feb 2026 to Mar 2026</b>: nothing finished", out)  # a quiet run is one line
+        self.assertEqual(out.count("nothing finished"), 1)
         self.assertNotIn("<details><summary><b>Feb", out)
-        order = [out.index(m) for m in ("Apr 2026", "Mar 2026", "Feb 2026", "Jan 2026")]
+        order = [out.index(m) for m in ("Apr 2026", "Feb 2026 to Mar 2026", "Jan 2026")]
         self.assertEqual(order, sorted(order))
         self.assertNotIn("May 2026", out)  # only months between the first and the last shown
 
-    def test_month_without_an_overview_node_is_warned_once_per_month(self):
+    def test_months_without_an_overview_node_are_one_warning(self):
         nodes = [node("api-a", state="done", start="2020-01-05", overview=False),
                  node("api-b", state="done", start="2020-01-09", overview=False),
                  node("api-c", state="done", start="2020-02-01", overview=True, plain="p"),
                  node("api-d", state="next", start="2020-03-01", overview=False),
                  node("api-e", state="done", overview=False)]
-        warns = [w for w in check.validate_nodes(CFG, nodes)[1] if w.startswith("overview: no node")]
-        self.assertEqual(warns, ["overview: no node from Jan 2020 (2 finished nodes that month); pick its turning points"])
+        warns = [w for w in check.validate_nodes(CFG, nodes)[1] if w.startswith("overview: months")]
+        self.assertEqual(warns, ["overview: months with finished work but no overview node (pick their turning points): Jan 2020 (2)"])
         this_month = datetime.date.today().isoformat()[:7] + "-01"
         cur = [node("api-a", state="done", start=this_month, overview=False)]
-        self.assertFalse([w for w in check.validate_nodes(CFG, cur)[1] if "no node from" in w])
+        self.assertFalse([w for w in check.validate_nodes(CFG, cur)[1] if w.startswith("overview: months")])
 
     def test_title_identifier_heuristic(self):
-        for title, token in (("Fix parse_config now", "parse_config"), ("Set RWM_DELTA default", "RWM_DELTA"),
+        for title, token in (("Fix parse_config now", "parse_config"), ("Set MAX_UPLOAD_MB default", "MAX_UPLOAD_MB"),
                              ("Rewrite src/core/mod", "src/core/mod"), ("Move lib.rs out", "lib.rs"),
                              ("Merge feat-new-cache branch", "feat-new-cache"), ("Update app.py", "app.py")):
             self.assertEqual(check.title_identifier(title), token, title)
             w = check.validate_nodes(CFG, [node("api-a", title=title, plain="p")])[1]
             self.assertIn(f"api-a: title looks like an identifier ('{token}'); use plain words, and explain real names in 'plain'", w)
         for title in ("Per-key rate limiting", "GitHub login via OAuth", "p99 latency target", "zstd compression",
-                      "Blue-green deploys", "Plain words only", "Version 2.0 release",
+                      "Blue-green deploys", "Plain words only", "Version 2.0 release", "Upgrade to Node.js 22",
+                      "Move to Next.js", "Add end-to-end tests", "Keep docs up-to-date", "Use copy-on-write snapshots",
                       "A/B test rollout", "Read and/or write"):
             self.assertIsNone(check.title_identifier(title), title)
             self.assertFalse([w for w in check.validate_nodes(CFG, [node("api-a", title=title, plain="p")])[1]
@@ -1340,11 +1341,11 @@ class BrokenTests(unittest.TestCase):
         "WARNING: api-longtitle: title longer than 6 words",
         "WARNING: api-late-dep: prerequisite 'api-late-pre' starts after it",
         "WARNING: data-qorder-warn: queue_order on a node that is not a forward node in the queue lane",
-        "WARNING: 1 done nodes are unrated (no quoted verdict yet): ops-done-unrated",
+        "WARNING: 1 done node is unrated (no quoted verdict yet): ops-done-unrated",
         "WARNING: web-waiting-warn: waiting_on on a node that is not in-progress",
         "WARNING: web-qual-warn: qualified_by on a node that is not done",
         "WARNING: web-noplain: overview/forward node without a 'plain' sentence",
-        "WARNING: 4 rated nodes not confirmed by the owner",
+        "WARNING: 4 rated nodes are not confirmed by the owner",
         "WARNING: overview has 1 nodes (target 12-30)",
     ]
 

@@ -48,7 +48,7 @@ The file is a bare list of nodes, or a mapping with the single key `nodes`.
 ## States and outcomes
 `state` says where the work is; `outcome` says how it went. They are separate: a done node can be `mixed`, an abandoned one is `dead-end` or `superseded`.
 
-Outcome scale. **An outcome other than `unrated` or `n/a` needs a `verdict_quote`** (checked), and is read off that quote, never inferred. A verdict is a sentence that says how the work went: a merge or PR description that states the result, a review approval, a release note, a results write-up, the owner's own words. **A merge alone is not a verdict:** `Merge branch 'x'` says the work landed, not how it went, so the node is done and `unrated`.
+Outcome scale. **An outcome other than `unrated` or `n/a` needs a `verdict_quote`** (checked), and is read off that quote, never inferred. A verdict is a sentence that says how the work went: a merge or PR description that states the result, a review approval, a release note, a results write-up, a decision record; owner statements made only in chat are paraphrased in `plain`, not quoted. **A merge alone is not a verdict:** `Merge branch 'x'` says the work landed, not how it went, so the node is done and `unrated`.
 
 | outcome | the quoted verdict says |
 | --- | --- |
@@ -89,7 +89,7 @@ Paths are relative to the config file. See `config.example.yaml` for an annotate
 | `nodes` | path of nodes.yaml (default `docs/roadmap/nodes.yaml`) |
 | `page` | path of the main page (default `docs/roadmap.md`); track pages go to `<page dir>/<page stem>/tracks/<code>.md`, the timeline to `<page dir>/<page stem>/timeline.md` |
 | `tracks` | `{code: {name, scope}}`, in display order |
-| `kinds` | `{name: {shape, rated, owner_gate, blocks}}`. `shape`: `box` (default), `slant`, `hexagon`, `flag`, `round`. `rated: false`: never carries an outcome, shown as open or fixed (defects). `owner_gate: true`: an owner decision; outcome `n/a`; once done it is drawn in the overview only (never in the track trees), and open ones are listed under *Waiting on the owner*. `blocks: false`: an open node of this kind does not block its dependants' readiness. |
+| `kinds` | `{name: {shape, rated, owner_gate, blocks}}`. `shape`: `box` (default), `slant`, `hexagon`, `flag`, `round`. `rated: false`: never carries an outcome, shown as open or fixed (defects). `owner_gate: true`: an owner decision; outcome `n/a`; once done, and when picked with `overview: true`, it is drawn in the overview only (never in the track trees), and open ones are listed under *Waiting on the owner*. `blocks: false`: an open node of this kind does not block its dependants' readiness. |
 | `lanes` | list of lane names: who or what the work needs (a person, a machine, an environment) |
 | `queue_lane` | optional: a lane whose forward nodes are worked one at a time; they carry a unique `queue_order` and appear in the *Queue* region |
 | `overview` | optional `{min, max}`: warn when the overview count leaves this band; size it to the history (months × picks per month) |
