@@ -22,9 +22,9 @@ One node is one thing that got, or will get, its own verdict. Apply the rules in
   track: api                       # checked: a code from config tracks
   kind: feature                    # checked: a name from config kinds
   state: done                      # done | in-progress | next | blocked | parked | abandoned
-  outcome: successful              # see the outcome scale
+  outcome: very-successful         # read off the quote: accepted, with a measured gain
   evidence: ["PR #212", "docs/adr/0007-rate-limits.md"]   # done needs at least one
-  verdict_quote: "Merged; p99 latency unchanged under the load test."  # verbatim, <= 300 chars
+  verdict_quote: "Merged; under the load test p99 410 ms -> 180 ms for well-behaved keys."  # verbatim, <= 300 chars
   headline: "p99 410 ms -> 180 ms" # one number with its unit, verbatim from the source; "" if none
   depends_on: [api-auth-keys]      # HARD prerequisites only; checked: exist, no cycle
   replaced_by: []                  # superseded/abandoned nodes: the node that replaced it

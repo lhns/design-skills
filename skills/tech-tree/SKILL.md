@@ -1,6 +1,6 @@
 ---
 name: tech-tree
-description: Keep a project's roadmap as a tech tree: one YAML file of nodes (each a piece of work with its own verdict, its state, a rating from a quoted verdict, and its prerequisites), rendered into Markdown pages with Mermaid trees, derived work lists and a timeline. Use for coding projects whose work moves through experiments, results, refutations, decisions and follow-ups, when asked to set up, update or review a roadmap or tech tree, and when backfilling the tree from git history and session transcripts.
+description: Keep a project's roadmap as a tech tree, with one YAML file of nodes (each a piece of work with its own verdict, its state, a rating from a quoted verdict, and its prerequisites), rendered into Markdown pages with Mermaid trees, derived work lists and a timeline. Use for coding projects whose work moves through experiments, results, refutations, decisions and follow-ups, when asked to set up, update or review a roadmap or tech tree, and when backfilling the tree from git history and session transcripts.
 ---
 
 # Tech tree
