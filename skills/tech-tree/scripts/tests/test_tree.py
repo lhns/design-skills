@@ -485,9 +485,9 @@ class ValidateTests(unittest.TestCase):
 # ---------------------------------------------------------------- build
 class BuildTests(unittest.TestCase):
     def test_label_escaping(self):
-        t = 'Law ' + chr(0xA7) + '5 "x" [y] #z'
+        t = 'Item ' + chr(0xA7) + '5 "x" [y] #z'
         out = tfile([node("api-a", title=t)], "api")
-        self.assertIn('api_a["○ Law #167;5 #quot;x#quot; #91;y#93; #35;z"]', out)
+        self.assertIn('api_a["○ Item #167;5 #quot;x#quot; #91;y#93; #35;z"]', out)
         self.assertNotIn(t, region(out, "track-api"))
 
     def test_shapes_come_from_the_kind_and_edges(self):
