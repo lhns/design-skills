@@ -365,11 +365,13 @@ class ValidateTests(unittest.TestCase):
         self.assertIn("evidence", e)
         errs, warns = check.validate_nodes(CFG, [node("api-a", state="done", outcome="unrated", evidence=["x"])])
         self.assertEqual(errs, [])
-        self.assertTrue(any("unrated" in w for w in warns))
+        self.assertIn("1 done nodes are unrated (no quoted verdict yet): api-a", warns)
         # an unrated node may keep its source quote as evidence: a warning, not an error
-        errs, warns = check.validate_nodes(CFG, [node("api-a", state="done", outcome="unrated", evidence=["x"], verdict_quote="q")])
+        errs, warns = check.validate_nodes(CFG, [node("api-a", state="done", outcome="unrated", evidence=["x"], verdict_quote="q"),
+                                                 node("api-b", state="done", outcome="unrated", evidence=["x"])])
         self.assertEqual(errs, [])
-        self.assertTrue(any("quote kept as evidence" in w for w in warns))
+        self.assertEqual([w for w in warns if "unrated" in w],
+                         ["2 done nodes are unrated (no quoted verdict yet): api-a, api-b"])  # one aggregate warning
 
     def test_rated_outcome_needs_a_verdict_quote(self):
         for outcome in ("very-successful", "successful", "mixed", "bad", "dead-end"):
@@ -635,16 +637,17 @@ class BuildTests(unittest.TestCase):
         n = node("api-a", notes="why | so", verdict_quote="Merged; fast.", headline="12 ms", plain="Plain words.",
                  evidence=["PR #5"])
         tb = region(tfile([n, node("api-b")], "api"), "table-api")
-        self.assertLess(tb.index("| id | title | state"), tb.index("### Details per node"))
-        self.assertIn("| `api-a` | T api-a | Merged; fast. | 12 ms | Plain words. | why \\| so | PR #5 |", tb)
+        self.assertLess(tb.index("| id | title | kind"), tb.index("### Details per node"))
+        self.assertIn("| `api-a` | T api-a | Merged; fast. | 12 ms | Plain words. | why \\| so |  |  |  |  |", tb)
         self.assertNotIn("`api-b` | T api-b | ", tb.split("### Details")[1])
-        for field in ("verdict_quote", "headline", "plain", "notes"):  # any one of them earns a row
-            one = region(tfile([node("api-a", **{field: "only this"})], "api"), "table-api")
+        for field in build.DETAIL_FIELDS:  # any one of them earns a row
+            value = 3 if field == "queue_order" else "only this"
+            one = region(tfile([node("api-a", **{field: value})], "api"), "table-api")
             self.assertIn("### Details per node", one, field)
 
     def test_table_row(self):
         out = tfile([node("api-a", headline="a|b", evidence=["x", "y"])], "api")
-        self.assertIn("| `api-a` | T api-a | next | unrated | a\\|b | x; y |  |", out)
+        self.assertIn("| `api-a` | T api-a | feature | none | next | unrated |  |  |  |  |  | a\\|b | x; y |", out)
 
     def test_done_by_month_groups_every_done_node(self):
         out = region(built([
@@ -1090,39 +1093,52 @@ class StaleTests(Files, unittest.TestCase):
 class DisplayCoverageTests(unittest.TestCase):
     """Every text field of a node reaches a generated page; a field with no renderer fails here."""
 
-    NON_TEXT = {"id", "track", "kind", "state", "outcome", "depends_on", "replaced_by", "lane", "start", "end", "overview",
-                "qualified_by", "queue_order", "diagram", "confirmed"}
-    TEXT = {"title", "evidence", "verdict_quote", "headline", "folded", "notes", "plain", "waiting_on", "order_reason"}
-
-    def sentinel_node(self):
-        n = node("api-sentinel", state="in-progress", lane=CFG.queue_lane, queue_order=1, start="2026-01-01")
-        for f in self.TEXT:
-            n[f] = [f"SENT_{f}"] if f in ("evidence", "folded") else f"SENT_{f}"
+    def sentinel_nodes(self):
+        """One node with a value in every recorded field, and one target node in each other track."""
+        n = node("api-sentinel", kind="experiment", state="in-progress", lane=CFG.queue_lane, queue_order=7,
+                 start="2026-01-01", end="2026-02-02", confirmed="2026-01-05", depends_on=["web-target"],
+                 replaced_by=["data-target"], qualified_by=["ops-target"])
+        for f in check.TEXT_FIELDS:
+            n[f] = f"SENT_{f}"
+        n["evidence"] = ["SENT_evidence"]
         n["folded"] = ["SENT_folded (2026-01-02, commit abcdef12)", "SENT_folded_bare"]
-        return n
+        return [n, node("web-target"), node("data-target"), node("ops-target")]
 
-    def test_every_schema_field_is_classified(self):
+    def test_every_schema_field_is_covered_or_exempt(self):
         fields = set(check.FIELDS) | set(check.OPTIONAL)
-        self.assertEqual(fields, self.NON_TEXT | self.TEXT,
-                         "a new node field must be listed as text (and then shown on a page) or as non-text here")
+        covered = (set(check.TEXT_FIELDS) | set(check.TEXT_LIST_FIELDS) | set(check.ID_LIST_FIELDS)
+                   | set(check.SCALAR_FIELDS) | set(check.IMPLICIT_FIELDS))
+        self.assertEqual(fields - covered, set(check.COVERAGE_EXEMPT),
+                         "a new node field must be checked by coverage_errors (and shown on a page), or be exempt with a reason")
+        self.assertEqual(set(check.COVERAGE_EXEMPT), {"overview", "diagram"})
+        self.assertFalse(covered - fields)
 
-    def test_each_sentinel_appears_on_a_generated_page(self):
-        n = self.sentinel_node()
-        self.assertEqual(check.validate_nodes(CFG, [n])[0], [])
-        outs = build.render_outputs(CFG, [n], skeleton(), TODAY)
+    def test_each_sentinel_appears_where_it_is_checked(self):
+        nodes = self.sentinel_nodes()
+        self.assertEqual(check.validate_nodes(CFG, nodes)[0], [])
+        outs = build.render_outputs(CFG, nodes, skeleton(), TODAY)
         blob = "\n".join(outs.values())
-        for f in self.TEXT:
+        for f in check.TEXT_FIELDS + ["evidence"]:
             self.assertIn(f"SENT_{f}", blob, f"field {f} reaches no generated page")
         self.assertIn("SENT_folded_bare", blob)
-        self.assertEqual(check.coverage_errors(CFG, [n], TODAY), [])
+        # ids and scalars are in the source node's own track page, even when the target is in another track
+        api = outs[CFG.track_file("api")]
+        for target in ("web-target", "data-target", "ops-target", "experiment", CFG.queue_lane, "2026-02-02", "2026-01-05"):
+            self.assertIn(target, "\n".join(ln for ln in api.splitlines() if ln.startswith("| `api-sentinel` |")), target)
+        self.assertEqual(check.coverage_errors(CFG, nodes, TODAY), [])
 
     def test_coverage_check_reports_a_field_no_renderer_shows(self):
-        n = self.sentinel_node()
         silent = lambda cfg, code: (lambda nodes, today: "nothing")  # noqa: E731
         with mock.patch.object(build, "r_table", silent):
-            errs = check.coverage_errors(CFG, [n], TODAY)
-        self.assertIn("api-sentinel: notes appears on no generated page", errs)
-        self.assertIn("api-sentinel: folded item 2 appears on no generated page", errs)
+            errs = check.coverage_errors(CFG, self.sentinel_nodes(), TODAY)
+        for expect in ("api-sentinel: notes appears on no generated page",
+                       "api-sentinel: folded item 2 appears on no generated page",
+                       "api-sentinel: replaced_by target data-target is not in the node's table row",
+                       "api-sentinel: qualified_by target ops-target is not in the node's table row",
+                       "api-sentinel: lane value staging is not in the node's table row",
+                       "api-sentinel: confirmed value 2026-01-05 is not in the node's table row",
+                       "api-sentinel: queue_order value 7 is not in the node's table row"):
+            self.assertIn(expect, errs)
 
     def test_coverage_uses_the_tables_cell_normalization(self):
         n = node("api-a", notes="two  words | and\na pipe", plain="x")
@@ -1223,7 +1239,7 @@ class BrokenTests(unittest.TestCase):
         "WARNING: api-longtitle: title longer than 6 words",
         "WARNING: api-late-dep: prerequisite 'api-late-pre' starts after it",
         "WARNING: data-qorder-warn: queue_order on a node that is not a forward node in the queue lane",
-        "WARNING: ops-done-unrated: done but unrated",
+        "WARNING: 1 done nodes are unrated (no quoted verdict yet): ops-done-unrated",
         "WARNING: web-waiting-warn: waiting_on on a node that is not in-progress",
         "WARNING: web-qual-warn: qualified_by on a node that is not done",
         "WARNING: web-noplain: overview/forward node without a 'plain' sentence",

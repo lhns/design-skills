@@ -25,7 +25,8 @@ kinds:
     shape: hexagon
     owner_gate: true                    # outcome n/a; listed under "Waiting on the owner"
 
-# Lanes: what a forward node needs to run.
+# Lanes: what a forward node needs to run. A lane says who or what does the work; the owner-decision
+# kind says what the node is. Owner decisions sit in the owner lane, and so can other work only the owner does.
 lanes: [local, staging, owner, none]
 
 # Optional: a lane worked one at a time (here: the single shared staging environment).

@@ -20,8 +20,14 @@ FIELDS = ["id", "title", "track", "kind", "state", "outcome", "evidence", "verdi
 LIST_FIELDS = ["evidence", "depends_on", "replaced_by", "folded"]
 # absent == [] / "" / None / true
 OPTIONAL = ["qualified_by", "notes", "queue_order", "order_reason", "plain", "waiting_on", "diagram", "confirmed"]
-# fields whose text must show up on a generated page (see coverage_errors)
-DISPLAYED_TEXT = ["title", "verdict_quote", "headline", "plain", "notes"]
+# Display coverage: every recorded field must be visible on a generated page (see coverage_errors).
+TEXT_FIELDS = ["title", "verdict_quote", "headline", "plain", "notes", "waiting_on", "order_reason"]  # on some page
+TEXT_LIST_FIELDS = ["evidence", "folded"]  # each item on some page
+ID_LIST_FIELDS = ["depends_on", "replaced_by", "qualified_by"]  # each target id in the node's own table row
+SCALAR_FIELDS = ["kind", "lane", "state", "outcome", "start", "end", "confirmed", "queue_order"]  # a cell of the node's rows
+IMPLICIT_FIELDS = {"id": "the row's first cell", "track": "the page the row is on"}
+COVERAGE_EXEMPT = {"overview": "a boolean shown by whether the node is drawn on the main overview",
+                   "diagram": "a boolean shown by whether the node is drawn in the trees"}
 ID_RE = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 # GitHub fails to render some Mermaid blocks ("Unable to render rich display") when one page holds too many;
 # the cause is not known, the cap is empirical: 3 blocks per file rendered, more failed from some block on.
@@ -163,6 +169,7 @@ def validate_nodes(cfg, nodes):
     ids = {n["id"] for n in good}
     by = {n["id"]: n for n in good}
     orders = {}
+    done_unrated = []
     for n in good:
         nid = n["id"]
         k = cfg.kinds[n["kind"]]
@@ -194,8 +201,7 @@ def validate_nodes(cfg, nodes):
             if not n["evidence"]:
                 errors.append(f"{nid}: state done needs at least one evidence entry")
             if outcome == "unrated" and k["rated"] and not k["owner_gate"]:
-                # A quote may stay on an unrated node: the source sentence is kept as evidence.
-                warnings.append(f"{nid}: done but unrated" + (" (quote kept as evidence)" if n["verdict_quote"] else ""))
+                done_unrated.append(nid)  # a quote may stay on an unrated node as evidence
         if outcome == "superseded" and not n["replaced_by"]:
             errors.append(f"{nid}: outcome superseded needs a non-empty replaced_by")
         if state == "abandoned" and outcome not in ("dead-end", "superseded"):
@@ -211,6 +217,8 @@ def validate_nodes(cfg, nodes):
             if by[d]["start"] and n["start"] and str(by[d]["start"]) > str(n["start"]):
                 warnings.append(f"{n['id']}: prerequisite '{d}' starts after it ({by[d]['start']} > {n['start']})")
 
+    if done_unrated:
+        warnings.append(f"{len(done_unrated)} done nodes are unrated (no quoted verdict yet): " + ", ".join(done_unrated))
     unconfirmed = [n for n in good if build.is_rated(n) and not n.get("confirmed")]
     if unconfirmed:
         warnings.append(f"{len(unconfirmed)} rated nodes not confirmed by the owner")
@@ -276,21 +284,38 @@ def mermaid_errors(texts):
             for p, t in texts.items() if t.count("```mermaid") > MAX_MERMAID_PER_FILE]
 
 
+def _row_cells(page_text, nid):
+    """The cells of every table row of a node (its main row and its details row) on its track page."""
+    cells = []
+    for ln in page_text.splitlines():
+        if ln.startswith(f"| `{nid}` |"):
+            cells += [c.strip() for c in ln.strip().strip("|").split(" | ")]
+    return cells
+
+
 def coverage_errors(cfg, nodes, today=None):
-    """Every node's title, verdict quote, headline, plain sentence, notes and each folded item must appear, with the
-    tables' own cell normalization, on some generated page. A field no renderer shows is reported here."""
+    """Every recorded field of every node must be visible on a generated page; a field no renderer shows is
+    reported here. Text: on some page, with the tables' cell normalization. Id lists: each target id in the
+    node's own row. Scalars: the value is a cell of the node's rows. Only COVERAGE_EXEMPT fields are skipped."""
     regions = build.render_regions(cfg, nodes, today)
-    pages = list(regions.values()) + [build.render_timeline_file(cfg, nodes, today)]
-    pages += [build.render_track_file(cfg, nodes, c, today) for c in cfg.tracks]
-    blob = "\n".join(pages)
+    tracks = {c: build.render_track_file(cfg, nodes, c, today) for c in cfg.tracks}
+    blob = "\n".join(list(regions.values()) + [build.render_timeline_file(cfg, nodes, today)] + list(tracks.values()))
     out = []
     for n in build.normalize(nodes):
-        for f in DISPLAYED_TEXT:
+        cells = _row_cells(tracks[n["track"]], n["id"])
+        for f in TEXT_FIELDS:
             if n[f] and build.cell(n[f]) not in blob:
                 out.append(f"{n['id']}: {f} appears on no generated page")
-        for i, item in enumerate(n["folded"]):
-            if build.cell(item) not in blob:
-                out.append(f"{n['id']}: folded item {i + 1} appears on no generated page")
+        for f in TEXT_LIST_FIELDS:
+            for i, item in enumerate(n[f]):
+                if build.cell(item) not in blob:
+                    out.append(f"{n['id']}: {f} item {i + 1} appears on no generated page")
+        for f in ID_LIST_FIELDS:
+            ids = {x.strip() for c in cells for x in c.split(",")}
+            out += [f"{n['id']}: {f} target {t} is not in the node's table row" for t in n[f] if t not in ids]
+        for f in SCALAR_FIELDS:
+            if n[f] not in ("", None) and build.cell(n[f]) not in cells:
+                out.append(f"{n['id']}: {f} value {n[f]} is not in the node's table row")
     return out
 
 

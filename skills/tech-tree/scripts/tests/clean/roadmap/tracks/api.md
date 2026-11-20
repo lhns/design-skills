@@ -38,19 +38,19 @@ flowchart TB
 ## Node table
 
 <!-- BEGIN GENERATED: table-api -->
-| id | title | state | outcome | headline | evidence | depends_on |
-|---|---|---|---|---|---|---|
-| `api-auth-keys` | Per-client API keys | done | successful |  | PR #101 |  |
-| `api-rate-limit` | Per-key rate limiting | done | very-successful | p99 410 ms -> 180 ms | PR #212; docs/adr/0007-rate-limits.md | api-auth-keys |
-| `api-graphql-gateway` | GraphQL gateway | abandoned | dead-end |  | notes/graphql-spike.md | api-auth-keys |
+| id | title | kind | lane | state | outcome | start | end | depends_on | replaced_by | qualified_by | headline | evidence |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `api-auth-keys` | Per-client API keys | feature | none | done | successful | 2026-01-05 | 2026-01-20 |  |  |  |  | PR #101 |
+| `api-rate-limit` | Per-key rate limiting | feature | none | done | very-successful | 2026-02-02 | 2026-02-09 | api-auth-keys |  |  | p99 410 ms -> 180 ms | PR #212; docs/adr/0007-rate-limits.md |
+| `api-graphql-gateway` | GraphQL gateway | experiment | none | abandoned | dead-end | 2026-02-15 | 2026-03-01 | api-auth-keys |  |  |  | notes/graphql-spike.md |
 
 ### Details per node
 
-| id | title | verdict | headline | in plain words | notes | evidence |
-|---|---|---|---|---|---|---|
-| `api-auth-keys` | Per-client API keys | Merged; all endpoints now require a key. |  | Every client gets its own key, so we can tell who calls what. |  | PR #101 |
-| `api-rate-limit` | Per-key rate limiting | Merged; p99 latency unchanged under the load test. | p99 410 ms -> 180 ms | Each API key gets its own request budget, so one noisy client cannot slow the rest. |  | PR #212; docs/adr/0007-rate-limits.md |
-| `api-graphql-gateway` | GraphQL gateway | Dropped: query cost limits needed more work than the clients gain. |  |  |  | notes/graphql-spike.md |
+| id | title | verdict | headline | in plain words | notes | confirmed | waiting on | queue order | order reason |
+|---|---|---|---|---|---|---|---|---|---|
+| `api-auth-keys` | Per-client API keys | Merged; all endpoints now require a key. |  | Every client gets its own key, so we can tell who calls what. |  | 2026-01-25 |  |  |  |
+| `api-rate-limit` | Per-key rate limiting | Merged; p99 latency unchanged under the load test. | p99 410 ms -> 180 ms | Each API key gets its own request budget, so one noisy client cannot slow the rest. |  | 2026-02-12 |  |  |  |
+| `api-graphql-gateway` | GraphQL gateway | Dropped: query cost limits needed more work than the clients gain. |  |  |  | 2026-03-05 |  |  |  |
 
 ### Folded items per node
 

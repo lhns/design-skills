@@ -37,17 +37,17 @@ flowchart TB
 ## Node table
 
 <!-- BEGIN GENERATED: table-ops -->
-| id | title | state | outcome | headline | evidence | depends_on |
-|---|---|---|---|---|---|---|
-| `ops-staging-deploy` | Automated staging deploys | in-progress | unrated |  |  |  |
-| `ops-blue-green` | Blue-green production deploys | blocked | unrated |  |  | ops-staging-deploy |
-| `ops-cost-alerts` | Cloud cost alerts | in-progress | unrated |  |  |  |
+| id | title | kind | lane | state | outcome | start | end | depends_on | replaced_by | qualified_by | headline | evidence |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `ops-staging-deploy` | Automated staging deploys | tooling | staging | in-progress | unrated | 2026-05-05 |  |  |  |  |  |  |
+| `ops-blue-green` | Blue-green production deploys | feature | staging | blocked | unrated |  |  | ops-staging-deploy |  |  |  |  |
+| `ops-cost-alerts` | Cloud cost alerts | tooling | local | in-progress | unrated | 2026-06-02 |  |  |  |  |  |  |
 
 ### Details per node
 
-| id | title | verdict | headline | in plain words | notes | evidence |
-|---|---|---|---|---|---|---|
-| `ops-staging-deploy` | Automated staging deploys |  |  | Pushing to the main branch updates the staging site by itself. |  |  |
-| `ops-blue-green` | Blue-green production deploys |  |  | Switch production traffic between two copies so a bad deploy can be undone at once. |  |  |
-| `ops-cost-alerts` | Cloud cost alerts |  |  | Email when the monthly cloud bill passes a set limit. |  |  |
+| id | title | verdict | headline | in plain words | notes | confirmed | waiting on | queue order | order reason |
+|---|---|---|---|---|---|---|---|---|---|
+| `ops-staging-deploy` | Automated staging deploys |  |  | Pushing to the main branch updates the staging site by itself. |  |  | staging deploy freeze | 1 | everything else on staging needs it |
+| `ops-blue-green` | Blue-green production deploys |  |  | Switch production traffic between two copies so a bad deploy can be undone at once. |  |  |  | 3 | last: it reuses the staging pipeline |
+| `ops-cost-alerts` | Cloud cost alerts |  |  | Email when the monthly cloud bill passes a set limit. |  |  |  |  |  |
 <!-- END GENERATED: table-ops -->

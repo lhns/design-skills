@@ -23,7 +23,7 @@ Also reports nodes that the main page does not show (overview false and not a fo
 
 Usage:
   python history_gap.py [--config PATH] --out DIR [--before YYYY-MM-DD]
-Git runs with -C <directory of the config>. Writes DIR/history_gap_commits.csv and
+Git runs with -C <directory of the config>. Writes DIR/history_gap_commits.csv (bucket counts weak matches; strong_bucket does not) and
 DIR/history_gap_summary.md. The output is not meant to be committed.
 """
 import argparse
@@ -329,10 +329,10 @@ def write_outputs(rows, nodes, main_ref, before, out):
     out.mkdir(parents=True, exist_ok=True)
     with open(out / "history_gap_commits.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
-        w.writerow(["sha", "date", "refs", "subject", "bucket", "node_ids", "via"])
+        w.writerow(["sha", "date", "refs", "subject", "bucket", "strong_bucket", "node_ids", "via"])
         for c in sorted(rows, key=lambda r: r["date"]):
             w.writerow([c["sha"][:10], c["date"], ";".join(c["refs"])[:200], c["subject"],
-                        c["bucket"], ";".join(c["ids"][:3]), ";".join(c["vias"])])
+                        c["bucket"], c["strong_bucket"], ";".join(c["ids"][:3]), ";".join(c["vias"])])
     lines = summary(rows, nodes, main_ref, before)
     (out / "history_gap_summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     return lines

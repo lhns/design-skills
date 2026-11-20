@@ -7,12 +7,12 @@ One node is one thing that got, or will get, its own verdict. Apply the rules in
 1. **Own verdict.** It could have been merged, refuted or parked independently of its neighbours. A proposal with its revisions, trial runs, result and corrections is one node.
 2. **Own evidence.** It has at least one record of its own: a merged branch or PR, a decision record, a results write-up, a design doc.
 3. **Own edges.** Two items with the same prerequisites, dependants and outcome are one node; list the absorbed items in `folded`.
-4. **Forward nodes:** one lane and one done criterion each (a passing check, a reviewed write-up, an owner call). A plan that needs two separate sessions on a scarce resource is two nodes.
+4. **Forward nodes:** one lane and one done criterion each (a passing check, a reviewed write-up, an owner call). A plan that needs two separate runs on a shared resource (a test environment, a benchmark machine) is two nodes.
 5. **Always a node:**
    - each refuted or abandoned design (abandoned paths stay visible);
    - each owner decision that gates work;
-   - each recorded defect verdict (a finding that qualifies earlier results).
-6. **Never a node:** a single commit, a bug fix inside a branch, a test re-pin, a tooling repair. These go in a node's `folded`.
+   - each recorded defect finding (one that qualifies earlier results).
+6. **Never a node:** a single commit, a bug fix inside a branch, updating a test's expected values, a tooling repair. These go in a node's `folded`.
 7. **Sanity check:** the overview should hold a screenful (`overview` bounds in the config); a track that grows past ~20 nodes is probably mixing granularities.
 
 ## Node fields
@@ -48,12 +48,12 @@ The file is a bare list of nodes, or a mapping with the single key `nodes`.
 ## States and outcomes
 `state` says where the work is; `outcome` says how it went. They are separate: a done node can be `mixed`, an abandoned one is `dead-end` or `superseded`.
 
-Outcome scale. **An outcome other than `unrated` or `n/a` needs a `verdict_quote`** (checked), and is read off that quote, never inferred:
+Outcome scale. **An outcome other than `unrated` or `n/a` needs a `verdict_quote`** (checked), and is read off that quote, never inferred. A verdict is a sentence that says how the work went: a merge or PR description that states the result, a review approval, a release note, a results write-up, the owner's own words. **A merge alone is not a verdict:** `Merge branch 'x'` says the work landed, not how it went, so the node is done and `unrated`.
 
 | outcome | the quoted verdict says |
 | --- | --- |
-| `very-successful` | it was merged or accepted, with a measured gain (a number in `headline`) |
-| `successful` | it was merged or accepted, no headline gain |
+| `very-successful` | it was accepted, with a measured gain (a number in `headline`) |
+| `successful` | it was accepted and works as intended, no measured gain claimed |
 | `mixed` | a gain with a stated cost, or a partial result |
 | `bad` | it made things worse, or was merged and then reverted |
 | `dead-end` | refuted or abandoned, nothing reused |
@@ -61,7 +61,7 @@ Outcome scale. **An outcome other than `unrated` or `n/a` needs a `verdict_quote
 | `unrated` | no recorded verdict yet |
 | `n/a` | owner gates only (kinds with `owner_gate: true`): a decision is not rated |
 
-Checked: `abandoned` needs `dead-end` or `superseded`; a kind with `rated: false` (a defect) stays `unrated`. A rating the owner has not confirmed (`confirmed` empty) is a warning, and the page says how many ratings are confirmed.
+Checked: `abandoned` needs `dead-end` or `superseded`; a kind with `rated: false` (a defect) stays `unrated`. Two aggregate warnings, one line each: done nodes still unrated, and ratings the owner has not confirmed (`confirmed` empty); the page says how many ratings are confirmed.
 
 Readiness (checked): a node in state `next` must have every `depends_on` done, except prerequisites whose kind has `blocks: false` (a known defect does not block work on its diagnosis).
 
@@ -113,4 +113,4 @@ Derived regions, never hand-kept:
 - **Queue:** forward nodes in `queue_lane`, by `queue_order`.
 - **Done, by month:** every done or abandoned node by the month it ended, with its labelled folded records.
 
-Checked: every node's title, verdict quote, headline, plain sentence, notes and each folded item appear on a generated page; stale regions or pages fail the check.
+Checked: every recorded field of every node appears on a generated page (its track page shows the full row, details and folded items); the only exemptions are `overview` and `diagram`, which show by where the node is drawn. Stale regions or pages fail the check.

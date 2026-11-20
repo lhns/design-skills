@@ -32,15 +32,15 @@ flowchart TB
 ## Node table
 
 <!-- BEGIN GENERATED: table-docs -->
-| id | title | state | outcome | headline | evidence | depends_on |
-|---|---|---|---|---|---|---|
-| `docs-tutorial` | Write the tutorial | next | unrated |  |  | core-tokenizer |
-| `docs-site` | Publish the docs site | done | successful |  | PR #20 |  |
+| id | title | kind | lane | state | outcome | start | end | depends_on | replaced_by | qualified_by | headline | evidence |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `docs-tutorial` | Write the tutorial | change | local | next | unrated |  |  | core-tokenizer |  |  |  |  |
+| `docs-site` | Publish the docs site | change | none | done | successful | 2026-03-01 | 2026-03-08 |  |  |  |  | PR #20 |
 
 ### Details per node
 
-| id | title | verdict | headline | in plain words | notes | evidence |
-|---|---|---|---|---|---|---|
-| `docs-tutorial` | Write the tutorial |  |  | A first walk-through for new users. | Done when: someone new runs every example. |  |
-| `docs-site` | Publish the docs site | Merged; the site builds on every release. |  | The reference pages are online. |  | PR #20 |
+| id | title | verdict | headline | in plain words | notes | confirmed | waiting on | queue order | order reason |
+|---|---|---|---|---|---|---|---|---|---|
+| `docs-tutorial` | Write the tutorial |  |  | A first walk-through for new users. | Done when: someone new runs every example. |  |  |  |  |
+| `docs-site` | Publish the docs site | Merged; the site builds on every release. |  | The reference pages are online. |  | 2026-03-12 |  |  |  |
 <!-- END GENERATED: table-docs -->

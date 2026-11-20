@@ -2,7 +2,7 @@
 """Mechanically validate the records an extractor wrote (format: extractor-brief.md).
 
 BACKFILL_DIR holds one subfolder per chunk; a subfolder with a records.yaml is a chunk and also
-needs commits.csv and digest.md. A record is accepted or rejected whole, never repaired:
+needs commits.csv; digest.md is optional (without it no digest entry exists). A record is accepted or rejected whole, never repaired:
   - track and kind are in the config, outcome_word is in the fixed list, existing_node (if set)
     is an id in the nodes file;
   - every sha resolves to a commit (git rev-parse --verify <sha>^{commit}) and is in the chunk's
@@ -194,7 +194,8 @@ def load_chunk(d):
     try:
         with open(d / "commits.csv", encoding="utf-8", newline="") as f:
             rows = list(csv.DictReader(f))
-        digest = parse_digest((d / "digest.md").read_text(encoding="utf-8"))
+        dg = d / "digest.md"  # optional: a project without session transcripts has none
+        digest = parse_digest(dg.read_text(encoding="utf-8")) if dg.exists() else {}
         data = yaml.safe_load((d / "records.yaml").read_text(encoding="utf-8")) or {}
     except (OSError, yaml.YAMLError, UnicodeDecodeError) as e:
         return None, f"{d.name}: cannot read the chunk: {e}"

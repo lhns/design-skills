@@ -463,24 +463,32 @@ def cell(s):
     return " ".join(str(s).split()).replace("|", "\\|")
 
 
+# a node gets a row in the details table when any of these is set
+DETAIL_FIELDS = ("verdict_quote", "headline", "notes", "plain", "confirmed", "waiting_on", "queue_order", "order_reason")
+
+
 def r_table(cfg, code):
     """The track's node table, its per-node details (verdict, headline, plain words, notes) and its folded items."""
     def render(nodes, today):
         sel = [n for n in nodes if n["track"] == code]
         if not sel:
             return "_No nodes yet._"
-        rows = ["| id | title | state | outcome | headline | evidence | depends_on |", "|---|---|---|---|---|---|---|"]
+        rows = ["| id | title | kind | lane | state | outcome | start | end | depends_on | replaced_by | qualified_by | headline | evidence |",
+                "|" + "---|" * 13]
         for n in sel:
             rows.append("| " + " | ".join([
-                f"`{n['id']}`", cell(n["title"]), n["state"], n["outcome"], cell(n["headline"]),
-                cell("; ".join(n["evidence"])), cell(", ".join(n["depends_on"])),
+                f"`{n['id']}`", cell(n["title"]), cell(n["kind"]), cell(n["lane"]), n["state"], n["outcome"],
+                n["start"], n["end"], cell(", ".join(n["depends_on"])), cell(", ".join(n["replaced_by"])),
+                cell(", ".join(n["qualified_by"])), cell(n["headline"]), cell("; ".join(n["evidence"])),
             ]) + " |")
         parts = ["\n".join(rows)]
-        detailed = [n for n in sel if n["verdict_quote"] or n["headline"] or n["notes"] or n["plain"]]
+        detailed = [n for n in sel if any(n[f] not in ("", None) for f in DETAIL_FIELDS)]
         if detailed:
-            rows = ["| id | title | verdict | headline | in plain words | notes | evidence |", "|---|---|---|---|---|---|---|"]
+            rows = ["| id | title | verdict | headline | in plain words | notes | confirmed | waiting on | queue order | order reason |",
+                    "|" + "---|" * 10]
             rows += [f"| `{n['id']}` | {cell(n['title'])} | {cell(n['verdict_quote'])} | {cell(n['headline'])} | "
-                     f"{cell(n['plain'])} | {cell(n['notes'])} | {cell('; '.join(n['evidence']))} |" for n in detailed]
+                     f"{cell(n['plain'])} | {cell(n['notes'])} | {n['confirmed']} | {cell(n['waiting_on'])} | "
+                     f"{'' if n['queue_order'] is None else n['queue_order']} | {cell(n['order_reason'])} |" for n in detailed]
             parts += ["### Details per node", "\n".join(rows)]
         withf = [n for n in sel if n["folded"]]
         if withf:

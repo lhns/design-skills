@@ -408,10 +408,27 @@ class ValidateRecordsTests(unittest.TestCase):
         self.assertIn("verdict_quote is not a literal substring", "\n".join(errors["Docs unit fix"]))
         self.assertIn("digest_ref 2026-03-14T09:12:04Z is not a heading timestamp", "\n".join(errors["Cache decision"]))
 
-    def test_unreadable_chunk_and_bad_arguments(self):
+    def test_a_chunk_without_digest_md_is_readable_and_digest_sources_are_rejected(self):
         with tempfile.TemporaryDirectory() as t:
             back = self.chunk_dir("2026-03", t)
             (back / "2026-03" / "digest.md").unlink()
+            code, out, _ = self.validate(back)
+            res = yaml.safe_load((back / "validated.yaml").read_text(encoding="utf-8"))
+        self.assertEqual(code, 1)
+        self.assertNotIn("CHUNK", out)
+        self.assertEqual([r["title"] for r in res["accepted"]], ["Docs unit fix"])  # quoted from a commit message
+        errors = {r["title"]: "\n".join(r["_errors"]) for r in res["rejected"]}
+        self.assertEqual(sorted(errors), ["Cache decision", "Product cache"])
+        self.assertIn("digest_ref 2026-03-15T10:00:00Z is not a heading timestamp", errors["Product cache"])
+        self.assertIn("quote_source '2026-03-15T10:00:00Z' is neither a digest heading timestamp nor a commit",
+                      errors["Product cache"])
+        self.assertIn("quote_source '2026-03-14T09:12:03Z' is neither", errors["Cache decision"])
+        self.assertEqual((res["uncovered"], res["conflicts"], res["chunk_errors"] if "chunk_errors" in res else []), ([], [], []))
+
+    def test_unreadable_chunk_and_bad_arguments(self):
+        with tempfile.TemporaryDirectory() as t:
+            back = self.chunk_dir("2026-03", t)
+            (back / "2026-03" / "commits.csv").unlink()
             code, out, _ = self.validate(back)
             self.assertEqual(code, 1)
             self.assertIn("CHUNK 2026-03: cannot read the chunk", out)

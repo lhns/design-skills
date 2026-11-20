@@ -195,9 +195,9 @@ class EndToEnd(unittest.TestCase):
         with open(out / "history_gap_commits.csv", encoding="utf-8", newline="") as f:
             rows = list(csv.DictReader(f))
         self.assertEqual(len(rows), 10)
-        self.assertEqual(list(rows[0]), ["sha", "date", "refs", "subject", "bucket", "node_ids", "via"])
+        self.assertEqual(list(rows[0]), ["sha", "date", "refs", "subject", "bucket", "strong_bucket", "node_ids", "via"])
         weak = next(r for r in rows if r["subject"].startswith("Fix flaky"))
-        self.assertEqual((weak["bucket"], weak["via"]), ("node", "pr"))
+        self.assertEqual((weak["bucket"], weak["strong_bucket"], weak["via"]), ("node", "none", "pr"))
         self.assertEqual(weak["sha"], self.w1[:10])
 
     def test_before_option_and_bad_main_ref(self):
