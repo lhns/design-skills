@@ -13,12 +13,12 @@ One node is one thing that got, or will get, its own verdict. Apply the rules in
    - each owner decision that gates work;
    - each recorded defect finding (one that qualifies earlier results).
 6. **Never a node:** a single commit, a bug fix inside a branch, updating a test's expected values, a tooling repair. These go in a node's `folded`.
-7. **Sanity check:** the overview should hold a screenful (`overview` bounds in the config); a track that grows past ~20 nodes is probably mixing granularities.
+7. **Sanity check:** the overview shows every month's important points; size its `overview` range to the history (months × picks per month). There is no per-track count: a track holds every node of its history, and its page lists them all.
 
 ## Node fields
 ```yaml
 - id: api-rate-limit              # checked: kebab-case, unique, starts with "<track>-"
-  title: "Per-key rate limiting"   # at most 6 words (longer: warning)
+  title: "Per-key rate limiting"   # at most 6 plain words a newcomer can read (warnings: longer, or identifier-like)
   track: api                       # checked: a code from config tracks
   kind: feature                    # checked: a name from config kinds
   state: done                      # done | in-progress | next | blocked | parked | abandoned
@@ -56,7 +56,7 @@ Outcome scale. **An outcome other than `unrated` or `n/a` needs a `verdict_quote
 | `successful` | it was accepted and works as intended, no measured gain claimed |
 | `mixed` | a gain with a stated cost, or a partial result |
 | `bad` | it made things worse, or was merged and then reverted |
-| `dead-end` | refuted or abandoned, nothing reused |
+| `dead-end` | refuted or abandoned, nothing reused and nothing of it still in the product (check before rating; kept with caveats is `mixed`) |
 | `superseded` | replaced by a named node (checked: `replaced_by` non-empty) |
 | `unrated` | no recorded verdict yet |
 | `n/a` | owner gates only (kinds with `owner_gate: true`): a decision is not rated |
@@ -78,6 +78,7 @@ Free text, one item each, all listed on the track page. A **labelled record** al
 <title> (<YYYY-MM-DD>, commit <sha>[, commit <sha>...])
 <title> (<YYYY-MM-DD>, session record)
 ```
+An item carries its commits whenever one exists; `session record` is only for work with no committed artifact.
 Backfilled history uses the labelled form, so every attached record is visible by date.
 
 ## Config (`tech-tree.yaml`)
@@ -88,10 +89,11 @@ Paths are relative to the config file. See `config.example.yaml` for an annotate
 | `nodes` | path of nodes.yaml (default `docs/roadmap/nodes.yaml`) |
 | `page` | path of the main page (default `docs/roadmap.md`); track pages go to `<page dir>/<page stem>/tracks/<code>.md`, the timeline to `<page dir>/<page stem>/timeline.md` |
 | `tracks` | `{code: {name, scope}}`, in display order |
-| `kinds` | `{name: {shape, rated, owner_gate, blocks}}`. `shape`: `box` (default), `slant`, `hexagon`, `flag`, `round`. `rated: false`: never carries an outcome, shown as open or fixed (defects). `owner_gate: true`: an owner decision; outcome `n/a`, not drawn in the trees, open ones listed under *Waiting on the owner*. `blocks: false`: an open node of this kind does not block its dependants' readiness. |
+| `kinds` | `{name: {shape, rated, owner_gate, blocks}}`. `shape`: `box` (default), `slant`, `hexagon`, `flag`, `round`. `rated: false`: never carries an outcome, shown as open or fixed (defects). `owner_gate: true`: an owner decision; outcome `n/a`; once done it is drawn in the overview only (never in the track trees), and open ones are listed under *Waiting on the owner*. `blocks: false`: an open node of this kind does not block its dependants' readiness. |
 | `lanes` | list of lane names: who or what the work needs (a person, a machine, an environment) |
 | `queue_lane` | optional: a lane whose forward nodes are worked one at a time; they carry a unique `queue_order` and appear in the *Queue* region |
-| `overview` | optional `{min, max}`: warn when the overview count leaves this band |
+| `overview` | optional `{min, max}`: warn when the overview count leaves this band; size it to the history (months × picks per month) |
+| `layout` | optional `{overview_width, track_width, band_min}`, defaults 3, 3, 1: boxes per row in the overview and in track trees, and how many nodes a past-month overview band needs before the next month starts its own (1: one band per month) |
 | `history` | optional, for `history_gap.py`: `main` (the main ref; default the first of origin/main, main, master), `weak_refs` (`{name: regex}` with one capture group, e.g. decision-record numbers or PR numbers; matched in commit messages and node text, counted as weak), `merge_subject` (a regex whose group 1 is the branch name in a merge commit subject, added to git's and GitHub's defaults) |
 
 No track, kind or lane name is special to the scripts; behaviour comes from these attributes only.
@@ -111,6 +113,8 @@ Derived regions, never hand-kept:
 - **Built, waiting:** `in-progress` nodes with `waiting_on`, grouped by it.
 - **Waiting on the owner:** open owner-gate nodes.
 - **Queue:** forward nodes in `queue_lane`, by `queue_order`.
-- **Done, by month:** every done or abandoned node by the month it ended, with its labelled folded records.
+- **Done, by month:** every done or abandoned node (with its tag) by the month it ended, with its plain sentence (else its headline) and its labelled folded records; a month in the span with nothing finished says so.
+
+Warned: each past month with finished nodes but no overview node; titles that look like identifiers.
 
 Checked: every recorded field of every node appears on a generated page (its track page shows the full row, details and folded items); the only exemptions are `overview` and `diagram`, which show by where the node is drawn. Stale regions or pages fail the check.

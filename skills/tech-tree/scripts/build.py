@@ -28,9 +28,7 @@ OUTCOMES = ["very-successful", "successful", "mixed", "bad", "dead-end", "supers
 NOT_RATED = ("unrated", "n/a")  # outcomes that need no verdict quote and count as no rating
 
 WRAP = 22           # label line width in characters
-OVERVIEW_WIDTH = 2  # max nodes per row in the overview
-TRACK_WIDTH = 3     # max nodes per row in a per-track tree
-BAND_MIN = 4        # past months are merged into one overview band until it holds this many nodes
+# row widths and the month-band minimum are config (`layout`, see tree_config.LAYOUT_DEFAULTS)
 GANTT_TITLE = 40    # gantt task names are truncated to this many characters
 
 GENERATED_ON = "Generated on {}."  # check.py parses the date back out of this sentence
@@ -53,6 +51,7 @@ CLASSDEFS = [
     ("parked", "fill:#f3f3f3,stroke:#999,color:#555"),
     ("unrated", "fill:#fff,stroke:#333,stroke-dasharray:1 3,color:#111"),
     ("gate", "fill:#d9c2f0,stroke:#7b3fb5,color:#111"),
+    ("decided", "fill:#ece0f7,stroke:#7b3fb5,stroke-dasharray:2 2,color:#111"),
     ("finding", "fill:#ffe0b2,stroke:#d84315,stroke-width:2px,color:#111"),
     ("waiting", "fill:#e3f2fd,stroke:#1f6fc5,stroke-dasharray:5 5,color:#111"),
 ]
@@ -116,6 +115,8 @@ def node_class(n, k):
     s, o = n["state"], n["outcome"]
     if k["owner_gate"] and s not in ("done", "abandoned"):
         return "gate"
+    if k["owner_gate"] and s == "done":  # a decided owner call: drawn in the overview only
+        return "decided"
     if not k["rated"] and s in ("in-progress", "next"):
         return "finding"
     if not k["rated"] and s == "done":
@@ -182,21 +183,28 @@ def precedence(nodes):
     return pre
 
 
-def hidden(cfg, n):
-    """Owner-gate nodes (and nodes with `diagram: false`) are not drawn; tables and lists still carry them."""
-    return kind_of(cfg, n)["owner_gate"] or not n["diagram"]
+def hidden(cfg, n, owner_done=False):
+    """Owner-gate nodes (and nodes with `diagram: false`) are not drawn; tables and lists still carry them.
+    With owner_done (the overview only) a done owner gate is drawn; an open one never is."""
+    if not n["diagram"]:
+        return True
+    return kind_of(cfg, n)["owner_gate"] and not (owner_done and n["state"] == "done")
 
 
-def diagram_view(cfg, nodes):
+def diagram_view(cfg, nodes, owner_done=False):
     """The nodes the diagrams draw: hidden ones removed, a dependency that ran through one rewired
-    from its prerequisites to its dependants. replaced_by / qualified_by into a hidden node are dropped."""
+    from its prerequisites to its dependants. replaced_by / qualified_by into a hidden node are dropped.
+    owner_done: also draw done owner gates (the overview does; the track trees do not)."""
     by = {n["id"]: n for n in nodes}
     pre = precedence(nodes)
+
+    def hid(n):
+        return hidden(cfg, n, owner_done)
 
     def visible_pre(i, seen=()):
         out = []
         for p in pre[i]:
-            if hidden(cfg, by[p]):
+            if hid(by[p]):
                 out += [q for q in visible_pre(p, seen + (i,)) if p not in seen]
             else:
                 out.append(p)
@@ -204,13 +212,13 @@ def diagram_view(cfg, nodes):
 
     view = []
     for n in nodes:
-        if hidden(cfg, n):
+        if hid(n):
             continue
         m = dict(n)
         m["depends_on"] = list(dict.fromkeys(d for x in n["depends_on"]
-                                             for d in ([x] if not hidden(cfg, by[x]) else visible_pre(x))))
-        m["replaced_by"] = [r for r in n["replaced_by"] if not hidden(cfg, by[r])]
-        m["qualified_by"] = [q for q in n["qualified_by"] if not hidden(cfg, by[q])]
+                                             for d in ([x] if not hid(by[x]) else visible_pre(x))))
+        m["replaced_by"] = [r for r in n["replaced_by"] if not hid(by[r])]
+        m["qualified_by"] = [q for q in n["qualified_by"] if not hid(by[q])]
         view.append(m)
     return view
 
@@ -332,7 +340,7 @@ def month_name(ym):
 
 
 def overview_bands(cfg, sel, order):
-    """[(label, [node ids])] in time order: past months (merged until a band holds BAND_MIN nodes), now, next, later.
+    """[(label, [node ids])] in time order: past months (merged until a band holds layout.band_min nodes), now, next, later.
 
     A node's band follows its own state and date: done, abandoned and open finding nodes go to the month of
     their start; in-progress to Now, next to Next, blocked and parked to Later. An edge that would then point
@@ -355,7 +363,7 @@ def overview_bands(cfg, sel, order):
     for ym, ids in past.items():  # month order; "" (undated) comes first
         acc += ids
         months.append(ym)
-        if len(acc) >= BAND_MIN or ym == "":
+        if len(acc) >= cfg.layout["band_min"] or ym == "":
             bands.append((months, acc))
             months, acc = [], []
     if acc:
@@ -382,7 +390,7 @@ def overview_bands(cfg, sel, order):
 
 # ---------------------------------------------------------------- regions
 def r_overview(cfg, nodes, today):
-    nodes = diagram_view(cfg, nodes)
+    nodes = diagram_view(cfg, nodes, owner_done=True)
     sel = [n for n in nodes if n["overview"]]
     if not sel:
         return "_No nodes have `overview: true` yet._"
@@ -394,7 +402,7 @@ def r_overview(cfg, nodes, today):
         out.append(f'    subgraph bd_{k}["{esc(label)}"]')
         out += [f"        {node_def(by[i], kind_of(cfg, by[i]), prefix=by[i]['track'])}" for i in ids]
         out.append("    end")
-        rows += pack_rows([by[i] for i in ids], OVERVIEW_WIDTH)
+        rows += pack_rows([by[i] for i in ids], cfg.layout["overview_width"])
     out += edge_block(nodes, rows)
     out += classdef_lines()
     out += class_lines([(sid(n["id"]), node_class(n, kind_of(cfg, n))) for n in sel])
@@ -413,7 +421,7 @@ def r_track(cfg, code):
         sel = track_nodes(nodes, code)
         if not sel:
             return "_No nodes in this track yet._"
-        rows = pack_rows(sel, TRACK_WIDTH)
+        rows = pack_rows(sel, cfg.layout["track_width"])
         # edges to other tracks are not drawn (stub nodes made trees wide and unreadable);
         # they stay in the node table's depends_on column and in the other track's own tree
         out = ["flowchart TB"]
@@ -545,9 +553,11 @@ def legend_shapes(cfg):
     """One sample per configured kind, drawn with the kind's shape: [(class, sample node, kind attributes)]."""
     out = []
     for name, k in cfg.kinds.items():
-        title = name + (" (not drawn)" if k["owner_gate"] else "")
-        s = _sample(title, "next" if k["rated"] else "in-progress")
+        s = _sample(name + (" (open, not drawn)" if k["owner_gate"] else ""), "next" if k["rated"] else "in-progress")
         out.append((node_class(s, k), s, k))
+        if k["owner_gate"]:  # a decided owner call is drawn in the overview, in its own colour
+            d = _sample(name + " (decided)", "done", "n/a")
+            out.append((node_class(d, k), d, k))
     return out
 
 
@@ -580,8 +590,8 @@ def r_legend(cfg, nodes, today):
     notes = ["The prefix on an overview box is its track. A prerequisite implied by a longer chain is not drawn; "
              "the node tables keep every edge."]
     if any(a["owner_gate"] for a in cfg.kinds.values()):
-        notes.insert(0, "Owner gates (the purple shape) are not drawn in the trees; open ones are listed under "
-                        "*Waiting on the owner*.")
+        notes.insert(0, "Owner calls are the purple shape. A decided owner call is drawn in the overview only, never "
+                        "in the track trees; an open one is listed under *Waiting on the owner*.")
     return "\n".join([fence(out), "", " ".join(notes)])
 
 
@@ -664,7 +674,8 @@ def labelled(item):
 
 def r_done_by_month(cfg, nodes, today):
     """Every finished node (done or abandoned), grouped by the month it ended (else started), newest month
-    first, undated last; each node's labelled folded records follow as sub-bullets."""
+    first, undated last; each line carries the node's plain sentence (else its headline), and the node's labelled
+    folded records follow as sub-bullets. A month between the first and the last with nothing finished is named."""
     sel = [n for n in nodes if n["state"] in ("done", "abandoned")]
     if not sel:
         return "_Nothing done yet._"
@@ -672,14 +683,25 @@ def r_done_by_month(cfg, nodes, today):
     for n in sel:
         groups.setdefault((n["end"] or n["start"])[:7], []).append(n)
     parts = []
-    for ym in sorted((k for k in groups if k), reverse=True) + ([""] if "" in groups else []):
+    dated = sorted(k for k in groups if k)
+    months = []
+    if dated:
+        y, m = int(dated[0][:4]), int(dated[0][5:7])
+        while f"{y:04d}-{m:02d}" <= dated[-1]:
+            months.append(f"{y:04d}-{m:02d}")
+            y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    for ym in sorted(months, reverse=True) + ([""] if "" in groups else []):
+        if ym not in groups:
+            parts.append(f"<b>{month_name(ym)}</b>: nothing finished")
+            continue
         group = sorted(groups[ym], key=lambda n: (n["end"] or n["start"], n["id"]))
         head = month_name(ym) if ym else "Undated"
         done = sum(1 for n in group if n["state"] == "done")
         count = f"{done} done" + (f", {len(group) - done} abandoned" if len(group) > done else "")
         lines = []
         for n in group:
-            lines.append(f"- `{n['id']}`: {cell(n['title'])} ({cell(tag(n, kind_of(cfg, n)))})")
+            say = n["plain"] or n["headline"]
+            lines.append(f"- `{n['id']}`: {cell(n['title'])} ({cell(tag(n, kind_of(cfg, n)))})" + (f". {cell(say)}" if say else ""))
             lines += [f"  - {cell(t)} ({d})" for t, d in filter(None, map(labelled, n["folded"]))]
         body = "\n".join(lines)
         parts.append(f"<details><summary><b>{head}</b>: {count}</summary>\n\n{body}\n\n</details>")

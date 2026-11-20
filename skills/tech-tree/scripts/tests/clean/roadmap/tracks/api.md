@@ -27,6 +27,7 @@ flowchart TB
     classDef parked fill:#f3f3f3,stroke:#999,color:#555
     classDef unrated fill:#fff,stroke:#333,stroke-dasharray:1 3,color:#111
     classDef gate fill:#d9c2f0,stroke:#7b3fb5,color:#111
+    classDef decided fill:#ece0f7,stroke:#7b3fb5,stroke-dasharray:2 2,color:#111
     classDef finding fill:#ffe0b2,stroke:#d84315,stroke-width:2px,color:#111
     classDef waiting fill:#e3f2fd,stroke:#1f6fc5,stroke-dasharray:5 5,color:#111
     class api_auth_keys succ

@@ -4,6 +4,7 @@
 Exit 0: no errors (warnings are printed). Exit 1: errors. Exit 2: bad config.
 """
 import argparse
+import collections
 import datetime
 import re
 import sys
@@ -28,6 +29,11 @@ SCALAR_FIELDS = ["kind", "lane", "state", "outcome", "start", "end", "confirmed"
 IMPLICIT_FIELDS = {"id": "the row's first cell", "track": "the page the row is on"}
 COVERAGE_EXEMPT = {"overview": "a boolean shown by whether the node is drawn on the main overview",
                    "diagram": "a boolean shown by whether the node is drawn in the trees"}
+# title readability: a title token that looks like an identifier (see title_identifier)
+CODE_EXTENSIONS = (".py", ".rs", ".js", ".ts", ".go", ".java", ".rb")
+SNAKE_RE = re.compile(r"[a-z0-9]+_[a-z0-9_]+")
+ENV_RE = re.compile(r"[A-Z][A-Z0-9]*_[A-Z0-9_]+")
+KEBAB_RE = re.compile(r"[a-z0-9]+(-[a-z0-9]+){2,}")
 ID_RE = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 # GitHub fails to render some Mermaid blocks ("Unable to render rich display") when one page holds too many;
 # the cause is not known, the cap is empirical: 3 blocks per file rendered, more failed from some block on.
@@ -46,6 +52,17 @@ def _date(v):
     if isinstance(v, datetime.date):
         return v
     return datetime.date.fromisoformat(str(v))
+
+
+def title_identifier(title):
+    """The first token of a title that looks like an identifier (snake_case, ENV_NAME, a path or code file, a
+    branch-style kebab name), else None. Words, product names and short hyphenated words do not match."""
+    for raw in title.split():
+        t = raw.strip(".,;:!?()[]\"'`")
+        if (SNAKE_RE.fullmatch(t) or ENV_RE.fullmatch(t) or t.count("/") >= 2 or t.lower().endswith(CODE_EXTENSIONS)
+                or KEBAB_RE.fullmatch(t)):
+            return t
+    return None
 
 
 def find_cycle(nodes):
@@ -119,6 +136,10 @@ def validate_nodes(cfg, nodes):
                 err("title is empty")
             elif len(n["title"].split()) > 6:
                 warnings.append(f"{nid}: title longer than 6 words")
+            ident = title_identifier(n["title"])
+            if ident:
+                warnings.append(f"{nid}: title looks like an identifier ('{ident}'); "
+                                "use plain words, and explain real names in 'plain'")
         if isinstance(n["verdict_quote"], str) and len(n["verdict_quote"]) > 300:
             err("verdict_quote longer than 300 chars")
         for f in LIST_FIELDS:
@@ -219,6 +240,19 @@ def validate_nodes(cfg, nodes):
 
     if done_unrated:
         warnings.append(f"{len(done_unrated)} done nodes are unrated (no quoted verdict yet): " + ", ".join(done_unrated))
+    finished = collections.defaultdict(int)  # start month -> done or abandoned nodes
+    drawn = set()  # start months holding an overview node
+    for n in good:
+        ym = str(n["start"])[:7]
+        if ym:
+            finished[ym] += n["state"] in ("done", "abandoned")
+            if n["overview"]:
+                drawn.add(ym)
+    now = datetime.date.today().strftime("%Y-%m")
+    for ym in sorted(finished):
+        if finished[ym] and ym not in drawn and ym != now:
+            warnings.append(f"overview: no node from {build.month_name(ym)} ({finished[ym]} finished nodes that month); "
+                            "pick its turning points")
     unconfirmed = [n for n in good if build.is_rated(n) and not n.get("confirmed")]
     if unconfirmed:
         warnings.append(f"{len(unconfirmed)} rated nodes not confirmed by the owner")

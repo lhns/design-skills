@@ -33,8 +33,11 @@ lanes: [local, staging, owner, none]
 # Its forward nodes carry a unique queue_order and are listed in the "queue" region.
 queue_lane: staging
 
-# Optional: warn when the overview leaves this band.
+# Optional: warn when the overview leaves this band. Size it to the history: months x picks per month.
 overview: {min: 12, max: 30}
+
+# Optional layout (these are the defaults): boxes per row, and one overview band per past month.
+layout: {overview_width: 3, track_width: 3, band_min: 1}
 
 # Optional: inputs for scripts/history_gap.py.
 history:

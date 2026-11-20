@@ -33,7 +33,8 @@ flowchart TB
         direction LR
         lg_k0["○ change"]
         lg_k1[/"○ spike"/]
-        lg_k2{{"○ decision (not drawn)"}}
+        lg_k2{{"○ decision (open, not<br/>drawn)"}}
+        lg_k3{{"✔ decision (decided)"}}
     end
     subgraph lg_edge["Arrow (in the trees every arrow points down, forward in time)"]
         direction LR
@@ -60,6 +61,7 @@ flowchart TB
     classDef parked fill:#f3f3f3,stroke:#999,color:#555
     classDef unrated fill:#fff,stroke:#333,stroke-dasharray:1 3,color:#111
     classDef gate fill:#d9c2f0,stroke:#7b3fb5,color:#111
+    classDef decided fill:#ece0f7,stroke:#7b3fb5,stroke-dasharray:2 2,color:#111
     classDef finding fill:#ffe0b2,stroke:#d84315,stroke-width:2px,color:#111
     classDef waiting fill:#e3f2fd,stroke:#1f6fc5,stroke-dasharray:5 5,color:#111
     class lg_s0 vsucc
@@ -74,9 +76,10 @@ flowchart TB
     class lg_s10 blocked
     class lg_s11 parked
     class lg_k2 gate
+    class lg_k3 decided
 ```
 
-Owner gates (the purple shape) are not drawn in the trees; open ones are listed under *Waiting on the owner*. The prefix on an overview box is its track. A prerequisite implied by a longer chain is not drawn; the node tables keep every edge.
+Owner calls are the purple shape. A decided owner call is drawn in the overview only, never in the track trees; an open one is listed under *Waiting on the owner*. The prefix on an overview box is its track. A prerequisite implied by a longer chain is not drawn; the node tables keep every edge.
 <!-- END GENERATED: legend -->
 
 ## Ratings
@@ -90,20 +93,21 @@ Owner gates (the purple shape) are not drawn in the trees; open ones are listed 
 <!-- BEGIN GENERATED: overview -->
 ```mermaid
 flowchart TB
-    subgraph bd_0["Feb 2026 to Mar 2026"]
+    subgraph bd_0["Feb 2026"]
         core_tokenizer["core · ✔ Rewrite the<br/>tokenizer"]
         core_streaming[/"core · ✖ Streaming<br/>parse spike"/]
+    end
+    subgraph bd_1["Mar 2026"]
         docs_site["docs · ✔ Publish the<br/>docs site"]
     end
-    subgraph bd_1["Now (in progress)"]
+    subgraph bd_2["Now (in progress)"]
         core_error_recovery["core · ▶ Keep parsing<br/>after an error"]
     end
-    subgraph bd_2["Next"]
+    subgraph bd_3["Next"]
         docs_tutorial["docs · ○ Write the<br/>tutorial"]
     end
     core_tokenizer ~~~ core_streaming
-    core_tokenizer ~~~ docs_site
-    core_streaming ~~~ core_error_recovery
+    core_streaming ~~~ docs_site
     docs_site ~~~ core_error_recovery
     core_error_recovery ~~~ docs_tutorial
     core_tokenizer --> core_streaming
@@ -120,6 +124,7 @@ flowchart TB
     classDef parked fill:#f3f3f3,stroke:#999,color:#555
     classDef unrated fill:#fff,stroke:#333,stroke-dasharray:1 3,color:#111
     classDef gate fill:#d9c2f0,stroke:#7b3fb5,color:#111
+    classDef decided fill:#ece0f7,stroke:#7b3fb5,stroke-dasharray:2 2,color:#111
     classDef finding fill:#ffe0b2,stroke:#d84315,stroke-width:2px,color:#111
     classDef waiting fill:#e3f2fd,stroke:#1f6fc5,stroke-dasharray:5 5,color:#111
     class core_tokenizer vsucc
@@ -184,14 +189,14 @@ Generated on 2026-06-30.
 <!-- BEGIN GENERATED: done-by-month -->
 <details><summary><b>Mar 2026</b>: 1 done, 1 abandoned</summary>
 
-- `core-streaming`: Streaming parse spike (✖ dead end)
-- `docs-site`: Publish the docs site (✔ done · successful)
+- `core-streaming`: Streaming parse spike (✖ dead end). Parsing a file piece by piece did not work with our grammar.
+- `docs-site`: Publish the docs site (✔ done · successful). The reference pages are online.
 
 </details>
 
 <details><summary><b>Feb 2026</b>: 1 done</summary>
 
-- `core-tokenizer`: Rewrite the tokenizer (✔ done · very-successful)
+- `core-tokenizer`: Rewrite the tokenizer (✔ done · very-successful). The first stage of the parser is now almost three times faster.
   - Unicode escapes (2026-02-10)
 
 </details>

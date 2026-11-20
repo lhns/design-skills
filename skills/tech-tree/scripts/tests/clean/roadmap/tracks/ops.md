@@ -26,6 +26,7 @@ flowchart TB
     classDef parked fill:#f3f3f3,stroke:#999,color:#555
     classDef unrated fill:#fff,stroke:#333,stroke-dasharray:1 3,color:#111
     classDef gate fill:#d9c2f0,stroke:#7b3fb5,color:#111
+    classDef decided fill:#ece0f7,stroke:#7b3fb5,stroke-dasharray:2 2,color:#111
     classDef finding fill:#ffe0b2,stroke:#d84315,stroke-width:2px,color:#111
     classDef waiting fill:#e3f2fd,stroke:#1f6fc5,stroke-dasharray:5 5,color:#111
     class ops_staging_deploy waiting
@@ -39,7 +40,8 @@ flowchart TB
 <!-- BEGIN GENERATED: table-ops -->
 | id | title | kind | lane | state | outcome | start | end | depends_on | replaced_by | qualified_by | headline | evidence |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `ops-staging-deploy` | Automated staging deploys | tooling | staging | in-progress | unrated | 2026-05-05 |  |  |  |  |  |  |
+| `ops-region-choice` | Hosting region | owner-decision | owner | done | n/a | 2026-04-10 | 2026-04-12 |  |  |  |  | docs/decisions/hosting-region.md |
+| `ops-staging-deploy` | Automated staging deploys | tooling | staging | in-progress | unrated | 2026-05-05 |  | ops-region-choice |  |  |  |  |
 | `ops-blue-green` | Blue-green production deploys | feature | staging | blocked | unrated |  |  | ops-staging-deploy |  |  |  |  |
 | `ops-cost-alerts` | Cloud cost alerts | tooling | local | in-progress | unrated | 2026-06-02 |  |  |  |  |  |  |
 
@@ -47,6 +49,7 @@ flowchart TB
 
 | id | title | verdict | headline | in plain words | notes | confirmed | waiting on | queue order | order reason |
 |---|---|---|---|---|---|---|---|---|---|
+| `ops-region-choice` | Hosting region |  |  | The owner picked the cloud region closest to most shoppers. |  |  |  |  |  |
 | `ops-staging-deploy` | Automated staging deploys |  |  | Pushing to the main branch updates the staging site by itself. |  |  | staging deploy freeze | 1 | everything else on staging needs it |
 | `ops-blue-green` | Blue-green production deploys |  |  | Switch production traffic between two copies so a bad deploy can be undone at once. |  |  |  | 3 | last: it reuses the staging pipeline |
 | `ops-cost-alerts` | Cloud cost alerts |  |  | Email when the monthly cloud bill passes a set limit. |  |  |  |  |  |

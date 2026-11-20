@@ -16,7 +16,8 @@ DEFAULT_NODES = "docs/roadmap/nodes.yaml"
 DEFAULT_PAGE = "docs/roadmap.md"
 SHAPES = ("box", "slant", "hexagon", "flag", "round")
 KIND_KEYS = ("shape", "rated", "owner_gate", "blocks")
-TOP_KEYS = ("nodes", "page", "tracks", "kinds", "lanes", "queue_lane", "overview", "history")
+TOP_KEYS = ("nodes", "page", "tracks", "kinds", "lanes", "queue_lane", "overview", "layout", "history")
+LAYOUT_DEFAULTS = {"overview_width": 3, "track_width": 3, "band_min": 1}
 HISTORY_KEYS = ("main", "weak_refs", "merge_subject")
 RESERVED_REFS = ("sha", "branch")  # token kinds history_gap.py uses for its strong matches
 CODE_RE = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
@@ -40,6 +41,7 @@ class Config:
         self.queue_lane = raw.get("queue_lane") or None
         self.overview = raw.get("overview") or None  # {min, max} or None
         self.history = raw.get("history") or {}
+        self.layout = {**LAYOUT_DEFAULTS, **(raw.get("layout") or {})}
         self.nodes_path = _join(self.root, raw.get("nodes", DEFAULT_NODES))
         self.page_path = _join(self.root, raw.get("page", DEFAULT_PAGE))
 
@@ -133,6 +135,14 @@ def validate(raw):
         if (not isinstance(ov, dict) or set(ov) - {"min", "max"} or not _is_int(ov.get("min")) or not _is_int(ov.get("max"))
                 or ov["min"] > ov["max"]):
             errs.append("overview must be {min: N, max: M} with integers, min <= max")
+    lay = raw.get("layout")
+    if lay is not None:
+        if not isinstance(lay, dict):
+            errs.append("layout must be a mapping")
+        else:
+            errs += [f"layout: unknown key '{k}' (allowed: {', '.join(LAYOUT_DEFAULTS)})" for k in lay if k not in LAYOUT_DEFAULTS]
+            errs += [f"layout.{k} must be a positive integer" for k, v in lay.items()
+                     if k in LAYOUT_DEFAULTS and not (_is_int(v) and v > 0)]
     hist = raw.get("history")
     if hist is not None:
         if not isinstance(hist, dict):

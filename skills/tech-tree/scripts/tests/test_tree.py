@@ -4,6 +4,7 @@ Run from the repository root: python -m unittest discover -s skills/tech-tree/sc
 """
 import contextlib
 import copy
+import datetime
 import io
 import re
 import shutil
@@ -562,12 +563,12 @@ class BuildTests(unittest.TestCase):
         self.assertNotIn("direction", ov)
         for label in ('"Now (in progress)"', '"Next"', '"Later (blocked or parked)"'):
             self.assertIn(label, ov)
-        self.assertRegex(ov, r'subgraph bd_0\["Jan 2026')  # past bands are months, merged until BAND_MIN nodes
+        self.assertRegex(ov, r'subgraph bd_0\["Jan 2026')  # past bands are months, one band per month: layout.band_min is 1
         self.assertIn("api · ✔ A fairly long<br/>title here ok", ov)  # track prefix, one glyph, wrapped title
         rows = {}
         for i, k in row_levels(ov).items():
             rows.setdefault(k, []).append(i)
-        self.assertLessEqual(max(map(len, rows.values())), build.OVERVIEW_WIDTH)
+        self.assertLessEqual(max(map(len, rows.values())), CFG.layout["overview_width"])
         tr = region(tfile([node(f"api-{c}") for c in "abcdefg"], "api"), "track-api")
         rows = {}
         for i, k in row_levels(tr).items():
@@ -774,7 +775,7 @@ class BuildTests(unittest.TestCase):
         self.assertEqual(region(built([node("api-a", state="done", outcome="successful", evidence=["e"])]), "running").strip(), "_None._")
 
 
-TRACK_ROW = build.TRACK_WIDTH + 1  # at most one row's worth of root nodes plus the node with a prerequisite
+TRACK_ROW = CFG.layout["track_width"] + 1  # at most one row's worth of root nodes plus the node with a prerequisite
 
 
 class HiddenNodeTests(unittest.TestCase):
@@ -811,6 +812,30 @@ class HiddenNodeTests(unittest.TestCase):
     def test_check_accepts_the_nodes(self):
         self.assertEqual(check.validate_nodes(CFG, self.NODES)[0], [])
 
+    def test_a_done_owner_gate_is_drawn_in_the_overview_only(self):
+        nodes = [node("api-a", state="done", outcome="successful", verdict_quote="q", evidence=["e"], start="2026-01-01"),
+                 node("api-g", kind="owner-decision", state="done", outcome="n/a", evidence=["e"], depends_on=["api-a"],
+                      start="2026-02-01", lane="owner"),
+                 node("api-o", kind="owner-decision", outcome="n/a", depends_on=["api-a"], start="2026-02-05", lane="owner"),
+                 node("api-b", depends_on=["api-g"], state="in-progress", start="2026-03-01")]
+        files = build.render_outputs(CFG, nodes, skeleton(), TODAY)
+        ov = mermaid_blocks(region(files[CFG.page_path], "overview"))[0]
+        self.assertIn('api_g{{"api \u00b7 \u2714 T api-g"}}', ov)  # the kind's own shape
+        self.assertIn("class api_g decided", ov)
+        self.assertIn("api_g --> api_b", ov)
+        self.assertNotIn("api_o", ov)  # an open gate is drawn nowhere
+        for block in mermaid_blocks(files[CFG.track_file("api")]):
+            self.assertNotIn("api_g", block)
+            self.assertNotIn("api_o", block)
+        self.assertIn("`api-o`", region(files[CFG.page_path], "waiting-on-owner"))
+        self.assertNotIn("api-g", region(files[CFG.page_path], "waiting-on-owner"))
+        self.assertIn("overview only", region(files[CFG.page_path], "legend"))
+
+    def test_a_dependency_through_an_open_gate_is_still_rewired(self):
+        view = {n["id"]: n for n in build.diagram_view(CFG, build.normalize(HiddenNodeTests.NODES), owner_done=True)}
+        self.assertEqual(view["api-c"]["depends_on"], ["api-a"])
+        self.assertNotIn("api-u", view)
+
 
 # ---------------------------------------------------------------- legend
 class LegendTests(unittest.TestCase):
@@ -841,7 +866,7 @@ class LegendTests(unittest.TestCase):
                         if check.validate_nodes(CFG, [n, node("api-b")])[0]:
                             continue  # a combination check.py rejects is never drawn
                         m = build.normalize([n])[0]
-                        if not build.hidden(cfg, m):
+                        if not build.hidden(cfg, m, owner_done=True):  # the overview draws decided owner calls
                             drawable.add(build.node_class(m, build.kind_of(cfg, m)))
         return drawable
 
@@ -855,7 +880,8 @@ class LegendTests(unittest.TestCase):
         drawable = self.drawable_classes(CFG)
         shown = set(self.classes_in(self.legend()))
         self.assertLessEqual(drawable, shown)
-        self.assertNotIn("gate", drawable)  # owner gates are hidden from every tree
+        self.assertNotIn("gate", drawable)  # an open owner gate is drawn nowhere
+        self.assertIn("decided", drawable)  # a decided one is drawn in the overview
         self.assertIn("finding", drawable)
         self.assertLessEqual(shown, {name for name, _ in build.CLASSDEFS})
 
@@ -867,14 +893,17 @@ class LegendTests(unittest.TestCase):
         self.assertLessEqual(drawable, set(shown))
         self.assertNotIn("finding", drawable)
         self.assertNotIn("finding", shown)
-        self.assertIn("gate", shown)  # the owner-gate kind still has its shape sample
+        self.assertIn("gate", shown)  # the owner-gate kind still has its shape samples
+        self.assertIn("decided", shown)
 
     def test_one_shape_sample_per_configured_kind(self):
         for cfg in (CFG, tree_config.load(LIBRARY / "tech-tree.yaml")):
             lg = self.legend(cfg)
             samples = build.legend_shapes(cfg)
-            self.assertEqual(len(samples), len(cfg.kinds))
-            for j, ((cls, s, attrs), (name, k)) in enumerate(zip(samples, cfg.kinds.items())):
+            gates = sum(1 for k in cfg.kinds.values() if k["owner_gate"])
+            self.assertEqual(len(samples), len(cfg.kinds) + gates)  # a decided sample beside each owner-gate kind
+            expected = [(n, k) for n, k in cfg.kinds.items() for _ in range(1 + k["owner_gate"])]
+            for j, ((cls, s, attrs), (name, k)) in enumerate(zip(samples, expected)):
                 self.assertIn(name, s["title"])
                 self.assertIn(build.node_def(s, attrs, ident=f"lg_k{j}"), lg)
                 self.assertIn(f"lg_k{j}", self.classes_in(lg)[cls])
@@ -903,6 +932,78 @@ class LegendTests(unittest.TestCase):
         self.assertEqual(ties, len(build.legend_status(CFG)) + 1)  # status rows, shapes, arrows
         self.assertIn(f"linkStyle {ties + q[0]} {build.QUAL_STYLE}", lg)
         self.assertEqual(lines[1 + q[0]], f"lg_e{q[0]}a -.-> lg_e{q[0]}b")
+
+
+class LayoutAndWarningTests(unittest.TestCase):
+    def test_layout_defaults_and_validation(self):
+        lib = tree_config.load(LIBRARY / "tech-tree.yaml")
+        self.assertEqual(lib.layout, {"overview_width": 3, "track_width": 3, "band_min": 1})
+        cfg = make_cfg(HERE / "unit", layout={"overview_width": 2})
+        self.assertEqual(cfg.layout, {"overview_width": 2, "track_width": 3, "band_min": 1})
+        for bad in ({"overview_width": 0}, {"track_width": "3"}, {"band_min": True}, {"colour": 1}):
+            with self.assertRaises(tree_config.ConfigError):
+                make_cfg(HERE / "unit", layout=bad)
+
+    def test_the_example_config_validates(self):
+        cfg = tree_config.load(SCRIPTS.parent / "config.example.yaml")
+        self.assertEqual(cfg.layout, {"overview_width": 3, "track_width": 3, "band_min": 1})
+
+    def test_layout_changes_the_diagrams(self):
+        nodes = [node(f"api-{c}", state="done", outcome="unrated", evidence=["e"], start=f"2026-0{1 + i}-01")
+                 for i, c in enumerate("abcdef")]
+        merged = make_cfg(HERE / "unit", layout={"band_min": 4})
+        one = region(built(nodes), "overview")
+        many = region(built(nodes, cfg=merged), "overview")
+        self.assertEqual(one.count("subgraph bd_"), 6)  # band_min 1: one band per month
+        self.assertLess(many.count("subgraph bd_"), 6)
+        narrow = region(built(nodes, cfg=make_cfg(HERE / "unit", layout={"overview_width": 1})), "overview")
+        rows = {}
+        for i, k in row_levels(narrow).items():
+            rows.setdefault(k, []).append(i)
+        self.assertEqual(max(map(len, rows.values())), 1)
+
+    def test_done_by_month_lines_carry_plain_or_headline_and_gap_months_are_named(self):
+        nodes = [node("api-a", state="done", start="2026-01-05", end="2026-01-09", plain="Plain one."),
+                 node("api-b", state="done", start="2026-01-06", end="2026-01-10", headline="12 ms"),
+                 node("api-c", state="abandoned", outcome="dead-end", start="2026-04-02", end="2026-04-03", plain="Dropped it."),
+                 node("api-d", state="done", start="2026-04-04", end="2026-04-05")]
+        out = region(built(nodes), "done-by-month")
+        self.assertIn("- `api-a`: T api-a (\u2714 done \u00b7 unrated). Plain one.", out)
+        self.assertIn("- `api-b`: T api-b (\u2714 done \u00b7 unrated). 12 ms", out)
+        self.assertIn("- `api-c`: T api-c (\u2716 dead end). Dropped it.", out)
+        self.assertIn("- `api-d`: T api-d (\u2714 done \u00b7 unrated)\n", out + "\n")
+        self.assertIn("<b>Mar 2026</b>: nothing finished", out)
+        self.assertIn("<b>Feb 2026</b>: nothing finished", out)
+        self.assertNotIn("<details><summary><b>Feb", out)
+        order = [out.index(m) for m in ("Apr 2026", "Mar 2026", "Feb 2026", "Jan 2026")]
+        self.assertEqual(order, sorted(order))
+        self.assertNotIn("May 2026", out)  # only months between the first and the last shown
+
+    def test_month_without_an_overview_node_is_warned_once_per_month(self):
+        nodes = [node("api-a", state="done", start="2020-01-05", overview=False),
+                 node("api-b", state="done", start="2020-01-09", overview=False),
+                 node("api-c", state="done", start="2020-02-01", overview=True, plain="p"),
+                 node("api-d", state="next", start="2020-03-01", overview=False),
+                 node("api-e", state="done", overview=False)]
+        warns = [w for w in check.validate_nodes(CFG, nodes)[1] if w.startswith("overview: no node")]
+        self.assertEqual(warns, ["overview: no node from Jan 2020 (2 finished nodes that month); pick its turning points"])
+        this_month = datetime.date.today().isoformat()[:7] + "-01"
+        cur = [node("api-a", state="done", start=this_month, overview=False)]
+        self.assertFalse([w for w in check.validate_nodes(CFG, cur)[1] if "no node from" in w])
+
+    def test_title_identifier_heuristic(self):
+        for title, token in (("Fix parse_config now", "parse_config"), ("Set RWM_DELTA default", "RWM_DELTA"),
+                             ("Rewrite src/core/mod", "src/core/mod"), ("Move lib.rs out", "lib.rs"),
+                             ("Merge feat-new-cache branch", "feat-new-cache"), ("Update app.py", "app.py")):
+            self.assertEqual(check.title_identifier(title), token, title)
+            w = check.validate_nodes(CFG, [node("api-a", title=title, plain="p")])[1]
+            self.assertIn(f"api-a: title looks like an identifier ('{token}'); use plain words, and explain real names in 'plain'", w)
+        for title in ("Per-key rate limiting", "GitHub login via OAuth", "p99 latency target", "zstd compression",
+                      "Blue-green deploys", "Plain words only", "Version 2.0 release",
+                      "A/B test rollout", "Read and/or write"):
+            self.assertIsNone(check.title_identifier(title), title)
+            self.assertFalse([w for w in check.validate_nodes(CFG, [node("api-a", title=title, plain="p")])[1]
+                              if "looks like an identifier" in w], title)
 
 
 # ---------------------------------------------------------------- generated pages

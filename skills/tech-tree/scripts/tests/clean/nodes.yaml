@@ -248,6 +248,24 @@ nodes:
   overview: true
   plain: "Split the order table by year; waits for the retention decision."
 
+- id: ops-region-choice
+  title: "Hosting region"
+  track: ops
+  kind: owner-decision
+  state: done
+  outcome: n/a
+  evidence: ["docs/decisions/hosting-region.md"]
+  verdict_quote: ""
+  headline: ""
+  depends_on: []
+  replaced_by: []
+  lane: owner
+  start: 2026-04-10
+  end: 2026-04-12
+  folded: []
+  overview: true
+  plain: "The owner picked the cloud region closest to most shoppers."
+
 - id: ops-staging-deploy
   title: "Automated staging deploys"
   track: ops
@@ -257,7 +275,7 @@ nodes:
   evidence: []
   verdict_quote: ""
   headline: ""
-  depends_on: []
+  depends_on: [ops-region-choice]
   replaced_by: []
   lane: staging
   start: 2026-05-05

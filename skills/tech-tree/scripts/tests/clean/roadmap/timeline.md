@@ -26,6 +26,7 @@ gantt
     Stale prices in the cache :active, data_stale_cache, 2026-05-10, 2026-06-30
     Order data retention period :data_retention_policy, 2026-05-20, 2026-06-30
     section ops - operations
+    Hosting region :ops_region_choice, 2026-04-10, 2026-04-12
     Automated staging deploys :active, ops_staging_deploy, 2026-05-05, 2026-06-30
     Cloud cost alerts :active, ops_cost_alerts, 2026-06-02, 2026-06-30
 ```
