@@ -37,7 +37,8 @@ queue_lane: staging
 overview: {min: 12, max: 30}
 
 # Optional layout (these are the defaults): boxes per row, and one overview band per past month.
-layout: {overview_width: 3, track_width: 3, band_min: 1}
+# band: week makes the bands ISO weeks, for a short history.
+layout: {overview_width: 3, track_width: 3, band_min: 1, band: month}
 
 # Optional: inputs for scripts/history_gap.py.
 history:

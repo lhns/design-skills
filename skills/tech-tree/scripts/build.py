@@ -28,7 +28,7 @@ OUTCOMES = ["very-successful", "successful", "mixed", "bad", "dead-end", "supers
 NOT_RATED = ("unrated", "n/a")  # outcomes that need no verdict quote and count as no rating
 
 WRAP = 22           # label line width in characters
-# row widths and the month-band minimum are config (`layout`, see tree_config.LAYOUT_DEFAULTS)
+# row widths, the band unit and the band minimum are config (`layout`, see tree_config.LAYOUT_DEFAULTS)
 GANTT_TITLE = 40    # gantt task names are truncated to this many characters
 
 GENERATED_ON = "Generated on {}."  # check.py parses the date back out of this sentence
@@ -115,7 +115,7 @@ def node_class(n, k):
     s, o = n["state"], n["outcome"]
     if k["owner_gate"] and s not in ("done", "abandoned"):
         return "gate"
-    if k["owner_gate"] and s == "done":  # a decided owner call: drawn in the overview only
+    if k["owner_gate"] and s == "done":  # a decided owner call
         return "decided"
     if not k["rated"] and s in ("in-progress", "next"):
         return "finding"
@@ -183,23 +183,22 @@ def precedence(nodes):
     return pre
 
 
-def hidden(cfg, n, owner_done=False):
-    """Owner-gate nodes (and nodes with `diagram: false`) are not drawn; tables and lists still carry them.
-    With owner_done (the overview only) a done owner gate is drawn; an open one never is."""
+def hidden(cfg, n):
+    """Open owner gates (and nodes with `diagram: false`) are not drawn; tables and lists still carry them.
+    A done owner gate (a decided call) is drawn."""
     if not n["diagram"]:
         return True
-    return kind_of(cfg, n)["owner_gate"] and not (owner_done and n["state"] == "done")
+    return kind_of(cfg, n)["owner_gate"] and n["state"] != "done"
 
 
-def diagram_view(cfg, nodes, owner_done=False):
+def diagram_view(cfg, nodes):
     """The nodes the diagrams draw: hidden ones removed, a dependency that ran through one rewired
-    from its prerequisites to its dependants. replaced_by / qualified_by into a hidden node are dropped.
-    owner_done: also draw done owner gates (the overview does; the track trees do not)."""
+    from its prerequisites to its dependants. replaced_by / qualified_by into a hidden node are dropped."""
     by = {n["id"]: n for n in nodes}
     pre = precedence(nodes)
 
     def hid(n):
-        return hidden(cfg, n, owner_done)
+        return hidden(cfg, n)
 
     def visible_pre(i, seen=()):
         out = []
@@ -339,10 +338,32 @@ def month_name(ym):
     return f"{MONTHS[int(ym[5:7]) - 1]} {ym[:4]}"
 
 
-def overview_bands(cfg, sel, order):
-    """[(label, [node ids])] in time order: past months (merged until a band holds layout.band_min nodes), now, next, later.
+def band_key(cfg, date):
+    """The overview band a date falls in: "YYYY-MM", or with layout.band week the ISO week "YYYY-Www"; "" if undated."""
+    if not date:
+        return ""
+    if cfg.layout["band"] == "week":
+        y, w, _ = datetime.date.fromisoformat(str(date)[:10]).isocalendar()
+        return f"{y}-W{w:02d}"
+    return str(date)[:7]
 
-    A node's band follows its own state and date: done, abandoned and open finding nodes go to the month of
+
+def band_name(key):
+    """"Nov 2026", or for a week "Week 47, 2026 (16-22 Nov)" (Monday to Sunday)."""
+    if "W" not in key:
+        return month_name(key)
+    mon = datetime.date.fromisocalendar(int(key[:4]), int(key[6:]), 1)
+    sun = mon + datetime.timedelta(days=6)
+    span = (f"{mon.day}-{sun.day} {MONTHS[mon.month - 1]}" if mon.month == sun.month
+            else f"{mon.day} {MONTHS[mon.month - 1]} - {sun.day} {MONTHS[sun.month - 1]}")
+    return f"Week {int(key[6:])}, {key[:4]} ({span})"
+
+
+def overview_bands(cfg, sel, order):
+    """[(label, [node ids])] in time order: past bands (a month, or a week with layout.band; merged until a band holds
+    layout.band_min nodes), now, next, later.
+
+    A node's band follows its own state and date: done, abandoned and open finding nodes go to the band of
     their start; in-progress to Now, next to Next, blocked and parked to Later. An edge that would then point
     up is not drawn (drawn_edges drops it); the tables keep it.
     """
@@ -350,7 +371,7 @@ def overview_bands(cfg, sel, order):
 
     def base(n):
         if n["state"] in ("done", "abandoned") or (not kind_of(cfg, n)["rated"] and n["start"]):
-            return (0, n["start"][:7])
+            return (0, band_key(cfg, n["start"]))
         return {"in-progress": (1, ""), "next": (2, "")}.get(n["state"], (3, ""))
 
     rank = {i: base(by[i]) for i in order if i in by}
@@ -377,9 +398,9 @@ def overview_bands(cfg, sel, order):
         if not dated:
             label = "Earlier (no start date)"
         elif len(dated) == 1:
-            label = month_name(dated[0])
+            label = band_name(dated[0])
         else:
-            label = f"{month_name(dated[0])} to {month_name(dated[-1])}"
+            label = f"{band_name(dated[0])} to {band_name(dated[-1])}"
         out.append((label, ids))
     for r, label in ((1, "Now (in progress)"), (2, "Next"), (3, "Later (blocked or parked)")):
         ids = [i for i in ordered if rank[i][0] == r]
@@ -390,7 +411,7 @@ def overview_bands(cfg, sel, order):
 
 # ---------------------------------------------------------------- regions
 def r_overview(cfg, nodes, today):
-    nodes = diagram_view(cfg, nodes, owner_done=True)
+    nodes = diagram_view(cfg, nodes)
     sel = [n for n in nodes if n["overview"]]
     if not sel:
         return "_No nodes have `overview: true` yet._"
@@ -555,7 +576,7 @@ def legend_shapes(cfg):
     for name, k in cfg.kinds.items():
         s = _sample(name + (" (open, not drawn)" if k["owner_gate"] else ""), "next" if k["rated"] else "in-progress")
         out.append((node_class(s, k), s, k))
-        if k["owner_gate"]:  # a decided owner call is drawn in the overview, in its own colour
+        if k["owner_gate"]:  # a decided owner call is drawn, in its own colour
             d = _sample(name + " (decided)", "done", "n/a")
             out.append((node_class(d, k), d, k))
     return out
@@ -590,8 +611,8 @@ def r_legend(cfg, nodes, today):
     notes = ["The prefix on an overview box is its track. A prerequisite implied by a longer chain is not drawn; "
              "the node tables keep every edge."]
     if any(a["owner_gate"] for a in cfg.kinds.values()):
-        notes.insert(0, "Owner calls are the purple shape. A decided owner call is drawn in the overview only, never "
-                        "in the track trees; an open one is listed under *Waiting on the owner*.")
+        notes.insert(0, "Owner calls are the purple shape. A decided owner call is drawn; an open one is not, "
+                        "and is listed under *Waiting on the owner*.")
     return "\n".join([fence(out), "", " ".join(notes)])
 
 

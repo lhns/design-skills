@@ -89,11 +89,11 @@ Paths are relative to the config file. See `config.example.yaml` for an annotate
 | `nodes` | path of nodes.yaml (default `docs/roadmap/nodes.yaml`) |
 | `page` | path of the main page (default `docs/roadmap.md`); track pages go to `<page dir>/<page stem>/tracks/<code>.md`, the timeline to `<page dir>/<page stem>/timeline.md` |
 | `tracks` | `{code: {name, scope}}`, in display order |
-| `kinds` | `{name: {shape, rated, owner_gate, blocks}}`. `shape`: `box` (default), `slant`, `hexagon`, `flag`, `round`. `rated: false`: never carries an outcome, shown as open or fixed (defects). `owner_gate: true`: an owner decision; outcome `n/a`; once done, and when picked with `overview: true`, it is drawn in the overview only (never in the track trees), and open ones are listed under *Waiting on the owner*. `blocks: false`: an open node of this kind does not block its dependants' readiness. |
+| `kinds` | `{name: {shape, rated, owner_gate, blocks}}`. `shape`: `box` (default), `slant`, `hexagon`, `flag`, `round`. `rated: false`: never carries an outcome, shown as open or fixed (defects). `owner_gate: true`: an owner decision; outcome `n/a`; once done it is drawn like any node (overview: when picked with `overview: true`; track trees: always), and open ones are not drawn but listed under *Waiting on the owner*. `blocks: false`: an open node of this kind does not block its dependants' readiness. |
 | `lanes` | list of lane names: who or what the work needs (a person, a machine, an environment) |
 | `queue_lane` | optional: a lane whose forward nodes are worked one at a time; they carry a unique `queue_order` and appear in the *Queue* region |
 | `overview` | optional `{min, max}`: warn when the overview count leaves this band; size it to the history (months × picks per month) |
-| `layout` | optional `{overview_width, track_width, band_min}`, defaults 3, 3, 1: boxes per row in the overview and in track trees, and how many nodes a past-month overview band needs before the next month starts its own (1: one band per month) |
+| `layout` | optional `{overview_width, track_width, band_min, band}`, defaults 3, 3, 1, `month`: boxes per row in the overview and in track trees; `band` is the overview's band unit, `month` or `week` (ISO weeks, labelled like "Week 47, 2026 (16-22 Nov)"; use it for a history of about a month); `band_min` is how many nodes a past band needs before the next one starts its own (1: one band per unit). The timeline and *Done, by month* stay month-based |
 | `history` | optional, for `history_gap.py`: `main` (the main ref; default the first of origin/main, main, master), `weak_refs` (`{name: regex}` with one capture group, e.g. decision-record numbers or PR numbers; matched in commit messages and node text, counted as weak), `merge_subject` (a regex whose group 1 is the branch name in a merge commit subject, added to git's and GitHub's defaults) |
 
 No track, kind or lane name is special to the scripts; behaviour comes from these attributes only.
@@ -115,6 +115,6 @@ Derived regions, never hand-kept:
 - **Queue:** forward nodes in `queue_lane`, by `queue_order`.
 - **Done, by month:** every done or abandoned node (with its tag) by the month it ended, with its plain sentence (else its headline) and its labelled folded records; a month in the span with nothing finished says so.
 
-Warned: each past month with finished nodes but no overview node; titles that look like identifiers.
+Warned: each past band (month, or week with `layout.band: week`) with finished nodes but no overview node; titles that look like identifiers.
 
 Checked: every recorded field of every node appears on a generated page (its track page shows the full row, details and folded items); the only exemptions are `overview` and `diagram`, which show by where the node is drawn. Stale regions or pages fail the check.
