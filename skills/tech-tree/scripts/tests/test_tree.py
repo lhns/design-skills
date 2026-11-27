@@ -812,7 +812,7 @@ class HiddenNodeTests(unittest.TestCase):
     def test_check_accepts_the_nodes(self):
         self.assertEqual(check.validate_nodes(CFG, self.NODES)[0], [])
 
-    def test_a_done_owner_gate_is_drawn_in_the_overview_only(self):
+    def test_a_done_owner_gate_is_drawn_in_the_overview_and_the_track(self):
         nodes = [node("api-a", state="done", outcome="successful", verdict_quote="q", evidence=["e"], start="2026-01-01"),
                  node("api-g", kind="owner-decision", state="done", outcome="n/a", evidence=["e"], depends_on=["api-a"],
                       start="2026-02-01", lane="owner"),
@@ -824,15 +824,46 @@ class HiddenNodeTests(unittest.TestCase):
         self.assertIn("class api_g decided", ov)
         self.assertIn("api_g --> api_b", ov)
         self.assertNotIn("api_o", ov)  # an open gate is drawn nowhere
-        for block in mermaid_blocks(files[CFG.track_file("api")]):
-            self.assertNotIn("api_g", block)
-            self.assertNotIn("api_o", block)
+        tr = region(files[CFG.track_file("api")], "track-api")
+        self.assertIn('api_g{{"✔ T api-g"}}', tr)
+        self.assertIn("class api_g decided", tr)
+        self.assertIn("api_a --> api_g", tr)
+        self.assertIn("api_g --> api_b", tr)
+        self.assertNotIn("api_o", tr)
         self.assertIn("`api-o`", region(files[CFG.page_path], "waiting-on-owner"))
         self.assertNotIn("api-g", region(files[CFG.page_path], "waiting-on-owner"))
-        self.assertIn("overview only", region(files[CFG.page_path], "legend"))
+        self.assertNotIn("overview only", region(files[CFG.page_path], "legend"))
+
+    def test_week_bands_split_a_one_month_history(self):
+        nodes = [node("api-a", state="done", outcome="successful", evidence=["e"], start="2026-11-03"),
+                 node("api-b", state="done", outcome="successful", evidence=["e"], start="2026-11-10", depends_on=["api-a"]),
+                 node("api-c", state="done", outcome="successful", evidence=["e"], start="2026-11-12", depends_on=["api-b"]),
+                 node("api-d", state="done", outcome="successful", evidence=["e"], start="2026-11-24", depends_on=["api-c"])]
+        norm = build.normalize(nodes)
+
+        def labels(cfg):
+            return [label for label, _ in build.overview_bands(cfg, norm, build.time_order(norm))]
+
+        self.assertEqual(labels(CFG), ["Nov 2026"])
+        week = make_cfg(HERE / "unit", layout={"band": "week"})
+        self.assertEqual(labels(week), ["Week 45, 2026 (2-8 Nov)", "Week 46, 2026 (9-15 Nov)", "Week 48, 2026 (23-29 Nov)"])
+        merged = make_cfg(HERE / "unit", layout={"band": "week", "band_min": 2})
+        bands = build.overview_bands(merged, norm, build.time_order(norm))
+        self.assertEqual([ids for _, ids in bands], [["api-a", "api-b", "api-c", "api-d"]])  # weeks 45 and 46 reach 3, week 48 joins
+        self.assertEqual(bands[0][0], "Week 45, 2026 (2-8 Nov) to Week 48, 2026 (23-29 Nov)")
+        self.assertEqual(build.band_name("2026-W49"), "Week 49, 2026 (30 Nov - 6 Dec)")
+
+    def test_week_band_config_is_validated_and_check_warns_per_week(self):
+        self.assertIn("layout.band must be", ConfigTests.bad(ConfigTests(), layout={"band": "day"}))
+        week = make_cfg(HERE / "unit", layout={"band": "week"})
+        nodes = [node("api-a", state="done", outcome="successful", evidence=["e"], verdict_quote="q",
+                      start="2026-01-05", end="2026-01-06", confirmed="2026-01-07", overview=False)]
+        self.assertIn("weeks with finished work", " ".join(check.validate_nodes(week, nodes)[1]))
+        self.assertIn("Week 2, 2026", " ".join(check.validate_nodes(week, nodes)[1]))
+        self.assertIn("months with finished work", " ".join(check.validate_nodes(CFG, nodes)[1]))
 
     def test_a_dependency_through_an_open_gate_is_still_rewired(self):
-        view = {n["id"]: n for n in build.diagram_view(CFG, build.normalize(HiddenNodeTests.NODES), owner_done=True)}
+        view = {n["id"]: n for n in build.diagram_view(CFG, build.normalize(HiddenNodeTests.NODES))}
         self.assertEqual(view["api-c"]["depends_on"], ["api-a"])
         self.assertNotIn("api-u", view)
 
@@ -866,7 +897,7 @@ class LegendTests(unittest.TestCase):
                         if check.validate_nodes(CFG, [n, node("api-b")])[0]:
                             continue  # a combination check.py rejects is never drawn
                         m = build.normalize([n])[0]
-                        if not build.hidden(cfg, m, owner_done=True):  # the overview draws decided owner calls
+                        if not build.hidden(cfg, m):
                             drawable.add(build.node_class(m, build.kind_of(cfg, m)))
         return drawable
 
@@ -881,7 +912,7 @@ class LegendTests(unittest.TestCase):
         shown = set(self.classes_in(self.legend()))
         self.assertLessEqual(drawable, shown)
         self.assertNotIn("gate", drawable)  # an open owner gate is drawn nowhere
-        self.assertIn("decided", drawable)  # a decided one is drawn in the overview
+        self.assertIn("decided", drawable)  # a decided one is drawn
         self.assertIn("finding", drawable)
         self.assertLessEqual(shown, {name for name, _ in build.CLASSDEFS})
 
@@ -937,16 +968,16 @@ class LegendTests(unittest.TestCase):
 class LayoutAndWarningTests(unittest.TestCase):
     def test_layout_defaults_and_validation(self):
         lib = tree_config.load(LIBRARY / "tech-tree.yaml")
-        self.assertEqual(lib.layout, {"overview_width": 3, "track_width": 3, "band_min": 1})
+        self.assertEqual(lib.layout, {"overview_width": 3, "track_width": 3, "band_min": 1, "band": "month"})
         cfg = make_cfg(HERE / "unit", layout={"overview_width": 2})
-        self.assertEqual(cfg.layout, {"overview_width": 2, "track_width": 3, "band_min": 1})
+        self.assertEqual(cfg.layout, {"overview_width": 2, "track_width": 3, "band_min": 1, "band": "month"})
         for bad in ({"overview_width": 0}, {"track_width": "3"}, {"band_min": True}, {"colour": 1}):
             with self.assertRaises(tree_config.ConfigError):
                 make_cfg(HERE / "unit", layout=bad)
 
     def test_the_example_config_validates(self):
         cfg = tree_config.load(SCRIPTS.parent / "config.example.yaml")
-        self.assertEqual(cfg.layout, {"overview_width": 3, "track_width": 3, "band_min": 1})
+        self.assertEqual(cfg.layout, {"overview_width": 3, "track_width": 3, "band_min": 1, "band": "month"})
 
     def test_layout_changes_the_diagrams(self):
         nodes = [node(f"api-{c}", state="done", outcome="unrated", evidence=["e"], start=f"2026-0{1 + i}-01")

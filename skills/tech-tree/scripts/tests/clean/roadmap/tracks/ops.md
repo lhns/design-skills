@@ -9,11 +9,15 @@ Scope: CI, deploys, monitoring, cost.
 <!-- BEGIN GENERATED: track-ops -->
 ```mermaid
 flowchart TB
+    ops_region_choice{{"✔ Hosting region"}}
     ops_staging_deploy["⏳ Automated staging<br/>deploys"]
     ops_cost_alerts["▶ Cloud cost alerts"]
     ops_blue_green["⛔ Blue-green<br/>production deploys"]
+    ops_region_choice ~~~ ops_staging_deploy
+    ops_region_choice ~~~ ops_cost_alerts
     ops_staging_deploy ~~~ ops_blue_green
     ops_cost_alerts ~~~ ops_blue_green
+    ops_region_choice --> ops_staging_deploy
     ops_staging_deploy --> ops_blue_green
     classDef vsucc fill:#2e9e4f,stroke:#1b6b34,color:#fff
     classDef succ fill:#bfe8c8,stroke:#2e9e4f,color:#111
@@ -29,6 +33,7 @@ flowchart TB
     classDef decided fill:#ece0f7,stroke:#7b3fb5,stroke-dasharray:2 2,color:#111
     classDef finding fill:#ffe0b2,stroke:#d84315,stroke-width:2px,color:#111
     classDef waiting fill:#e3f2fd,stroke:#1f6fc5,stroke-dasharray:5 5,color:#111
+    class ops_region_choice decided
     class ops_staging_deploy waiting
     class ops_cost_alerts inprog
     class ops_blue_green blocked

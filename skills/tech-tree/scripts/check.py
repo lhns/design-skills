@@ -247,19 +247,19 @@ def validate_nodes(cfg, nodes):
 
     if done_unrated:
         warnings.append(f"{_count(len(done_unrated), 'done node')} unrated (no quoted verdict yet): " + ", ".join(done_unrated))
-    finished = collections.defaultdict(int)  # start month -> done or abandoned nodes
-    drawn = set()  # start months holding an overview node
+    finished = collections.defaultdict(int)  # start band (month, or week with layout.band) -> done or abandoned nodes
+    drawn = set()  # start bands holding an overview node
     for n in good:
-        ym = str(n["start"])[:7]
+        ym = build.band_key(cfg, n["start"])
         if ym:
             finished[ym] += n["state"] in ("done", "abandoned")
             if n["overview"]:
                 drawn.add(ym)
-    now = datetime.date.today().strftime("%Y-%m")
+    now = build.band_key(cfg, datetime.date.today())
     bare = [ym for ym in sorted(finished) if finished[ym] and ym not in drawn and ym != now]
     if bare:
-        warnings.append("overview: months with finished work but no overview node (pick their turning points): "
-                        + ", ".join(f"{build.month_name(ym)} ({finished[ym]})" for ym in bare))
+        warnings.append(f"overview: {cfg.layout['band']}s with finished work but no overview node (pick their turning points): "
+                        + ", ".join(f"{build.band_name(ym)} ({finished[ym]})" for ym in bare))
     unconfirmed = [n for n in good if build.is_rated(n) and not n.get("confirmed")]
     if unconfirmed:
         warnings.append(f"{_count(len(unconfirmed), 'rated node')} not confirmed by the owner")

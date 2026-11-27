@@ -31,9 +31,9 @@ The overview is the front page: the work someone should see first. **Choosing it
 - turning points: the result that changed what came next;
 - shipped mechanisms that later work builds on;
 - refutations that changed direction;
-- owner decisions (once made and picked, they are drawn in the overview only, as their own shape).
+- owner decisions (once made they are drawn as their own shape in the track trees, and in the overview when picked).
 
-Set the config's `overview` range from that granularity and the length of the history (months × per-month picks), not from a fixed number. The check warns for each past month that has finished work but no overview node.
+Set the config's `overview` range from that granularity and the length of the history (months × per-month picks), not from a fixed number. The check warns for each past band (month, or week with `layout.band: week`) that has finished work but no overview node. For a history of about a month, set `layout.band: week` so the overview is not one box.
 
 ## Same push
 Update the tree in the same push as each result, merge or owner decision: the node's state, outcome and quote, its plain sentence, and any nodes it creates or unblocks. Before the push:

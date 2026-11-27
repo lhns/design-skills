@@ -17,7 +17,7 @@ DEFAULT_PAGE = "docs/roadmap.md"
 SHAPES = ("box", "slant", "hexagon", "flag", "round")
 KIND_KEYS = ("shape", "rated", "owner_gate", "blocks")
 TOP_KEYS = ("nodes", "page", "tracks", "kinds", "lanes", "queue_lane", "overview", "layout", "history")
-LAYOUT_DEFAULTS = {"overview_width": 3, "track_width": 3, "band_min": 1}
+LAYOUT_DEFAULTS = {"overview_width": 3, "track_width": 3, "band_min": 1, "band": "month"}
 HISTORY_KEYS = ("main", "weak_refs", "merge_subject")
 RESERVED_REFS = ("sha", "branch")  # token kinds history_gap.py uses for its strong matches
 CODE_RE = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
@@ -142,7 +142,9 @@ def validate(raw):
         else:
             errs += [f"layout: unknown key '{k}' (allowed: {', '.join(LAYOUT_DEFAULTS)})" for k in lay if k not in LAYOUT_DEFAULTS]
             errs += [f"layout.{k} must be a positive integer" for k, v in lay.items()
-                     if k in LAYOUT_DEFAULTS and not (_is_int(v) and v > 0)]
+                     if k in LAYOUT_DEFAULTS and k != "band" and not (_is_int(v) and v > 0)]
+            if lay.get("band", "month") not in ("month", "week"):
+                errs.append("layout.band must be month or week")
     hist = raw.get("history")
     if hist is not None:
         if not isinstance(hist, dict):
